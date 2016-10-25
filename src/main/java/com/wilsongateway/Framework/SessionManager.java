@@ -44,6 +44,7 @@ public class SessionManager extends UI {
 	
 	@Override
 	protected void init(VaadinRequest request) {
+		//Init database connection
 		ensureBase();
 		
 		//Create login page and Navigator. Set login as error redirect
