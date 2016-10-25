@@ -47,6 +47,7 @@ public class SessionManager extends UI {
 		//Init database connection
 		//Change A
 		//Change B
+		//Change C
 		ensureBase();
 		
 		//Create login page and Navigator. Set login as error redirect
