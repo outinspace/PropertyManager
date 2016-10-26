@@ -1,52 +1,23 @@
-PropertyManager
-==============
+# PropertyManager
+A Property Management System for Monitoring Repair Tickets
+<img width="960" alt="loginview" src="https://cloud.githubusercontent.com/assets/865352/19712434/6c168724-9b03-11e6-9433-783e2dd16d78.PNG">
 
-Template for a simple Vaadin application that only requires a Servlet 3.0 container to run.
+## What Is It?
+PropertyManager is a generic web app that I created for a class I took in 2016. The class focused on building information systems so I decided to try my luck at it. "Mercy Affordable Housing" is the name of the mock organization that this service was made for. This system allows users (admins, repair crew, building managers, executives, etc) to login and see a custom dashboard that will provide them with useful information to do their job more efficiently. This program is focused specifically at tracking repair tickets for each property as well as the expenses, locations, and status information that is tied to them.
 
+<img width="960" alt="newuserview" src="https://cloud.githubusercontent.com/assets/865352/19712444/82668dd0-9b03-11e6-8d47-c16281320109.png">
 
-Workflow
-========
+## How Do I Install It?
+First you will need eclipse for Java EE with maven installed. Then create a workspace somewhere and clone this project into that workspace. If you do it correctly, you should end up with a folder called PropertyManager inside your workspace folder. Inside eclipse, just go File > Import > Maven > Existing Maven Project. Then wait a few minutes for Maven to build your project. Once complete, you will need an integrated server in eclipse if you plan on developing with it. I suggest using Apache Tomcat 7. Because this application relies on a preconfigured mysql database, you will have to do some customization of the SessionManager in order for it to properly connect. 
 
-To compile the entire project, run "mvn install".
+In the future I will post an SQL script that will create all the required tables.
 
-To run the application, run "mvn jetty:run" and open http://localhost:8080/ .
+## How Was It Made?
+I built this program using the Vaadin Web Framework. This allows programmers to write swing-style code in Java and view the program as a web page. Vaadin basically allows for developement of the back-end Java to generate the front-end HTML, JavaScript, and CSS.
 
-To produce a deployable production mode WAR:
-- change productionMode to true in the servlet class configuration (nested in the UI class)
-- run "mvn clean package"
-- test the war file with "mvn jetty:run-war"
+This system uses a MySQL database to store persistant data and most queries are managed by a useful framework called ActiveJDBC. ActiveJDBC creates an easy way for developers to persist java classes into a database with minimal configuration. All config used in this project can be found in the com.wilsongateway.Framework.Tables class.
 
-Client-Side compilation
--------------------------
+All dependencies are managed by Maven and the project runs as a Servlet. For testing purposes, a preconfigured Apache Tomcat server is included in the LocalServer folder.
 
-The generated maven project is using an automatically generated widgetset by default. 
-When you add a dependency that needs client-side compilation, the maven plugin will 
-automatically generate it for you. Your own client-side customisations can be added into
-package "client".
-
-Debugging client side code
-  - run "mvn vaadin:run-codeserver" on a separate console while the application is running
-  - activate Super Dev Mode in the debug window of the application
-
-Developing a theme using the runtime compiler
--------------------------
-
-When developing the theme, Vaadin can be configured to compile the SASS based
-theme at runtime in the server. This way you can just modify the scss files in
-your IDE and reload the browser to see changes.
-
-To use the runtime compilation, open pom.xml and comment out the compile-theme 
-goal from vaadin-maven-plugin configuration. To remove a possibly existing 
-pre-compiled theme, run "mvn clean package" once.
-
-When using the runtime compiler, running the application in the "run" mode 
-(rather than in "debug" mode) can speed up consecutive theme compilations
-significantly.
-
-It is highly recommended to disable runtime compilation for production WAR files.
-
-Using Vaadin pre-releases
--------------------------
-
-If Vaadin pre-releases are not enabled by default, use the Maven parameter
-"-P vaadin-prerelease" or change the activation default value of the profile in pom.xml .
+###Credits
+This program was made by Nicholas Wilson in 2016. Please refer to the License.md file for usage concerns.
