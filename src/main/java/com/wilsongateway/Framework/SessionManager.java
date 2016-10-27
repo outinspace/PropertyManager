@@ -26,7 +26,7 @@ public class SessionManager extends UI {
 	}
 
 	//Database login
-	static final String SQLuser = "root";
+	static final String SQLuser = "wilsongatewaydb";
 	static final String SQLpassword = "databaseserver";
 	
 	private ArrayList<Connection> connections = new ArrayList<Connection>();
@@ -92,7 +92,9 @@ public class SessionManager extends UI {
 	
 	public void ensureBase(){
 		if(!Base.hasConnection()){
-			Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/pm_database", SQLuser, SQLpassword);
+			Base.open("com.mysql.jdbc.Driver", 
+					"jdbc:mysql://wilsongatewaydb.cuz0rilr4tk2.us-west-2.rds.amazonaws.com:3306/pm_database", 
+					SQLuser, SQLpassword);
 			connections.add(Base.connection());
 			System.out.println(connections.size() + " connections");
 		}

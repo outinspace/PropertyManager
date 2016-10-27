@@ -111,6 +111,16 @@ public class Tables {
 	
 	
 	/**
+	 * Properties to Users Join Model
+	 * Columns: [id, property_id, user_id]
+	 *
+	 */
+	@Table("properties_users")
+	public static class PropertiesUsers extends Model {}
+	public static final PropertiesUsers PROPERTIESUSERS = new PropertiesUsers();
+	
+	
+	/**
 	 * Group Model
 	 * Columns: [id, name, tabs]
 	 *
