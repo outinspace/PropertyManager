@@ -94,7 +94,7 @@ public class SessionManager extends UI {
 	public void ensureBase(){
 		if(!Base.hasConnection()){
 			Base.open("com.mysql.jdbc.Driver", 
-					"jdbc:mysql://" + System.getProperty("RDS_HOSTNAME") + ":" + System.getProperty("RDS_PORT") + "/" + System.getProperty("RDS_DB_NAME"), 
+					"jdbc:mysql://" + System.getProperty("RDS_HOSTNAME") + ":" + System.getProperty("RDS_PORT") + "/" + System.getProperty("RDS_DBNAME"), 
 					System.getProperty("RDS_USERNAME"), 
 					System.getProperty("RDS_PASSWORD"));
 			connections.add(Base.connection());
