@@ -25,9 +25,10 @@ public class SessionManager extends UI {
 	public static class Servlet extends VaadinServlet {
 	}
 
-	//Database login
+	//Dev Database login
 	static final String SQLuser = "wilsongatewaydb";
 	static final String SQLpassword = "databaseserver";
+	
 	
 	private ArrayList<Connection> connections = new ArrayList<Connection>();
 	
@@ -93,8 +94,9 @@ public class SessionManager extends UI {
 	public void ensureBase(){
 		if(!Base.hasConnection()){
 			Base.open("com.mysql.jdbc.Driver", 
-					"jdbc:mysql://wilsongatewaydb.cuz0rilr4tk2.us-west-2.rds.amazonaws.com:3306/pm_database", 
-					SQLuser, SQLpassword);
+					"jdbc:mysql://" + System.getProperty("HOSTNAME") + ":" + System.getProperty("RDS_PORT") + "/" + System.getProperty("RDS_DB_NAME"), 
+					System.getProperty("RDS_USERNAME"), 
+					System.getProperty("RDS_PASSWORD"));
 			connections.add(Base.connection());
 			System.out.println(connections.size() + " connections");
 		}
