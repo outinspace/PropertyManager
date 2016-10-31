@@ -100,6 +100,8 @@ public class SessionManager extends UI {
 			
 			Base.open("com.mysql.jdbc.Driver", 
 					"jdbc:mysql://" + HOSTNAME + ":" + PORT + "/" + DBNAME, USERNAME, PASSWORD);
+			
+			
 			connections.add(Base.connection());
 			System.out.println(connections.size() + " connections");
 		}

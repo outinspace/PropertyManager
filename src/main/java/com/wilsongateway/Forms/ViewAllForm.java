@@ -26,7 +26,7 @@ public abstract class ViewAllForm extends Tab{
 		super((isEditable ? "Edit" : "View") + " All " + pluralItemName, manager);
 		this.model = model;
 		
-		Label heading = new Label((isEditable ? "Edit" : "View") +  " All " + model.getClass().getSimpleName() + "s");
+		Label heading = new Label((isEditable ? "Edit" : "View") +  " All " + pluralItemName);
 		
 		addComponent(heading);
 		addComponent(new Label("<hr />",ContentMode.HTML));
