@@ -11,6 +11,7 @@ import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.UI;
 import com.wilsongateway.Framework.Tab.TabType;
 import com.wilsongateway.Framework.Tables.Group;
@@ -29,7 +30,7 @@ public class SessionManager extends UI {
 	static final String SQLuser = "wilsongatewaydb";
 	static final String SQLpassword = "databaseserver";
 	
-	
+	//TODO add connection pooling
 	private ArrayList<Connection> connections = new ArrayList<Connection>();
 	
 	//View ENUMS
@@ -40,7 +41,6 @@ public class SessionManager extends UI {
 	private Navigator nav;
 	
 	//Current
-	private User currentUser;
 	private DashboardView currentDash;
 	
 	@Override
@@ -48,9 +48,8 @@ public class SessionManager extends UI {
 		//Init database connection
 		ensureBase();
 		
-		//Create login page and Navigator. Set login as error redirect
-		LoginView login = new LoginView(this);
 		nav = new Navigator(this, this);
+		LoginView login = new LoginView(this);
 		nav.addView(LOGINVIEW, login);
 		nav.setErrorView(login);
 		
@@ -61,7 +60,7 @@ public class SessionManager extends UI {
 		createTestEntries();
 		
 		//TODO re-enable, removed for debugging
-		//addDetachListener(new SessionCleanup());
+		//addDetachListener(new SessionCleanup(connections));
 	}
 	
 	private void createTestEntries() {
@@ -93,10 +92,14 @@ public class SessionManager extends UI {
 	
 	public void ensureBase(){
 		if(!Base.hasConnection()){
+			String HOSTNAME = System.getProperty("RDS_HOSTNAME") == null ? "localhost" : System.getProperty("RDS_HOSTNAME");
+			String PORT = System.getProperty("RDS_PORT") == null ? "3306" : System.getProperty("RDS_PORT");
+			String DBNAME = System.getProperty("RDS_DBNAME") == null ? "pm_database" : System.getProperty("RDS_DBNAME");
+			String USERNAME = System.getProperty("RDS_USERNAME") == null ? "root" : System.getProperty("RDS_USERNAME");
+			String PASSWORD = System.getProperty("RDS_PASSWORD") == null ? "databaseserver" : System.getProperty("RDS_PASSWORD");
+			
 			Base.open("com.mysql.jdbc.Driver", 
-					"jdbc:mysql://" + System.getProperty("RDS_HOSTNAME") + ":" + System.getProperty("RDS_PORT") + "/" + System.getProperty("RDS_DBNAME"), 
-					System.getProperty("RDS_USERNAME"), 
-					System.getProperty("RDS_PASSWORD"));
+					"jdbc:mysql://" + HOSTNAME + ":" + PORT + "/" + DBNAME, USERNAME, PASSWORD);
 			connections.add(Base.connection());
 			System.out.println(connections.size() + " connections");
 		}
@@ -106,9 +109,13 @@ public class SessionManager extends UI {
 		connections.remove(Base.connection());
 		Base.close(true);
 	}
+	
+	public ArrayList<Connection> getConnections(){
+		return connections;
+	}
 
 	public void setCurrentUser(User temp) {
-		this.currentUser = temp;
+		VaadinSession.getCurrent().setAttribute(User.class, temp);
 	}
 	
 	public void setCurrentDash(DashboardView dash){
@@ -118,13 +125,9 @@ public class SessionManager extends UI {
 	public DashboardView getDash(){
 		return currentDash;
 	}
-
-	public boolean userLoggedOn(){
-		return (currentUser != null);
-	}
 	
 	public User getCurrentUser(){
-		return currentUser;
+		return VaadinSession.getCurrent().getAttribute(User.class);
 	}
 	
 	public Navigator getNav(){

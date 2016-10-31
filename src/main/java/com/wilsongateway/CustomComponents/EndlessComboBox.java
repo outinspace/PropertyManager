@@ -13,6 +13,8 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.wilsongateway.Framework.SessionManager;
+import com.wilsongateway.Framework.Tables.Property;
+import com.wilsongateway.Framework.Tables.User;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalLayout;
@@ -48,7 +50,7 @@ public class EndlessComboBox<T> extends CustomComponent{
 		content.addComponent(boxLayout);
 		
 		//Preload values
-		if(this.values == null){
+		if(this.values == null || this.values.size() == 0){
 			addComboBox(null);	
 		}else{
 			for(T value : values){
@@ -59,6 +61,7 @@ public class EndlessComboBox<T> extends CustomComponent{
 		
 		Button plus = new Button();
 		plus.setIcon(FontAwesome.PLUS);
+		plus.setStyleName("tiny");
 		content.addComponent(plus);
 		
 		plus.addClickListener(new ClickListener(){
@@ -151,5 +154,23 @@ public class EndlessComboBox<T> extends CustomComponent{
 			
 		});
 		addComboBox(null);
+	}
+	
+	public void setManyToMany(User u, Model staticRef) {
+		//Remove relationships
+		for(Model instance : u.getAll(staticRef.getClass())){
+			if(!this.getValues().contains(instance)){
+				u.remove(instance);
+			}
+		}
+		
+		//Add new Relationships
+		for(T instance : this.getValues()){
+			if(instance != null && instance instanceof Model){
+				if(!u.getAll(staticRef.getClass()).contains(instance)){
+					u.add((Model)instance);
+				}
+			}
+		}
 	}
 }

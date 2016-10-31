@@ -106,7 +106,14 @@ public class Tables {
 	 *
 	 */
 	@Table("properties")
-	public static class Property extends Model {}
+	public static class Property extends Model {
+		
+		@Override
+		public String toString(){
+			return this.getString("name");
+		}
+		
+	}
 	public static final Property PROPERTY = new Property();
 	
 	

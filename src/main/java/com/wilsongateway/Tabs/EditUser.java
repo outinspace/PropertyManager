@@ -13,12 +13,14 @@ import com.wilsongateway.Forms.EditForm;
 import com.wilsongateway.Framework.SessionManager;
 import com.wilsongateway.Framework.Tables;
 import com.wilsongateway.Framework.Tables.Group;
+import com.wilsongateway.Framework.Tables.Property;
 import com.wilsongateway.Framework.Tables.User;
 
 @SuppressWarnings("serial")
 public class EditUser extends EditForm<User>{
 
-	private EndlessComboBox<Group> combos;
+	private EndlessComboBox<Group> groupSelect;
+	private EndlessComboBox<Property> propertySelect;
 	
 	public EditUser(SessionManager manager, User item) {
 		super(manager, item, "User");
@@ -48,7 +50,9 @@ public class EditUser extends EditForm<User>{
 			newU.save();
 			
 			if(viewMode != Mode.PERSONAL){
-				interpretAndSetGroups(newU);
+				//interpretAndSetGroups(newU);
+				groupSelect.setManyToMany(newU, Tables.GROUP);
+				propertySelect.setManyToMany(newU, Tables.PROPERTY);
 				newU.save();
 			}
 			
@@ -66,31 +70,51 @@ public class EditUser extends EditForm<User>{
 		}
 	}
 	
-	private void interpretAndSetGroups(User u) {
-		//Remove Groups
-		for(Group g : u.getAll(Group.class)){
-			if(!combos.getValues().contains(g)){
-				u.remove(g);
-			}
-		}
-		
-		//Add new Groups
-		for(Group g : combos.getValues()){
-			if(g != null){
-				u.addGroup(g);
-			}
-		}
-	}
+//	private void interpretAndSetGroups(User u) {
+//		//Remove Groups
+//		for(Group g : u.getAll(Group.class)){
+//			if(!groupSelect.getValues().contains(g)){
+//				u.remove(g);
+//			}
+//		}
+//		
+//		//Add new Groups
+//		for(Group g : groupSelect.getValues()){
+//			if(g != null){
+//				u.addGroup(g);
+//			}
+//		}
+//	}
+//	
+//	private void interpretAndSetProperties(User u) {
+//		//Remove Props
+//		for(Property p : u.getAll(Property.class)){
+//			if(!propertySelect.getValues().contains(p)){
+//				u.remove(p);
+//			}
+//		}
+//		
+//		//Add new Props
+//		for(Property p : propertySelect.getValues()){
+//			if(p != null){
+//				if(!u.getAll(Property.class).contains(p)){
+//					u.add(p);
+//				}
+//			}
+//		}
+//	}
 
 	@Override
 	protected void clearFields() {
 		clearAllTF();
-		combos.clear();
+		groupSelect.clear();
+		propertySelect.clear();
 	}
 
 	@Override
 	protected void reloadData() {
-		combos.setOptions(Tables.GROUP.findAll());
+		groupSelect.setOptions(Tables.GROUP.findAll());
+		propertySelect.setOptions(Tables.PROPERTY.findAll());
 	}
 
 	@Override
@@ -118,12 +142,11 @@ public class EditUser extends EditForm<User>{
 
 	@Override
 	protected void createRightCol(VerticalLayout rightCol, User u) {
-		combos = new EndlessComboBox<Group>("Groups", Tables.GROUP.findAll(), (u == null) ? null : u.getAll(Group.class));
-		rightCol.addComponent(combos);
+		groupSelect = new EndlessComboBox<Group>("Groups", Tables.GROUP.findAll(), (u == null) ? null : u.getAll(Group.class));
+		rightCol.addComponent(groupSelect);
 		
-		rightCol.addComponent(new Label("<p>Select groups from the left column and click >> to add this user"
-				+ " to that group. Select groups from the right column and click << to remove this user from "
-				+ "those groups.</p>",ContentMode.HTML));
+		propertySelect = new EndlessComboBox<Property>("Properties", Tables.PROPERTY.findAll(), (u == null) ? null : u.getAll(Property.class));
+		rightCol.addComponent(propertySelect);
 	}
 
 }
