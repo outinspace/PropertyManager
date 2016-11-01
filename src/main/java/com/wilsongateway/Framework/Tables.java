@@ -21,20 +21,29 @@ public class Tables {
 			}
 		}
 	}
+	
+	
 	/**
 	 * User Model
 	 * Columns: [id, username, password, first_name, last_name, position, apt_phone, cell_phone, created_at]
+	 * Encrypted: [password, first_name, last_name, position, apt_phone, cell_phone]
 	 *
 	 */
 	@Table("users")
-	public static class User extends Model {
+	public static class User extends EncryptedModel {
+		
+		public User(){
+			super();
+		}
 		
 		public User find(String username){return USER.findFirst("username = (?)", username);}
 		
-		public String getUsername(){return this.getString("username");}
-		public String getPassword(){return this.getString("password");}
-		public String getFirstName(){return this.getString("first_name");}
-		public String getLastName(){return  this.getString("last_name");}
+		public String getUsername(){
+			return this.getString("username");
+		}
+		public String getPassword(){
+			return this.getString("password");
+		}
 		
 		public void addGroup(Group newGroup){
 			if(!this.getAll(Group.class).contains(newGroup)){
@@ -86,6 +95,11 @@ public class Tables {
 				throw new InvalidPasswordException();
 			}
 		}
+
+		@Override
+		public String toString() {
+			return this.getString("first_name") + " " + this.getString("last_name");
+		}
 	}
 	public static final User USER = new User();
 	
@@ -93,10 +107,17 @@ public class Tables {
 	/**
 	 * Client Model
 	 * Columns: [id, first_name, last_name, unit, property_id, created_at]
+	 * Encrypted: [first_name, last_name]
 	 * 
 	 */
 	@Table("clients")
-	public static class Client extends Model {}
+	public static class Client extends Model {
+
+		@Override
+		public String toString() {
+			return this.getString("first_name") + " " + this.getString("last_name");
+		}
+	}
 	public static final Client CLIENT = new Client();
 	
 	

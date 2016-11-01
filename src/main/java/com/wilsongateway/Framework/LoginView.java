@@ -180,8 +180,8 @@ public class LoginView extends VerticalLayout implements View{
 	@Override
 	public void enter(ViewChangeEvent event) {
 		//TODO for testing purposes
-		usernameField.setValue("admin");
-		passwordField.setValue("Password1");
+//		usernameField.setValue("admin");
+//		passwordField.setValue("Password1");
 	}
 	
 }

@@ -165,8 +165,8 @@ public class EditUserDep extends Tab{
 		}
 		usernameTF.setValue(u.getUsername());
 		passwordTF.setValue(u.getPassword());
-		firstNameTF.setValue(u.getFirstName());
-		lastNameTF.setValue(u.getLastName());
+		firstNameTF.setValue(u.getString("first_name"));
+		lastNameTF.setValue(u.getString("last_name"));
 		positionTF.setValue(u.getString("position"));
 		aptPhoneTF.setValue(u.getString("apt_phone"));
 		cellPhoneTF.setValue(u.getString("cell_phone"));

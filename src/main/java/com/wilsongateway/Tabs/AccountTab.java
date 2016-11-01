@@ -16,7 +16,7 @@ public class AccountTab extends Tab{
 	}
 
 	private void initUI() {
-		addComponent(new Label("Account Settings for " + manager.getCurrentUser().getFirstName()));
+		addComponent(new Label("Account Settings for " + manager.getCurrentUser().getString("first_name")));
 		addComponent(new Button("Change Password"));
 	}
 
