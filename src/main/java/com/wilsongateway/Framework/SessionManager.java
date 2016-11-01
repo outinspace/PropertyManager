@@ -16,6 +16,8 @@ import com.vaadin.ui.UI;
 import com.wilsongateway.Framework.Tab.TabType;
 import com.wilsongateway.Framework.Tables.Group;
 import com.wilsongateway.Framework.Tables.User;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 
 @SuppressWarnings("serial")
 @Theme("pmTheme")
@@ -24,14 +26,39 @@ public class SessionManager extends UI {
 	@WebServlet(value = "/*", asyncSupported = true)
 	@VaadinServletConfiguration(productionMode = false, ui = SessionManager.class)
 	public static class Servlet extends VaadinServlet {
+		
+		private static final String HOSTNAME = System.getProperty("RDS_HOSTNAME") == null ? "localhost" : System.getProperty("RDS_HOSTNAME");
+		private static final String PORT = System.getProperty("RDS_PORT") == null ? "3306" : System.getProperty("RDS_PORT");
+		private static final String DBNAME = System.getProperty("RDS_DBNAME") == null ? "pm_database" : System.getProperty("RDS_DBNAME");
+		private static final String USERNAME = System.getProperty("RDS_USERNAME") == null ? "root" : System.getProperty("RDS_USERNAME");
+		private static final String PASSWORD = System.getProperty("RDS_PASSWORD") == null ? "databaseserver" : System.getProperty("RDS_PASSWORD");
+		
+		private static HikariDataSource datasource;
+		
+		//Server-wide Configuration
+		public Servlet(){
+			//Create connection pool
+			HikariConfig config = new HikariConfig();
+			config.setJdbcUrl("jdbc:mysql://" + HOSTNAME + ":" + PORT + "/" + DBNAME);
+			config.setUsername(USERNAME);
+			config.setPassword(PASSWORD);
+			//config.setDataSourceClassName("com.mysql.jdbc.jdbc2.optional.MysqlDataSource");
+			config.setDriverClassName("com.mysql.jdbc.Driver");
+			config.addDataSourceProperty("cachePrepStmts", "true");
+			config.addDataSourceProperty("prepStmtCacheSize", "250");
+			config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+
+			datasource = new HikariDataSource(config);
+		}
+		
+		public static HikariDataSource getDatasource(){
+			return datasource;
+		}
 	}
 
 	//Dev Database login
 	static final String SQLuser = "wilsongatewaydb";
 	static final String SQLpassword = "databaseserver";
-	
-	//TODO add connection pooling
-	private ArrayList<Connection> connections = new ArrayList<Connection>();
 	
 	//View ENUMS
 	public static final String LOGINVIEW = "";
@@ -92,30 +119,15 @@ public class SessionManager extends UI {
 	
 	public void ensureBase(){
 		if(!Base.hasConnection()){
-			String HOSTNAME = System.getProperty("RDS_HOSTNAME") == null ? "localhost" : System.getProperty("RDS_HOSTNAME");
-			String PORT = System.getProperty("RDS_PORT") == null ? "3306" : System.getProperty("RDS_PORT");
-			String DBNAME = System.getProperty("RDS_DBNAME") == null ? "pm_database" : System.getProperty("RDS_DBNAME");
-			String USERNAME = System.getProperty("RDS_USERNAME") == null ? "root" : System.getProperty("RDS_USERNAME");
-			String PASSWORD = System.getProperty("RDS_PASSWORD") == null ? "databaseserver" : System.getProperty("RDS_PASSWORD");
-			
-			Base.open("com.mysql.jdbc.Driver", 
-					"jdbc:mysql://" + HOSTNAME + ":" + PORT + "/" + DBNAME, USERNAME, PASSWORD);
-			
-			
-			connections.add(Base.connection());
-			System.out.println(connections.size() + " connections");
+			Base.open(Servlet.getDatasource());
 		}
 	}
 	
 	public void closeBase(){
-		connections.remove(Base.connection());
+		//connections.remove(Base.connection());
 		Base.close(true);
 	}
 	
-	public ArrayList<Connection> getConnections(){
-		return connections;
-	}
-
 	public void setCurrentUser(User temp) {
 		VaadinSession.getCurrent().setAttribute(User.class, temp);
 	}

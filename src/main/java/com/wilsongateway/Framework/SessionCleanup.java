@@ -26,15 +26,13 @@ public class SessionCleanup implements DetachListener{
 	
 	@Override
 	public void detach(DetachEvent event)throws NullPointerException{
-		System.out.println("Cleaning up session");
-		
-		for(Connection c : manager.getConnections()){
-			try {
-				c.close();
-			} catch (SQLException e) {}
-		}
-		
-		Base.close(true);
+//		for(Connection c : manager.getConnections()){
+//			try {
+//				c.close();
+//			} catch (SQLException e) {}
+//		}
+//		
+//		Base.close(true);
 		
 		VaadinSession.getCurrent().close();
 		SessionManager.getCurrent().getPage().setLocation("");

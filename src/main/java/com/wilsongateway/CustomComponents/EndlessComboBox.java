@@ -84,6 +84,7 @@ public class EndlessComboBox<T> extends CustomComponent{
 		ComboBox box = new ComboBox();
 		box.addItems(options);
 		
+		//TODO Clean
 		for(T option : options){
 			if(value != null && value.equals(option)){
 				value = option;
@@ -146,14 +147,14 @@ public class EndlessComboBox<T> extends CustomComponent{
 
 			@Override
 			public void run() {
-				for(ComboBox cb : boxes){//TODO fix
+				for(ComboBox cb : boxes){
 					boxes.remove(cb);
 				}
 				boxLayout.removeAllComponents();
+				addComboBox(null);
 			}
 			
 		});
-		addComboBox(null);
 	}
 	
 	public void setManyToMany(User u, Model staticRef) {

@@ -109,6 +109,16 @@ public class Tables {
 	public static class Property extends Model {
 		
 		@Override
+		public boolean equals(Object obj){
+			if(obj instanceof Property){
+				if(this.getId() == ((Property)obj).getId()){
+					return true;
+				}
+			}
+			return false;
+		}
+		
+		@Override
 		public String toString(){
 			return this.getString("name");
 		}
