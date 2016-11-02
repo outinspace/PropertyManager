@@ -4,6 +4,7 @@ import org.javalite.activejdbc.Model;
 
 import com.vaadin.ui.Table;
 import com.wilsongateway.Forms.ViewAllForm;
+import com.wilsongateway.Framework.EncryptedModel;
 import com.wilsongateway.Framework.SessionManager;
 import com.wilsongateway.Framework.Tables;
 import com.wilsongateway.Framework.Tables.Group;
@@ -27,7 +28,7 @@ public class ViewAllProperties extends ViewAllForm{
 	}
 
 	@Override
-	protected void navToEdit(Model ppt) {
+	protected void navToEdit(EncryptedModel ppt) {
 		manager.getDash().getTabNav().addView("EDITPROPERTY", new EditProperty(manager, (Property) ppt));
 		manager.getDash().getTabNav().navigateTo("EDITPROPERTY");
 	}

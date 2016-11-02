@@ -91,13 +91,15 @@ public class SessionManager extends UI {
 	}
 	
 	private void createTestEntries() {
+		System.out.println("Creating Test Entries");
 		User u = Tables.USER.findFirst("username = 'admin'");
 		if(u == null){
 			u = new User();
-			u.set("username", "admin");
-			u.set("password", "Password1");
-			u.saveIt();
 		}
+		u.setEncrypted("username", "admin");
+		u.setEncrypted("password", "Password1");
+		System.out.println("Saving admin");
+		u.save();
 		
 		//Create group with one tab
 		Group g1 = Tables.GROUP.findFirst("name = 'Admin'");

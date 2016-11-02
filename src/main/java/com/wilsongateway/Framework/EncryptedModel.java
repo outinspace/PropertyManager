@@ -19,45 +19,52 @@ public abstract class EncryptedModel extends Model{
 		this.encryptedAttributes = attributes;
 	}
 	
-	//Encrypt all attributes specified in encryptedAttributes
-//	@Override
-//	public void beforeSave(){
-//		for(String attribute : encryptedAttributes){
-//			this.set(attribute, encryptor.encrypt(this.getString(attribute)));
-//		}
-//		System.out.println("Before save called!!!");
-//	}
-	
-	@Override
-	public Object get(String attributeName){
+	public Object getDecrypted(String attributeName){
 		Object obj = super.get(attributeName);
 		if(isEncryptedAttribute(attributeName) && obj instanceof String){
-			return this.getString(attributeName);
+			String s = (String)obj;
+			if(s == null || s.equals("")){
+				return s;
+			}else{
+				BasicTextEncryptor encryptor = new BasicTextEncryptor();
+				encryptor.setPassword(GLOBALKEY);
+				return encryptor.decrypt(s);
+			}
 		}
 		return obj;
 	}
 	
-	@Override
-	public String getString(String attributeName){
-		String s = super.getString(attributeName);
-		if(s == null || s.equals("")){
-			return s;
-		}else if(isEncryptedAttribute(attributeName)){//TODO check for inconsistencies, maybe set salt to 0.
-			BasicTextEncryptor encryptor = new BasicTextEncryptor();
-			encryptor.setPassword(GLOBALKEY);
-			return encryptor.decrypt(s);
+	public String getAsString(String attributeName){
+		Object obj = getDecrypted(attributeName);
+		if(obj instanceof String){
+			return (String)obj;
 		}
-		return s;
+		return null;
 	}
 	
-	@Override
-	public <T extends Model> T set(String attributeName, Object value){//TODO fix resetting to plain text
-		if(isEncryptedAttribute(attributeName)){
+//	@Override
+//	public String getString(String attributeName){
+//		String s = super.getString(attributeName);
+//		if(s == null || s.equals("")){
+//			return s;
+//		}else if(isEncryptedAttribute(attributeName)){//TODO check for inconsistencies, maybe set salt to 0.
+//			BasicTextEncryptor encryptor = new BasicTextEncryptor();
+//			encryptor.setPassword(GLOBALKEY);
+//			return encryptor.decrypt(s);
+//		}
+//		return s;
+//	}
+	
+	public <T extends Model> T setEncrypted(String attributeName, Object value){
+		System.out.println("Setting attribute: " + attributeName);
+		if(isEncryptedAttribute(attributeName) && value instanceof String){
 			BasicTextEncryptor encryptor = new BasicTextEncryptor();
 			encryptor.setPassword(GLOBALKEY);
 			String encrypted = encryptor.encrypt((String)value);
+			System.out.println("Using encryption: " + encrypted + "\n");
 			return super.set(attributeName, encrypted);
 		}else{
+			System.out.println("Using plaintext: " + value + "\n");
 			return super.set(attributeName, value);
 		}
 	}

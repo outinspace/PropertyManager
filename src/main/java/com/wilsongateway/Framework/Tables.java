@@ -14,9 +14,10 @@ import com.wilsongateway.Framework.Tables.User;
 
 public class Tables {
 
-	public static void isUniqueName(String columnName, Model item, String comparing) throws NameUnavailableException{
+	public static void isUniqueName(String columnName, EncryptedModel item, String comparing) throws NameUnavailableException{
 		for(Model m : item.findAll()){
-			if(m.getString(columnName) != null && m.getString(columnName).equals(comparing)){
+			EncryptedModel em = (EncryptedModel)m;
+			if(em.getAsString(columnName) != null && em.getAsString(columnName).equals(comparing)){
 				throw new NameUnavailableException();
 			}
 		}
@@ -39,10 +40,10 @@ public class Tables {
 		public User find(String username){return USER.findFirst("username = (?)", username);}
 		
 		public String getUsername(){
-			return this.getString("username");
+			return this.getAsString("username");
 		}
 		public String getPassword(){
-			return this.getString("password");
+			return this.getAsString("password");
 		}
 		
 		public void addGroup(Group newGroup){
@@ -81,7 +82,7 @@ public class Tables {
 			}else{
 				User u = Tables.USER.findFirst("username = (?)", username);
 				if(u == null){
-					this.set("username", username);
+					this.setEncrypted("username", username);
 				}else{
 					throw new NameUnavailableException();
 				}
@@ -90,7 +91,9 @@ public class Tables {
 		
 		public void checkAndSetPassword(String password) throws InvalidPasswordException{
 			if(User.isAcceptablePassword(password)){
-				this.set("password", password);
+				System.out.println("calling set password");
+				this.setEncrypted("password", password);
+				this.save();
 			}else{
 				throw new InvalidPasswordException();
 			}
@@ -98,7 +101,7 @@ public class Tables {
 
 		@Override
 		public String toString() {
-			return this.getString("first_name") + " " + this.getString("last_name");
+			return this.getAsString("first_name") + " " + this.getAsString("last_name");
 		}
 	}
 	public static final User USER = new User();
@@ -111,11 +114,11 @@ public class Tables {
 	 * 
 	 */
 	@Table("clients")
-	public static class Client extends Model {
+	public static class Client extends EncryptedModel {
 
 		@Override
 		public String toString() {
-			return this.getString("first_name") + " " + this.getString("last_name");
+			return this.getAsString("first_name") + " " + this.getAsString("last_name");
 		}
 	}
 	public static final Client CLIENT = new Client();
@@ -127,7 +130,7 @@ public class Tables {
 	 *
 	 */
 	@Table("properties")
-	public static class Property extends Model {
+	public static class Property extends EncryptedModel {
 		
 		@Override
 		public boolean equals(Object obj){
@@ -141,7 +144,7 @@ public class Tables {
 		
 		@Override
 		public String toString(){
-			return this.getString("name");
+			return this.getAsString("name");
 		}
 		
 	}
@@ -154,7 +157,13 @@ public class Tables {
 	 *
 	 */
 	@Table("properties_users")
-	public static class PropertiesUsers extends Model {}
+	public static class PropertiesUsers extends EncryptedModel {
+
+		@Override
+		public String toString() {
+			// TODO Auto-generated method stub
+			return null;
+		}}
 	public static final PropertiesUsers PROPERTIESUSERS = new PropertiesUsers();
 	
 	
@@ -164,7 +173,7 @@ public class Tables {
 	 *
 	 */
 	@Table("groups")
-	public static class Group extends Model {
+	public static class Group extends EncryptedModel {
 		
 		public ArrayList<TabType> getTabs() {
 			ArrayList<TabType> output = new ArrayList<TabType>();
@@ -188,18 +197,18 @@ public class Tables {
 		}
 		
 		public void setName(String name){
-			this.set("name", name.replace(",", ""));
+			this.setEncrypted("name", name.replace(",", ""));
 		}
 		
 		public void setTabs(ArrayList<TabType> tabs) {
-			this.set("tabs", tabs.toString());
+			this.setEncrypted("tabs", tabs.toString());
 		}
 		
 		public void addTab(TabType tab) {
 			ArrayList<TabType> tabs = this.getTabs();
 			if(!tabs.contains(tab)){
 				tabs.add(tab);
-				this.set("tabs", tabs.toString());
+				this.setEncrypted("tabs", tabs.toString());
 			}
 		}
 		
@@ -221,7 +230,7 @@ public class Tables {
 		
 		@Override
 		public String toString(){
-			return this.getString("name");
+			return this.getAsString("name");
 		}
 	}
 	public static final Group GROUP = new Group();
@@ -233,7 +242,13 @@ public class Tables {
 	 *
 	 */
 	@Table("groups_users")
-	public static class GroupsUsers extends Model {}
+	public static class GroupsUsers extends EncryptedModel {
+
+		@Override
+		public String toString() {
+			// TODO Auto-generated method stub
+			return null;
+		}}
 	public static final GroupsUsers GROUPSUSERS = new GroupsUsers();
 }
 

@@ -10,6 +10,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
 import com.wilsongateway.Deprecated.EditUserDep.Mode;
 import com.wilsongateway.Framework.DashboardView;
+import com.wilsongateway.Framework.EncryptedModel;
 import com.wilsongateway.Framework.SessionManager;
 import com.wilsongateway.Framework.Tab;
 import com.wilsongateway.Framework.Tables;
@@ -20,9 +21,9 @@ import com.wilsongateway.Tabs.EditUser;
 public abstract class ViewAllForm extends Tab{
 
 	private Table t;
-	private Model model;
+	private EncryptedModel model;
 	
-	public ViewAllForm(SessionManager manager, Model model, String pluralItemName, boolean isEditable) {
+	public ViewAllForm(SessionManager manager, EncryptedModel model, String pluralItemName, boolean isEditable) {
 		super((isEditable ? "Edit" : "View") + " All " + pluralItemName, manager);
 		this.model = model;
 		
@@ -50,7 +51,7 @@ public abstract class ViewAllForm extends Tab{
 		t.removeAllItems();
 		//Iterate through all users
 		for(Model m : model.findAll()){
-			
+			EncryptedModel em = (EncryptedModel)m;
 			int length = t.getContainerPropertyIds().size();
 			Object[] cells = new Object[length];
 			
@@ -65,27 +66,27 @@ public abstract class ViewAllForm extends Tab{
 					CssLayout btnLayout = new CssLayout();
 					cells[i] = btnLayout;
 					
-					Button btn = new Button("edit", event -> navToEdit(m));
+					Button btn = new Button("edit", event -> navToEdit(em));
 					btn.setStyleName("quiet");
 					btnLayout.addComponent(btn);
 					//Set cell to get(cellName)
 				}else{
-					if(m.getString(attribute) == null){
+					if(em.getAsString(attribute) == null){
 						cells[i] = "";
-					}else if(m.get(attribute).toString().length() < 50){
-						cells[i] = m.get(attribute).toString();
+					}else if(em.getDecrypted(attribute).toString().length() < 50){
+						cells[i] = em.getDecrypted(attribute).toString();
 					}else{
-						cells[i] = m.get(attribute).toString().substring(0, 50) + "...";
+						cells[i] = em.getDecrypted(attribute).toString().substring(0, 50) + "...";
 					}
 				}
 			}
 			
-			t.addItem(cells, m.getId());
+			t.addItem(cells, em.getId());
 		}
 		
 	}
 
-	protected abstract void navToEdit(Model usr);
+	protected abstract void navToEdit(EncryptedModel usr);
 
 	@Override
 	public void enter(ViewChangeEvent event) {

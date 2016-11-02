@@ -4,6 +4,7 @@ import org.javalite.activejdbc.Model;
 
 import com.vaadin.ui.Table;
 import com.wilsongateway.Forms.ViewAllForm;
+import com.wilsongateway.Framework.EncryptedModel;
 import com.wilsongateway.Framework.SessionManager;
 import com.wilsongateway.Framework.Tables;
 import com.wilsongateway.Framework.Tables.Group;
@@ -24,7 +25,7 @@ public class ViewAllGroups extends ViewAllForm{
 	}
 
 	@Override
-	protected void navToEdit(Model grp) {
+	protected void navToEdit(EncryptedModel grp) {
 		manager.getDash().getTabNav().addView("EDITGROUP", new EditGroup(manager, (Group) grp));
 		manager.getDash().getTabNav().navigateTo("EDITGROUP");
 	}

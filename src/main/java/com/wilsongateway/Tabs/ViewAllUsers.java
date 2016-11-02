@@ -4,6 +4,7 @@ import org.javalite.activejdbc.Model;
 
 import com.vaadin.ui.Table;
 import com.wilsongateway.Forms.ViewAllForm;
+import com.wilsongateway.Framework.EncryptedModel;
 import com.wilsongateway.Framework.SessionManager;
 import com.wilsongateway.Framework.Tables;
 import com.wilsongateway.Framework.Tables.User;
@@ -25,7 +26,7 @@ public class ViewAllUsers extends ViewAllForm{
 	}
 
 	@Override
-	protected void navToEdit(Model usr) {
+	protected void navToEdit(EncryptedModel usr) {
 		manager.getDash().getTabNav().addView("EDITUSER", new EditUser(manager, (User) usr));
 		manager.getDash().getTabNav().navigateTo("EDITUSER");
 	}

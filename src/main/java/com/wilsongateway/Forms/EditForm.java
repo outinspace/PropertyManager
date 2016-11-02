@@ -22,6 +22,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.wilsongateway.CustomComponents.EndlessComboBox;
 import com.wilsongateway.Exceptions.InvalidPasswordException;
 import com.wilsongateway.Exceptions.NameUnavailableException;
+import com.wilsongateway.Framework.EncryptedModel;
 import com.wilsongateway.Framework.SessionManager;
 import com.wilsongateway.Framework.Tab;
 import com.wilsongateway.Framework.Tables;
@@ -29,7 +30,7 @@ import com.wilsongateway.Framework.Tables.Group;
 import com.wilsongateway.Framework.Tables.User;
 
 @SuppressWarnings("serial")
-public abstract class EditForm<T extends Model> extends Tab{
+public abstract class EditForm<T extends EncryptedModel> extends Tab{
 
 	private HorizontalLayout split;
 	private FormLayout leftCol;
@@ -97,7 +98,7 @@ public abstract class EditForm<T extends Model> extends Tab{
 		}
 		
 		if(viewMode != Mode.ADD){
-			temp.setValue(item.getString(columnName));
+			temp.setValue(item.getAsString(columnName));
 		}
 		
 		leftCol.addComponent(temp);

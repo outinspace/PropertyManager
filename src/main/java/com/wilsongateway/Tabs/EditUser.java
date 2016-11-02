@@ -33,7 +33,6 @@ public class EditUser extends EditForm<User>{
 			if(viewMode == Mode.ADD){
 				newU = new User();
 				newU.checkAndSetUsername(getTFValue("username"));
-				newU.checkAndSetPassword(getTFValue("password"));
 			}else{
 				newU = getItem();
 				if(!getTFValue("username").equals(newU.getUsername())){

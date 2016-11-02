@@ -162,12 +162,7 @@ public class LoginView extends VerticalLayout implements View{
 				manager.getNav().addView(SessionManager.DASHBOARDVIEW, new DashboardView(manager));
 				manager.getNav().navigateTo(SessionManager.DASHBOARDVIEW);
 			}else{
-				attempts++;
 				Notification.show("Incorrect Username or Password");
-				if(attempts > 5){
-					//TODO capcha
-					System.out.println("Current login attempts: " + attempts);
-				}
 			}
 			break;
 		case FORGOT:
