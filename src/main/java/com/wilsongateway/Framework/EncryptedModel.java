@@ -1,5 +1,6 @@
 package com.wilsongateway.Framework;
 
+import org.jasypt.util.text.BasicTextEncryptor;
 import org.jasypt.util.text.StrongTextEncryptor;
 import org.javalite.activejdbc.CallbackAdapter;
 import org.javalite.activejdbc.Model;
@@ -9,12 +10,12 @@ import com.wilsongateway.Exceptions.CannotEncryptNonStringException;
 public abstract class EncryptedModel extends Model{
 
 	private static final String GLOBALKEY = System.getProperty("global_key") == null ? "devKey" : System.getProperty("global_key");
-	private StrongTextEncryptor encryptor;
+	//private BasicTextEncryptor encryptor;
 	private String[] encryptedAttributes;
 	
 	public EncryptedModel(String ... attributes){
-		encryptor = new StrongTextEncryptor();
-		encryptor.setPassword(GLOBALKEY);
+//		encryptor = new BasicTextEncryptor();
+//		encryptor.setPassword(GLOBALKEY);
 		this.encryptedAttributes = attributes;
 	}
 	
@@ -31,7 +32,7 @@ public abstract class EncryptedModel extends Model{
 	public Object get(String attributeName){
 		Object obj = super.get(attributeName);
 		if(isEncryptedAttribute(attributeName) && obj instanceof String){
-			return encryptor.decrypt((String)obj);
+			return this.getString(attributeName);
 		}
 		return obj;
 	}
@@ -39,15 +40,21 @@ public abstract class EncryptedModel extends Model{
 	@Override
 	public String getString(String attributeName){
 		String s = super.getString(attributeName);
-		if(isEncryptedAttribute(attributeName)){
+		if(s == null || s.equals("")){
+			return s;
+		}else if(isEncryptedAttribute(attributeName)){//TODO check for inconsistencies, maybe set salt to 0.
+			BasicTextEncryptor encryptor = new BasicTextEncryptor();
+			encryptor.setPassword(GLOBALKEY);
 			return encryptor.decrypt(s);
 		}
 		return s;
 	}
 	
 	@Override
-	public <T extends Model> T set(String attributeName, Object value){
-		if(isEncryptedAttribute(attributeName) && value instanceof String){
+	public <T extends Model> T set(String attributeName, Object value){//TODO fix resetting to plain text
+		if(isEncryptedAttribute(attributeName)){
+			BasicTextEncryptor encryptor = new BasicTextEncryptor();
+			encryptor.setPassword(GLOBALKEY);
 			String encrypted = encryptor.encrypt((String)value);
 			return super.set(attributeName, encrypted);
 		}else{

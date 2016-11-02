@@ -7,6 +7,7 @@ import com.wilsongateway.Framework.SessionManager;
 import com.wilsongateway.Framework.Tab;
 
 @SuppressWarnings("serial")
+@Deprecated
 public class AccountTab extends Tab{
 
 	public AccountTab(SessionManager manager) {

@@ -33,7 +33,7 @@ public class Tables {
 	public static class User extends EncryptedModel {
 		
 		public User(){
-			super();
+			super("password");
 		}
 		
 		public User find(String username){return USER.findFirst("username = (?)", username);}

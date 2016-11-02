@@ -46,7 +46,7 @@ public abstract class ViewAllForm extends Tab{
 
 	protected abstract void setContainerProperties(Table t);
 
-	private void populateTable() {
+	private void populateTable() {//TODO add column captions
 		t.removeAllItems();
 		//Iterate through all users
 		for(Model m : model.findAll()){
@@ -56,12 +56,12 @@ public abstract class ViewAllForm extends Tab{
 			
 			//get column data from user using propertyIds
 			for(int i = 0; i < length; i++){
-				String id = (String)t.getContainerPropertyIds().toArray()[i];
+				String attribute = (String)t.getContainerPropertyIds().toArray()[i];
 				//Hide password
-				if(id.equals("password")){
+				if(attribute.equals("password")){
 					cells[i] = "********";
 					//Add edit button if isEditable
-				}else if(id.equals("")){
+				}else if(attribute.equals("")){
 					CssLayout btnLayout = new CssLayout();
 					cells[i] = btnLayout;
 					
@@ -70,12 +70,12 @@ public abstract class ViewAllForm extends Tab{
 					btnLayout.addComponent(btn);
 					//Set cell to get(cellName)
 				}else{
-					if(m.get(id) == null){
+					if(m.getString(attribute) == null){
 						cells[i] = "";
-					}else if(m.get(id).toString().length() < 50){
-						cells[i] = m.get(id).toString();
+					}else if(m.get(attribute).toString().length() < 50){
+						cells[i] = m.get(attribute).toString();
 					}else{
-						cells[i] = m.get(id).toString().substring(0, 50) + "...";
+						cells[i] = m.get(attribute).toString().substring(0, 50) + "...";
 					}
 				}
 			}
