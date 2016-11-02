@@ -41,11 +41,11 @@ public class EditUser extends EditForm<User>{
 			}
 			
 			newU.checkAndSetPassword(getTFValue("password"));
-			newU.set("first_name", getTFValue("first_name"));
-			newU.set("last_name", getTFValue("last_name"));
-			newU.set("position", getTFValue("position"));
-			newU.set("apt_phone", getTFValue("apt_phone"));
-			newU.set("cell_phone", getTFValue("cell_phone"));
+			newU.setEncrypted("first_name", getTFValue("first_name"));
+			newU.setEncrypted("last_name", getTFValue("last_name"));
+			newU.setEncrypted("position", getTFValue("position"));
+			newU.setEncrypted("apt_phone", getTFValue("apt_phone"));
+			newU.setEncrypted("cell_phone", getTFValue("cell_phone"));
 			newU.save();
 			
 			if(viewMode != Mode.PERSONAL){
@@ -68,40 +68,6 @@ public class EditUser extends EditForm<User>{
 			e.printStackTrace();
 		}
 	}
-	
-//	private void interpretAndSetGroups(User u) {
-//		//Remove Groups
-//		for(Group g : u.getAll(Group.class)){
-//			if(!groupSelect.getValues().contains(g)){
-//				u.remove(g);
-//			}
-//		}
-//		
-//		//Add new Groups
-//		for(Group g : groupSelect.getValues()){
-//			if(g != null){
-//				u.addGroup(g);
-//			}
-//		}
-//	}
-//	
-//	private void interpretAndSetProperties(User u) {
-//		//Remove Props
-//		for(Property p : u.getAll(Property.class)){
-//			if(!propertySelect.getValues().contains(p)){
-//				u.remove(p);
-//			}
-//		}
-//		
-//		//Add new Props
-//		for(Property p : propertySelect.getValues()){
-//			if(p != null){
-//				if(!u.getAll(Property.class).contains(p)){
-//					u.add(p);
-//				}
-//			}
-//		}
-//	}
 
 	@Override
 	protected void clearFields() {

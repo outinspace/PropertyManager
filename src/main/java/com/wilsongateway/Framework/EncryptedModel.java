@@ -1,5 +1,6 @@
 package com.wilsongateway.Framework;
 
+import org.jasypt.exceptions.EncryptionOperationNotPossibleException;
 import org.jasypt.util.text.BasicTextEncryptor;
 import org.jasypt.util.text.StrongTextEncryptor;
 import org.javalite.activejdbc.CallbackAdapter;
@@ -23,13 +24,16 @@ public abstract class EncryptedModel extends Model{
 		Object obj = super.get(attributeName);
 		if(isEncryptedAttribute(attributeName) && obj instanceof String){
 			String s = (String)obj;
-			if(s == null || s.equals("")){
-				return s;
-			}else{
+			if(s != null && !s.equals("")){
+				try{
 				BasicTextEncryptor encryptor = new BasicTextEncryptor();
 				encryptor.setPassword(GLOBALKEY);
-				return encryptor.decrypt(s);
+				s = encryptor.decrypt(s);
+				}catch(EncryptionOperationNotPossibleException e){
+					System.out.println("Could not decrypt text: " + s);
+				}
 			}
+			return s;
 		}
 		return obj;
 	}
