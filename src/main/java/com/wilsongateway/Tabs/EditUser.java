@@ -22,8 +22,8 @@ public class EditUser extends EditForm<User>{
 	private EndlessComboBox<Group> groupSelect;
 	private EndlessComboBox<Property> propertySelect;
 	
-	public EditUser(SessionManager manager, User item) {
-		super(manager, item, "User");
+	public EditUser(SessionManager manager, User item, boolean isEditable) {
+		super(manager, item, "User", isEditable);
 	}
 
 	@Override
@@ -48,17 +48,11 @@ public class EditUser extends EditForm<User>{
 			newU.setEncrypted("cell_phone", getTFValue("cell_phone"));
 			newU.save();
 			
-			if(viewMode != Mode.PERSONAL){
-				//interpretAndSetGroups(newU);
-				groupSelect.setManyToMany(newU, Tables.GROUP);
-				propertySelect.setManyToMany(newU, Tables.PROPERTY);
-				newU.save();
-			}
+			groupSelect.setManyToMany(newU, Tables.GROUP);
+			propertySelect.setManyToMany(newU, Tables.PROPERTY);
+			newU.save();
 			
 			Notification.show("User Saved", Notification.Type.HUMANIZED_MESSAGE);
-			if(viewMode == Mode.ADD){
-				clearFields();
-			}
 		}catch(NameUnavailableException e){
 			Notification.show("Username Is Taken", Notification.Type.WARNING_MESSAGE);
 		}catch(InvalidPasswordException e){
@@ -84,10 +78,10 @@ public class EditUser extends EditForm<User>{
 
 	@Override
 	protected void setViewMode(User u) {
-		if(u == null){
+		if(getItem() == null){
 			viewMode = Mode.ADD;
-		}else if(u.equals(manager.getCurrentUser())){
-			viewMode = Mode.PERSONAL;
+		}else{
+			viewMode = Mode.VIEW;
 		}
 	}
 
@@ -95,7 +89,7 @@ public class EditUser extends EditForm<User>{
 	protected void fillFields(User u) {}
 
 	@Override
-	protected void createLeftCol(FormLayout leftCol, User u) {
+	protected void populateLeftCol(FormLayout leftCol, User u) {
 		addAndFillTF("username", "Username", FontAwesome.USER);
 		addAndFillTF("password", "Password", FontAwesome.LOCK);
 		addAndFillTF("first_name", "First Name", null);
@@ -106,12 +100,14 @@ public class EditUser extends EditForm<User>{
 	}
 
 	@Override
-	protected void createRightCol(VerticalLayout rightCol, User u) {
+	protected void populateRightCol(VerticalLayout rightCol, User u) {
 		groupSelect = new EndlessComboBox<Group>("Groups", Tables.GROUP.findAll(), (u == null) ? null : u.getAll(Group.class));
 		rightCol.addComponent(groupSelect);
+		addCustomComponent(groupSelect);
 		
 		propertySelect = new EndlessComboBox<Property>("Properties", Tables.PROPERTY.findAll(), (u == null) ? null : u.getAll(Property.class));
 		rightCol.addComponent(propertySelect);
+		addCustomComponent(propertySelect);
 	}
 
 }

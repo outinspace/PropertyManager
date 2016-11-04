@@ -13,8 +13,8 @@ import com.wilsongateway.Framework.Tables.Property;
 @SuppressWarnings("serial")
 public class EditProperty extends EditForm<Property>{
 	
-	public EditProperty(SessionManager manager, Property prop) {
-		super(manager, prop, "Property");
+	public EditProperty(SessionManager manager, Property prop, boolean isEditable) {
+		super(manager, prop, "Property", isEditable);
 	}
 
 	@Override
@@ -40,9 +40,6 @@ public class EditProperty extends EditForm<Property>{
 			prop.save();
 			
 			Notification.show("Property Saved", Notification.Type.HUMANIZED_MESSAGE);
-			if(viewMode == Mode.ADD){
-				clearFields();
-			}
 		}catch(NameUnavailableException e){
 			Notification.show("Name Is Already Being Used", Notification.Type.WARNING_MESSAGE);
 		}catch(Exception e){
@@ -72,7 +69,7 @@ public class EditProperty extends EditForm<Property>{
 	protected void fillFields(Property item) {}
 
 	@Override
-	protected void createLeftCol(FormLayout leftCol, Property item) {
+	protected void populateLeftCol(FormLayout leftCol, Property item) {
 		addAndFillTF("name", "Name", FontAwesome.BUILDING);//TODO add icons
 		addAndFillTF("street_address", "Street Address", FontAwesome.MAP_PIN);
 		addAndFillTF("city", "City", null);
@@ -81,7 +78,7 @@ public class EditProperty extends EditForm<Property>{
 	}
 
 	@Override
-	protected void createRightCol(VerticalLayout rightCol, Property item) {
+	protected void populateRightCol(VerticalLayout rightCol, Property item) {
 		// TODO image upload
 	}
 

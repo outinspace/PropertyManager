@@ -21,8 +21,8 @@ public class EditGroup extends EditForm<Group>{
 
 	private EndlessComboBox<TabType> comboSelect;
 	
-	public EditGroup(SessionManager manager, Group item) {
-		super(manager, item, "Group");
+	public EditGroup(SessionManager manager, Group item, boolean isEditable) {
+		super(manager, item, "Group", isEditable);
 	}
 
 	@Override
@@ -44,9 +44,6 @@ public class EditGroup extends EditForm<Group>{
 			grp.save();
 			
 			Notification.show("Group Saved", Notification.Type.HUMANIZED_MESSAGE);
-			if(viewMode == Mode.ADD){
-				clearFields();
-			}
 		}catch(NameUnavailableException e){
 			Notification.show("That Group Name Is Unavailable", Notification.Type.ERROR_MESSAGE);
 		}catch(NoTabsSelectedException e){
@@ -106,7 +103,7 @@ public class EditGroup extends EditForm<Group>{
 	protected void fillFields(Group g) {}
 
 	@Override
-	protected void createLeftCol(FormLayout leftCol, Group g) {
+	protected void populateLeftCol(FormLayout leftCol, Group g) {
 		addAndFillTF("name", "Group Name", FontAwesome.GROUP);
 		
 		comboSelect = new EndlessComboBox<TabType>("Select Tabs", new ArrayList<TabType>(Arrays.asList(TabType.values())), g == null ? null : g.getTabs());
@@ -114,6 +111,6 @@ public class EditGroup extends EditForm<Group>{
 	}
 
 	@Override
-	protected void createRightCol(VerticalLayout rightCol, Group g) {}
+	protected void populateRightCol(VerticalLayout rightCol, Group item) {}
 
 }

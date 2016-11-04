@@ -53,11 +53,11 @@ public abstract class Tab extends VerticalLayout implements View{
 	public static Tab getInstance(TabType type, SessionManager manager, DashboardView dash){
 		switch(type){
 			case ACCOUNTTAB:
-				return new EditUser(manager, manager.getCurrentUser());
+				return new AccountTab(manager);
 			case ADDUSER:
-				return new EditUser(manager, null);
+				return new EditUser(manager, null, true);
 			case ADDGROUP:
-				return new EditGroup(manager, null);
+				return new EditGroup(manager, null, true);
 			case VIEWALLUSERS:
 				return new ViewAllUsers(manager, false);
 			case EDITALLUSERS:
@@ -67,7 +67,7 @@ public abstract class Tab extends VerticalLayout implements View{
 			case EDITALLGROUPS:
 				return new ViewAllGroups(manager, true);
 			case ADDPROPERTY:
-				return new EditProperty(manager, null);
+				return new EditProperty(manager, null, true);
 			case VIEWALLPROPERTIES:
 				return new ViewAllProperties(manager, false);
 			case EDITALLPROPERTIES:

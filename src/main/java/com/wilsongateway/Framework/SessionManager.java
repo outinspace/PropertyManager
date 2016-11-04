@@ -35,14 +35,12 @@ public class SessionManager extends UI {
 		
 		private static HikariDataSource datasource;
 		
-		//Server-wide Configuration
 		public Servlet(){
 			//Create connection pool
 			HikariConfig config = new HikariConfig();
 			config.setJdbcUrl("jdbc:mysql://" + HOSTNAME + ":" + PORT + "/" + DBNAME);
 			config.setUsername(USERNAME);
 			config.setPassword(PASSWORD);
-			//config.setDataSourceClassName("com.mysql.jdbc.jdbc2.optional.MysqlDataSource");
 			config.setDriverClassName("com.mysql.jdbc.Driver");
 			config.addDataSourceProperty("cachePrepStmts", "true");
 			config.addDataSourceProperty("prepStmtCacheSize", "250");

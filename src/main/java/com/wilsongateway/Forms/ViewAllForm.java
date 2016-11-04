@@ -1,5 +1,9 @@
 package com.wilsongateway.Forms;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.javalite.activejdbc.Model;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -22,6 +26,11 @@ public abstract class ViewAllForm extends Tab{
 
 	private Table t;
 	private EncryptedModel model;
+	private Map<String, Class<? extends EncryptedModel>> relationshipColumns = new HashMap<String, Class<? extends EncryptedModel>>();
+	
+	public static final String EDIT = "edit";
+	public static final String PASSWORD = "password";
+	public static final String RELATIONSHIP = "relationship";
 	
 	public ViewAllForm(SessionManager manager, EncryptedModel model, String pluralItemName, boolean isEditable) {
 		super((isEditable ? "Edit" : "View") + " All " + pluralItemName, manager);
@@ -38,16 +47,14 @@ public abstract class ViewAllForm extends Tab{
 		setContainerProperties(t);
 		
 		if(isEditable){
-			t.addContainerProperty("", CssLayout.class, "");
+			t.addContainerProperty(EDIT, CssLayout.class, "");
 		}
 		
 		populateTable();
 		addComponent(t);
 	}
 
-	protected abstract void setContainerProperties(Table t);
-
-	private void populateTable() {//TODO add column captions
+	private void populateTable() {
 		t.removeAllItems();
 		//Iterate through all users
 		for(Model m : model.findAll()){
@@ -59,34 +66,44 @@ public abstract class ViewAllForm extends Tab{
 			for(int i = 0; i < length; i++){
 				String attribute = (String)t.getContainerPropertyIds().toArray()[i];
 				//Hide password
-				if(attribute.equals("password")){
+				if(attribute.equals(PASSWORD)){
 					cells[i] = "********";
+				}else if(attribute.equals(EDIT)){
 					//Add edit button if isEditable
-				}else if(attribute.equals("")){
 					CssLayout btnLayout = new CssLayout();
 					cells[i] = btnLayout;
 					
-					Button btn = new Button("edit", event -> navToEdit(em));
+					Button btn = new Button("view", event -> navToEdit(em));
 					btn.setStyleName("quiet");
 					btnLayout.addComponent(btn);
-					//Set cell to get(cellName)
+				}else if(relationshipColumns.containsKey(attribute)){
+					cells[i] = m.getAll(relationshipColumns.get(attribute)).toString().replace("[", "").replace("]", "");
 				}else{
-					if(em.getAsString(attribute) == null){
-						cells[i] = "";
-					}else if(em.getDecrypted(attribute).toString().length() < 50){
-						cells[i] = em.getDecrypted(attribute).toString();
-					}else{
-						cells[i] = em.getDecrypted(attribute).toString().substring(0, 50) + "...";
-					}
+					cells[i] = em.getAsString(attribute) == null ? "" : em.getDecrypted(attribute).toString();
+				}
+				
+				//Truncate
+				if(cells[i] instanceof String && cells[i].toString().length() > 50){
+					cells[i] = cells[i].toString().substring(0, 50) + "...";
 				}
 			}
 			
 			t.addItem(cells, em.getId());
 		}
-		
+	}
+	
+	protected <T> void addTableColumn(String attribute, Class<T> type, String caption){
+		t.addContainerProperty(attribute, type, "", caption, null, null);
+	}
+	
+	protected void addRelationshipColumn(String identifier, Class<? extends EncryptedModel> type, String caption){
+		//Finds all many to many or one to many relationships of model and type.class
+		relationshipColumns.put(identifier, type);
+		t.addContainerProperty(identifier, String.class, "", caption, null, null);
 	}
 
 	protected abstract void navToEdit(EncryptedModel usr);
+	protected abstract void setContainerProperties(Table t);
 
 	@Override
 	public void enter(ViewChangeEvent event) {

@@ -32,6 +32,8 @@ public class EndlessComboBox<T> extends CustomComponent{
 	private List<T> options;
 	private List<T> values;
 	
+	private boolean isEnabled = true;
+	
 	public EndlessComboBox(String caption, List<T> options, List<T> values){
 		this.options = options;
 		this.values = values;
@@ -68,7 +70,9 @@ public class EndlessComboBox<T> extends CustomComponent{
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				addComboBox(null);
+				if(isEnabled){
+					addComboBox(null);
+				}
 			}
 			
 		});
@@ -106,18 +110,20 @@ public class EndlessComboBox<T> extends CustomComponent{
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				UI.getCurrent().access(new Runnable(){
+				if(isEnabled){
+					UI.getCurrent().access(new Runnable(){
 
-					@Override
-					public void run() {
-						boxes.remove(box);
-						boxLayout.removeComponent(rowLayout);
-						for(int i = 0; i < boxes.size(); i++){
-							boxes.get(i).setCaption("Selection " + (i+1));
+						@Override
+						public void run() {
+							boxes.remove(box);
+							boxLayout.removeComponent(rowLayout);
+							for(int i = 0; i < boxes.size(); i++){
+								boxes.get(i).setCaption("Selection " + (i+1));
+							}
 						}
-					}
-					
-				});
+						
+					});
+				}
 			}
 			
 		});
@@ -142,7 +148,6 @@ public class EndlessComboBox<T> extends CustomComponent{
 	}
 
 	public void clear() {
-		
 		UI.getCurrent().access(new Runnable(){
 
 			@Override
@@ -173,5 +178,12 @@ public class EndlessComboBox<T> extends CustomComponent{
 				}
 			}
 		}
+	}
+	
+	public void setEnabled(boolean value){
+		for(ComboBox cb: boxes){
+			cb.setEnabled(value);
+		}
+		isEnabled = value;
 	}
 }
