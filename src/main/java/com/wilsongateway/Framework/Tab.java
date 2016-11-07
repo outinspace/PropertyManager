@@ -79,12 +79,12 @@ public abstract class Tab extends VerticalLayout implements View{
 				return new ViewAllProperties(manager, false);
 			case EDITALLPROPERTIES:
 				return new ViewAllProperties(manager, true);
-//			case ADDCLIENT:
-//				return new EditClient(manager, null, true);
-//			case VIEWALLCLIENTS:
-//				return new ViewAllClients(manager, false);
-//			case EDITALLCLIENTS:
-//				return new ViewAllClients(manager, true);
+			case ADDCLIENT:
+				return new EditClient(manager, null, true);
+			case VIEWALLCLIENTS:
+				return new ViewAllClients(manager, false);
+			case EDITALLCLIENTS:
+				return new ViewAllClients(manager, true);
 		}
 		return null;
 	}

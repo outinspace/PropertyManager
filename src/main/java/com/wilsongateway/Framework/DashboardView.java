@@ -18,6 +18,7 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.wilsongateway.Framework.Tab.TabType;
 import com.wilsongateway.Framework.Tables.Group;
+import com.wilsongateway.Tabs.ErrorTab;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Image;
@@ -100,7 +101,13 @@ public class DashboardView extends VerticalLayout implements View{
 			VerticalLayout content = new VerticalLayout();
 			
 			for(TabType type : g.getTabs()){
-				Tab t = Tab.getInstance(type, manager, this);
+				Tab t;
+				try{
+					t = Tab.getInstance(type, manager, this);
+				}catch(Exception e){
+					t = new ErrorTab(manager, e.getMessage());
+				}
+				
 				tabNav.addView(type.toString(), t);
 				
 				Button b = new Button(t.getName());

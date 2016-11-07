@@ -7,17 +7,12 @@ import com.wilsongateway.Framework.SessionManager;
 import com.wilsongateway.Framework.Tab;
 
 @SuppressWarnings("serial")
-@Deprecated
-public class AccountTab extends Tab{
+public class ErrorTab extends Tab{
 
-	public AccountTab(SessionManager manager) {
-		super("Account Settings", manager);
-		initUI();
-	}
-
-	private void initUI() {
-		addComponent(new Label("Account Settings for " + manager.getCurrentUser().getString("first_name")));
-		addComponent(new Button("Change Password"));
+	public ErrorTab(SessionManager manager, String errorMsg) {
+		super("ERROR", manager);
+		
+		addComponent(new Label("There was a problem loading this tab: " + errorMsg));
 	}
 
 	@Override

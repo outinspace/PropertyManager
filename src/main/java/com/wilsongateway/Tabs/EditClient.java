@@ -18,7 +18,7 @@ public class EditClient extends EditForm<Client>{
 
 	private ComboBox propertyCB;
 	private Client c;
-	private List<Property> options= Tables.PROPERTY.findAll();
+	private List<Property> options;
 	
 	public EditClient(SessionManager manager, Client c, boolean isEditable) {
 		super(manager, c, "Client", isEditable);
@@ -72,15 +72,7 @@ public class EditClient extends EditForm<Client>{
 
 	@Override
 	protected void fillFields(Client c) {
-		Property value = null;
 		
-		for(Property option : options){//TODO fix nullPointer error
-			if(c.parent(Property.class) != null && c.parent(Property.class).equals(option)){
-				value = option;
-			}
-		}
-		
-		propertyCB.setValue(value);
 	}
 
 	@Override
@@ -93,8 +85,23 @@ public class EditClient extends EditForm<Client>{
 
 	@Override
 	protected void populateRightCol(VerticalLayout rightCol, Client c) {
+		options  = Tables.PROPERTY.findAll();
+		
 		propertyCB = new ComboBox("Located At");
-		propertyCB.addItems();
+		propertyCB.addItems(options);
+		
+		try{
+			Property parent = c.parent(Property.class);
+			
+			for(Property option : options){
+				if(parent != null && parent.equals(option)){
+					propertyCB.setValue(option);
+					break;
+				}
+			}
+		}catch(NullPointerException e){
+			propertyCB.setValue(null);
+		}
 		
 		rightCol.addComponent(propertyCB);
 		addCustomComponent(propertyCB);
