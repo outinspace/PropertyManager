@@ -94,9 +94,10 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 				createLowerLayout();
 				transitionView(viewMode);
 			}
-		}
-		for(Component c : customComponents){
-			c.setEnabled(false);
+		}else{
+			for(Component c : customComponents){
+				c.setEnabled(false);
+			}
 		}
 	}
 	

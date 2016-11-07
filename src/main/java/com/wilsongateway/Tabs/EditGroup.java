@@ -95,7 +95,7 @@ public class EditGroup extends EditForm<Group>{
 		if(g == null){
 			viewMode = Mode.ADD;
 		}else{
-			viewMode = Mode.EDIT;
+			viewMode = Mode.VIEW;
 		}
 	}
 

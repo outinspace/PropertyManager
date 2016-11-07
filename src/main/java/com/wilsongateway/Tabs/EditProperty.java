@@ -61,7 +61,7 @@ public class EditProperty extends EditForm<Property>{
 		if(item == null){
 			viewMode = Mode.ADD;
 		}else{
-			viewMode = Mode.EDIT;
+			viewMode = Mode.VIEW;
 		}
 	}
 

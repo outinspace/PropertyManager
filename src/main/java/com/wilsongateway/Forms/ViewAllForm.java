@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.javalite.activejdbc.Model;
+import org.javalite.activejdbc.associations.NotAssociatedException;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.shared.ui.label.ContentMode;
@@ -18,6 +19,7 @@ import com.wilsongateway.Framework.EncryptedModel;
 import com.wilsongateway.Framework.SessionManager;
 import com.wilsongateway.Framework.Tab;
 import com.wilsongateway.Framework.Tables;
+import com.wilsongateway.Framework.Tables.Property;
 import com.wilsongateway.Framework.Tables.User;
 import com.wilsongateway.Tabs.EditUser;
 
@@ -74,7 +76,12 @@ public abstract class ViewAllForm extends Tab{
 					btn.setStyleName("quiet");
 					btnLayout.addComponent(btn);
 				}else if(relationshipColumns.containsKey(attribute)){
-					cells[i] = m.getAll(relationshipColumns.get(attribute)).toString().replace("[", "").replace("]", "");
+					try{
+						cells[i] = m.getAll(relationshipColumns.get(attribute)).toString().replace("[", "").replace("]", "");
+					}catch(NotAssociatedException e){
+						EncryptedModel parent =  m.parent(relationshipColumns.get(attribute));
+						cells[i] = parent == null ? "" : parent.toString();
+					}
 				}else{
 					cells[i] = em.getAsString(attribute) == null ? "" : em.getDecrypted(attribute).toString();
 				}

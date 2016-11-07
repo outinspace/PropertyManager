@@ -8,9 +8,11 @@ import com.wilsongateway.Deprecated.ViewAllGroupsDep;
 import com.wilsongateway.Deprecated.ViewAllUsersDep;
 import com.wilsongateway.Tabs.AccountTab;
 import com.wilsongateway.Tabs.AdminConsole;
+import com.wilsongateway.Tabs.EditClient;
 import com.wilsongateway.Tabs.EditGroup;
 import com.wilsongateway.Tabs.EditProperty;
 import com.wilsongateway.Tabs.EditUser;
+import com.wilsongateway.Tabs.ViewAllClients;
 import com.wilsongateway.Tabs.ViewAllGroups;
 import com.wilsongateway.Tabs.ViewAllProperties;
 import com.wilsongateway.Tabs.ViewAllUsers;
@@ -26,7 +28,8 @@ public abstract class Tab extends VerticalLayout implements View{
 	public enum TabType {ACCOUNTTAB, ADMINCONSOLE,
 									ADDUSER, VIEWALLUSERS, EDITALLUSERS, 
 									ADDGROUP, VIEWALLGROUPS, EDITALLGROUPS,
-									ADDPROPERTY, VIEWALLPROPERTIES, EDITALLPROPERTIES};
+									ADDPROPERTY, VIEWALLPROPERTIES, EDITALLPROPERTIES,
+									ADDCLIENT, VIEWALLCLIENTS, EDITALLCLIENTS};
 	
 	protected Tab(String name, SessionManager manager){
 		this.name = name;
@@ -76,6 +79,12 @@ public abstract class Tab extends VerticalLayout implements View{
 				return new ViewAllProperties(manager, false);
 			case EDITALLPROPERTIES:
 				return new ViewAllProperties(manager, true);
+//			case ADDCLIENT:
+//				return new EditClient(manager, null, true);
+//			case VIEWALLCLIENTS:
+//				return new ViewAllClients(manager, false);
+//			case EDITALLCLIENTS:
+//				return new ViewAllClients(manager, true);
 		}
 		return null;
 	}

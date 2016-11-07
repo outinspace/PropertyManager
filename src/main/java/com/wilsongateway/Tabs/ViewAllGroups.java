@@ -1,14 +1,11 @@
 package com.wilsongateway.Tabs;
 
-import org.javalite.activejdbc.Model;
-
 import com.vaadin.ui.Table;
 import com.wilsongateway.Forms.ViewAllForm;
 import com.wilsongateway.Framework.EncryptedModel;
 import com.wilsongateway.Framework.SessionManager;
 import com.wilsongateway.Framework.Tables;
 import com.wilsongateway.Framework.Tables.Group;
-import com.wilsongateway.Framework.Tables.User;
 
 @SuppressWarnings("serial")
 public class ViewAllGroups extends ViewAllForm{
