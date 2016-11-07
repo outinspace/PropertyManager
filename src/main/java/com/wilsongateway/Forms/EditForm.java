@@ -95,6 +95,9 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 				transitionView(viewMode);
 			}
 		}
+		for(Component c : customComponents){
+			c.setEnabled(false);
+		}
 	}
 	
 	private void createEditBtn() {

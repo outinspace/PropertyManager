@@ -108,6 +108,7 @@ public class EditGroup extends EditForm<Group>{
 		
 		comboSelect = new EndlessComboBox<TabType>("Select Tabs", new ArrayList<TabType>(Arrays.asList(TabType.values())), g == null ? null : g.getTabs());
 		leftCol.addComponent(comboSelect);
+		addCustomComponent(comboSelect);
 	}
 
 	@Override

@@ -7,6 +7,7 @@ import com.wilsongateway.Deprecated.EditUserDep;
 import com.wilsongateway.Deprecated.ViewAllGroupsDep;
 import com.wilsongateway.Deprecated.ViewAllUsersDep;
 import com.wilsongateway.Tabs.AccountTab;
+import com.wilsongateway.Tabs.AdminConsole;
 import com.wilsongateway.Tabs.EditGroup;
 import com.wilsongateway.Tabs.EditProperty;
 import com.wilsongateway.Tabs.EditUser;
@@ -22,7 +23,8 @@ public abstract class Tab extends VerticalLayout implements View{
 	protected String description;
 	
 	//Enums for all Tabs
-	public enum TabType {ACCOUNTTAB, ADDUSER, VIEWALLUSERS, EDITALLUSERS, 
+	public enum TabType {ACCOUNTTAB, ADMINCONSOLE,
+									ADDUSER, VIEWALLUSERS, EDITALLUSERS, 
 									ADDGROUP, VIEWALLGROUPS, EDITALLGROUPS,
 									ADDPROPERTY, VIEWALLPROPERTIES, EDITALLPROPERTIES};
 	
@@ -54,6 +56,8 @@ public abstract class Tab extends VerticalLayout implements View{
 		switch(type){
 			case ACCOUNTTAB:
 				return new AccountTab(manager);
+			case ADMINCONSOLE:
+				return new AdminConsole(manager);
 			case ADDUSER:
 				return new EditUser(manager, null, true);
 			case ADDGROUP:

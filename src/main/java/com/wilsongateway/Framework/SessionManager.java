@@ -45,6 +45,7 @@ public class SessionManager extends UI {
 			config.addDataSourceProperty("cachePrepStmts", "true");
 			config.addDataSourceProperty("prepStmtCacheSize", "250");
 			config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+			config.setConnectionTestQuery("/* ping */");
 
 			datasource = new HikariDataSource(config);
 		}

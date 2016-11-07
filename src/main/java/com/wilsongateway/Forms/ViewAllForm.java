@@ -28,7 +28,7 @@ public abstract class ViewAllForm extends Tab{
 	private EncryptedModel model;
 	private Map<String, Class<? extends EncryptedModel>> relationshipColumns = new HashMap<String, Class<? extends EncryptedModel>>();
 	
-	public static final String EDIT = "edit";
+	public static final String VIEW = "view";
 	public static final String PASSWORD = "password";
 	public static final String RELATIONSHIP = "relationship";
 	
@@ -45,10 +45,7 @@ public abstract class ViewAllForm extends Tab{
 		t.setWidth("100%");
 		
 		setContainerProperties(t);
-		
-		if(isEditable){
-			t.addContainerProperty(EDIT, CssLayout.class, "");
-		}
+		t.addContainerProperty(VIEW, CssLayout.class, "");
 		
 		populateTable();
 		addComponent(t);
@@ -68,7 +65,7 @@ public abstract class ViewAllForm extends Tab{
 				//Hide password
 				if(attribute.equals(PASSWORD)){
 					cells[i] = "********";
-				}else if(attribute.equals(EDIT)){
+				}else if(attribute.equals(VIEW)){
 					//Add edit button if isEditable
 					CssLayout btnLayout = new CssLayout();
 					cells[i] = btnLayout;
