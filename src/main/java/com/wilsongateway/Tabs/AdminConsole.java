@@ -5,7 +5,7 @@ import com.wilsongateway.Framework.SessionManager;
 import com.wilsongateway.Framework.Tab;
 
 @SuppressWarnings("serial")
-public class AdminConsole extends Tab{
+public class AdminConsole extends Tab {//TODO
 
 	public AdminConsole(SessionManager manager) {
 		super("Admin Console", manager);

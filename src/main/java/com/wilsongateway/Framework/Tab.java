@@ -2,10 +2,6 @@ package com.wilsongateway.Framework;
 
 import com.vaadin.navigator.View;
 import com.vaadin.ui.VerticalLayout;
-import com.wilsongateway.Deprecated.EditGroupDep;
-import com.wilsongateway.Deprecated.EditUserDep;
-import com.wilsongateway.Deprecated.ViewAllGroupsDep;
-import com.wilsongateway.Deprecated.ViewAllUsersDep;
 import com.wilsongateway.Tabs.AccountTab;
 import com.wilsongateway.Tabs.AdminConsole;
 import com.wilsongateway.Tabs.EditClient;
