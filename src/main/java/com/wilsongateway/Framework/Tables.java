@@ -110,7 +110,7 @@ public class Tables {
 	/**
 	 * Client Model
 	 * Columns: [id, first_name, last_name, unit, property_id, created_at]
-	 * Encrypted: [first_name, last_name]
+	 * Encrypted: []TODO
 	 * 
 	 */
 	@Table("clients")
@@ -162,7 +162,7 @@ public class Tables {
 		@Override
 		public String toString() {
 			// TODO Auto-generated method stub
-			return null;
+			return "";
 		}}
 	public static final PropertiesUsers PROPERTIESUSERS = new PropertiesUsers();
 	
@@ -170,6 +170,7 @@ public class Tables {
 	/**
 	 * Group Model
 	 * Columns: [id, name, tabs]
+	 * 
 	 *
 	 */
 	@Table("groups")
@@ -246,9 +247,57 @@ public class Tables {
 
 		@Override
 		public String toString() {
-			// TODO Auto-generated method stub
-			return null;
+			return "";
 		}}
 	public static final GroupsUsers GROUPSUSERS = new GroupsUsers();
+	
+	
+	/**
+	 * Ticket Model
+	 * Columns: [id, date, property_id, description, status, desired_date, estimated_cost, actual_cost, created_at]
+	 *
+	 */
+	@Table("tickets")
+	public static class Ticket extends EncryptedModel {
+
+		@Override
+		public String toString() {
+			return this.getId().toString();
+		}
+		
+	}
+	public static final Ticket TICKET = new Ticket();
+	
+	
+	/**
+	 * Users to Tickets Join Model
+	 * Columns: [id, user_id, ticket_id]
+	 */
+	@Table("users_tickets")
+	public static class UsersTickets extends EncryptedModel {
+
+		@Override
+		public String toString() {
+			return "";
+		}
+		
+	}
+	public static final UsersTickets USERSTICKETS = new UsersTickets();
+	
+	
+	/**
+	 * Clients to Tickets Join Model
+	 * Columns: [id, client_id, ticket_id]
+	 */
+	@Table("clients_tickets")
+	public static class ClientsTickets extends EncryptedModel {
+
+		@Override
+		public String toString() {
+			return "";
+		}
+		
+	}
+	public static final ClientsTickets CLIENTSTICKETS = new ClientsTickets();
 }
 

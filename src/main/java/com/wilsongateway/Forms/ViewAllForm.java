@@ -1,6 +1,5 @@
 package com.wilsongateway.Forms;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,15 +12,9 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
-import com.wilsongateway.Deprecated.EditUserDep.Mode;
-import com.wilsongateway.Framework.DashboardView;
 import com.wilsongateway.Framework.EncryptedModel;
 import com.wilsongateway.Framework.SessionManager;
 import com.wilsongateway.Framework.Tab;
-import com.wilsongateway.Framework.Tables;
-import com.wilsongateway.Framework.Tables.Property;
-import com.wilsongateway.Framework.Tables.User;
-import com.wilsongateway.Tabs.EditUser;
 
 @SuppressWarnings("serial")
 public abstract class ViewAllForm extends Tab{

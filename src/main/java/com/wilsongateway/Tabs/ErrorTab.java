@@ -12,7 +12,7 @@ public class ErrorTab extends Tab{
 	public ErrorTab(SessionManager manager, String errorMsg) {
 		super("ERROR", manager);
 		
-		addComponent(new Label("There was a problem loading this tab: " + errorMsg));
+		addComponent(new Label("There was a problem loading this tab: " + errorMsg));//TODO big logo
 	}
 
 	@Override

@@ -1,7 +1,5 @@
 package com.wilsongateway.Tabs;
 
-import java.util.List;
-
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.FormLayout;
@@ -18,7 +16,6 @@ public class EditClient extends EditForm<Client>{
 
 	private ComboBox propertyCB;
 	private Client c;
-	private List<Property> options;
 	
 	public EditClient(SessionManager manager, Client c, boolean isEditable) {
 		super(manager, c, "Client", isEditable);
@@ -79,32 +76,13 @@ public class EditClient extends EditForm<Client>{
 	protected void populateLeftCol(FormLayout leftCol, Client c) {
 		addAndFillTF("first_name", "First Name", FontAwesome.USER);
 		addAndFillTF("last_name", "Last Name", FontAwesome.USER);
-		addAndFillTF("unit", "Unit #", null);
+		addAndFillTF("unit", "Unit #");
 		
 	}
 
 	@Override
 	protected void populateRightCol(VerticalLayout rightCol, Client c) {
-		options  = Tables.PROPERTY.findAll();
-		
-		propertyCB = new ComboBox("Located At");
-		propertyCB.addItems(options);
-		
-		try{
-			Property parent = c.parent(Property.class);
-			
-			for(Property option : options){
-				if(parent != null && parent.equals(option)){
-					propertyCB.setValue(option);
-					break;
-				}
-			}
-		}catch(NullPointerException e){
-			propertyCB.setValue(null);
-		}
-		
-		rightCol.addComponent(propertyCB);
-		addCustomComponent(propertyCB);
+		propertyCB = addOneToManySelector(Property.class, Tables.PROPERTY, "Located At",rightCol);
 	}
 
 }

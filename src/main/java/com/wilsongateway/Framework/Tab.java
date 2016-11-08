@@ -11,7 +11,9 @@ import com.wilsongateway.Tabs.AdminConsole;
 import com.wilsongateway.Tabs.EditClient;
 import com.wilsongateway.Tabs.EditGroup;
 import com.wilsongateway.Tabs.EditProperty;
+import com.wilsongateway.Tabs.EditTicket;
 import com.wilsongateway.Tabs.EditUser;
+import com.wilsongateway.Tabs.ErrorTab;
 import com.wilsongateway.Tabs.ViewAllClients;
 import com.wilsongateway.Tabs.ViewAllGroups;
 import com.wilsongateway.Tabs.ViewAllProperties;
@@ -29,7 +31,8 @@ public abstract class Tab extends VerticalLayout implements View{
 									ADDUSER, VIEWALLUSERS, EDITALLUSERS, 
 									ADDGROUP, VIEWALLGROUPS, EDITALLGROUPS,
 									ADDPROPERTY, VIEWALLPROPERTIES, EDITALLPROPERTIES,
-									ADDCLIENT, VIEWALLCLIENTS, EDITALLCLIENTS};
+									ADDCLIENT, VIEWALLCLIENTS, EDITALLCLIENTS,
+									ADDTICKET, EDITLOCALTICKETS, VIEWALLTICKETS, EDITALLTICKETS};
 	
 	protected Tab(String name, SessionManager manager){
 		this.name = name;
@@ -85,7 +88,10 @@ public abstract class Tab extends VerticalLayout implements View{
 				return new ViewAllClients(manager, false);
 			case EDITALLCLIENTS:
 				return new ViewAllClients(manager, true);
+			case ADDTICKET:
+				return new EditTicket(manager, null, true);
+			default:
+				return new ErrorTab(manager, "Tab not yet created");
 		}
-		return null;
 	}
 }

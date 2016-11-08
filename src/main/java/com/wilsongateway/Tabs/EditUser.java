@@ -92,9 +92,9 @@ public class EditUser extends EditForm<User>{
 	protected void populateLeftCol(FormLayout leftCol, User u) {
 		addAndFillTF("username", "Username", FontAwesome.USER);
 		addAndFillTF("password", "Password", FontAwesome.LOCK);
-		addAndFillTF("first_name", "First Name", null);
-		addAndFillTF("last_name", "Last Name", null);
-		addAndFillTF("position", "Job Position", null);
+		addAndFillTF("first_name", "First Name");
+		addAndFillTF("last_name", "Last Name");
+		addAndFillTF("position", "Job Position");
 		addAndFillTF("apt_phone", "Apartment Phone", FontAwesome.HOME);
 		addAndFillTF("cell_phone", "Cell Phone", FontAwesome.MOBILE_PHONE);
 	}

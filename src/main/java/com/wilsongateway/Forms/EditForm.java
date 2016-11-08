@@ -2,6 +2,7 @@ package com.wilsongateway.Forms;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.javalite.activejdbc.Model;
@@ -12,12 +13,14 @@ import com.vaadin.server.Resource;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Layout;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
@@ -29,6 +32,7 @@ import com.wilsongateway.Framework.SessionManager;
 import com.wilsongateway.Framework.Tab;
 import com.wilsongateway.Framework.Tables;
 import com.wilsongateway.Framework.Tables.Group;
+import com.wilsongateway.Framework.Tables.Property;
 import com.wilsongateway.Framework.Tables.User;
 
 @SuppressWarnings("serial")
@@ -42,7 +46,7 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 	
 	private Label heading;
 	private Map<String, TextField> columnToTF = new HashMap<String, TextField>();
-	private ArrayList<Component> customComponents = new ArrayList<Component>();
+	private List<Component> customComponents = new ArrayList<Component>();
 	
 	public enum Mode {ADD, VIEW, EDIT};
 	protected Mode viewMode = Mode.VIEW;
@@ -164,21 +168,49 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 		}
 	}
 
-	protected void addAndFillTF(String columnName, String captionName, Resource icon){
+	protected void addAndFillTF(String columnName, String captionName, Resource icon, Layout layout){
 		TextField temp = new TextField(captionName);
 		temp.setEnabled(false);
-		if(icon != null){
-			temp.setIcon(icon);
-		}else{
-			temp.setIcon(FontAwesome.QUESTION);
-		}
+		temp.setIcon(icon);
 		
 		if(viewMode != Mode.ADD){
 			temp.setValue(item.getAsString(columnName));
 		}
 		
-		leftCol.addComponent(temp);
+		layout.addComponent(temp);
 		columnToTF.put(columnName, temp);
+	}
+	
+	protected void addAndFillTF(String columnName, String captionName){
+		addAndFillTF(columnName, captionName, FontAwesome.QUESTION, leftCol);
+	}
+	
+	protected void addAndFillTF(String columnName, String captionName, Resource icon){
+		addAndFillTF(columnName, captionName, icon, leftCol);
+	}
+	
+	protected <J extends EncryptedModel> ComboBox addOneToManySelector(Class<J> parentClass, J staticModel, String caption, Layout layout){
+		List<J> options  = staticModel.findAll();
+		
+		ComboBox temp = new ComboBox(caption);
+		temp.addItems(options);
+		
+		try{
+			J parent = item.parent(parentClass);
+			
+			for(J option : options){
+				if(parent != null && parent.equals(option)){
+					temp.setValue(option);
+					break;
+				}
+			}
+		}catch(NullPointerException e){
+			temp.setValue(null);
+		}
+		
+		layout.addComponent(temp);
+		addCustomComponent(temp);
+		return temp;
 	}
 	
 	protected String getTFValue(String column){

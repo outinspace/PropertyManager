@@ -72,9 +72,9 @@ public class EditProperty extends EditForm<Property>{
 	protected void populateLeftCol(FormLayout leftCol, Property item) {
 		addAndFillTF("name", "Name", FontAwesome.BUILDING);//TODO add icons
 		addAndFillTF("street_address", "Street Address", FontAwesome.MAP_PIN);
-		addAndFillTF("city", "City", null);
-		addAndFillTF("state", "State", null);
-		addAndFillTF("zip", "Zip", null);
+		addAndFillTF("city", "City");
+		addAndFillTF("state", "State");
+		addAndFillTF("zip", "Zip");
 	}
 
 	@Override

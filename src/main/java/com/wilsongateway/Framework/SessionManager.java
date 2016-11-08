@@ -1,6 +1,5 @@
 package com.wilsongateway.Framework;
 
-import java.sql.Connection;
 import java.util.ArrayList;
 import javax.servlet.annotation.WebServlet;
 

@@ -11,12 +11,9 @@ import com.wilsongateway.Exceptions.CannotEncryptNonStringException;
 public abstract class EncryptedModel extends Model{
 
 	private static final String GLOBALKEY = System.getProperty("global_key") == null ? "devKey" : System.getProperty("global_key");
-	//private BasicTextEncryptor encryptor;
 	private String[] encryptedAttributes;
 	
 	public EncryptedModel(String ... attributes){
-//		encryptor = new BasicTextEncryptor();
-//		encryptor.setPassword(GLOBALKEY);
 		this.encryptedAttributes = attributes;
 	}
 	
@@ -46,19 +43,6 @@ public abstract class EncryptedModel extends Model{
 		return null;
 	}
 	
-//	@Override
-//	public String getString(String attributeName){
-//		String s = super.getString(attributeName);
-//		if(s == null || s.equals("")){
-//			return s;
-//		}else if(isEncryptedAttribute(attributeName)){//TODO check for inconsistencies, maybe set salt to 0.
-//			BasicTextEncryptor encryptor = new BasicTextEncryptor();
-//			encryptor.setPassword(GLOBALKEY);
-//			return encryptor.decrypt(s);
-//		}
-//		return s;
-//	}
-	
 	public <T extends Model> T setEncrypted(String attributeName, Object value){
 		System.out.println("Setting attribute: " + attributeName);
 		if(isEncryptedAttribute(attributeName) && value instanceof String){
@@ -81,15 +65,6 @@ public abstract class EncryptedModel extends Model{
 		}
 		return false;
 	}
-	
-//	public <T extends Model> T setEncrypted(String column, String value){
-//		return super.set(column, encryptor.encrypt(value));
-//	}
-//	
-//	public String getDecrypted(String column){
-//		String encrypted = super.getString(column);
-//		return encryptor.decrypt(encrypted);
-//	}
 	
 	@Override
 	public boolean equals(Object obj){

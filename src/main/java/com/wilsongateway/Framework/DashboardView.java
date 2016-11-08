@@ -106,6 +106,7 @@ public class DashboardView extends VerticalLayout implements View{
 					t = Tab.getInstance(type, manager, this);
 				}catch(Exception e){
 					t = new ErrorTab(manager, e.getMessage());
+					e.printStackTrace();
 				}
 				
 				tabNav.addView(type.toString(), t);

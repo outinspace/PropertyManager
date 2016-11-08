@@ -13,6 +13,7 @@ public class AccountTab extends Tab{
 	public AccountTab(SessionManager manager) {
 		super("Account Settings", manager);
 		initUI();
+		
 	}
 
 	private void initUI() {
