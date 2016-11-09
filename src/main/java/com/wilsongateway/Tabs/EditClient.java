@@ -3,6 +3,7 @@ package com.wilsongateway.Tabs;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.Layout;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
 import com.wilsongateway.Forms.EditForm;
@@ -73,7 +74,7 @@ public class EditClient extends EditForm<Client>{
 	}
 
 	@Override
-	protected void populateLeftCol(FormLayout leftCol, Client c) {
+	protected void populateLeftCol(Layout leftCol, Client c) {
 		addAndFillTF("first_name", "First Name", FontAwesome.USER);
 		addAndFillTF("last_name", "Last Name", FontAwesome.USER);
 		addAndFillTF("unit", "Unit #");
@@ -81,8 +82,8 @@ public class EditClient extends EditForm<Client>{
 	}
 
 	@Override
-	protected void populateRightCol(VerticalLayout rightCol, Client c) {
-		propertyCB = addOneToManySelector(Property.class, Tables.PROPERTY, "Located At",rightCol);
+	protected void populateRightCol(Layout rightCol, Client c) {
+		propertyCB = addOneToManySelector(Property.class, Tables.PROPERTY, "Located At", rightCol);
 	}
 
 }

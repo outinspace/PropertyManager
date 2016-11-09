@@ -39,10 +39,10 @@ import com.wilsongateway.Framework.Tables.User;
 public abstract class EditForm<T extends EncryptedModel> extends Tab{
 
 	private HorizontalLayout split;
-	private FormLayout leftCol;
-	private VerticalLayout rightCol;
-	HorizontalLayout lowerBtns;
-	Button editBtn;
+	private Layout leftCol;
+	private Layout rightCol;
+	private HorizontalLayout lowerBtns;
+	private Button editBtn;
 	
 	private Label heading;
 	private Map<String, TextField> columnToTF = new HashMap<String, TextField>();
@@ -79,14 +79,14 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 		split.addComponent(leftCol);
 		populateLeftCol(leftCol, item);
 		
-		rightCol = new VerticalLayout();
+		rightCol = new FormLayout();
 		split.addComponent(rightCol);
 		populateRightCol(rightCol, item);
 		
 		if(item != null){
 			fillFields(item);
 		}
-		
+		populateMiddleRow(this);
 		addComponent(new Label("<hr />", ContentMode.HTML));
 		
 		if(isEditable){
@@ -105,6 +105,9 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 		}
 	}
 	
+	//For purpose of overriding in sub class
+	protected void populateMiddleRow(Layout middleRow) {}
+
 	private void createEditBtn() {
 		editBtn = new Button("Edit");
 		editBtn.addClickListener(new ClickListener(){
@@ -240,9 +243,9 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 
 				@Override
 				public void buttonClick(ClickEvent event) {
-					manager.ensureBase();
+					SessionManager.ensureBase();
 					deleteBtnAction();	
-					manager.closeBase();
+					SessionManager.closeBase();
 				}
 				
 			});
@@ -258,9 +261,9 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				manager.ensureBase();
+				SessionManager.ensureBase();
 				saveBtnAction();
-				manager.closeBase();
+				SessionManager.closeBase();
 				if(viewMode == Mode.EDIT){
 					transitionView(Mode.VIEW);
 				}else if(viewMode == Mode.ADD){
@@ -292,9 +295,9 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 	@Override
 	public void enter(ViewChangeEvent event) {
 		if(viewMode == Mode.ADD){
-			manager.ensureBase();
+			SessionManager.ensureBase();
 			reloadData();
-			manager.closeBase();
+			SessionManager.closeBase();
 		}
 	}
 	
@@ -303,6 +306,6 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 	protected abstract void reloadData();
 	protected abstract void setViewMode(T item);
 	protected abstract void fillFields(T item);
-	protected abstract void populateLeftCol(FormLayout leftCol, T item);
-	protected abstract void populateRightCol(VerticalLayout rightCol, T item);
+	protected abstract void populateLeftCol(Layout leftCol, T item);
+	protected abstract void populateRightCol(Layout rightCol, T item);
 }

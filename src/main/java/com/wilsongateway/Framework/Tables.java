@@ -260,6 +260,7 @@ public class Tables {
 	@Table("tickets")
 	public static class Ticket extends EncryptedModel {
 
+		public enum Status {PENDING, COMPLETED};
 		@Override
 		public String toString() {
 			return this.getId().toString();

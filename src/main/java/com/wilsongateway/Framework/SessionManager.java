@@ -54,6 +54,9 @@ public class SessionManager extends UI {
 		}
 	}
 
+	//Testing Config
+	public static final boolean TESTMODE = System.getProperty("RDS_HOSTNAME") == null;
+	
 	//Dev Database login
 	static final String SQLuser = "wilsongatewaydb";
 	static final String SQLpassword = "databaseserver";
@@ -117,14 +120,13 @@ public class SessionManager extends UI {
 		u.save();
 	}
 	
-	public void ensureBase(){
+	public static void ensureBase(){
 		if(!Base.hasConnection()){
 			Base.open(Servlet.getDatasource());
 		}
 	}
 	
-	public void closeBase(){
-		//connections.remove(Base.connection());
+	public static void closeBase(){
 		Base.close(true);
 	}
 	

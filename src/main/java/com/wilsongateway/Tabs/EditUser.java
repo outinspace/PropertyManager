@@ -4,6 +4,7 @@ import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Layout;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
 import com.wilsongateway.CustomComponents.EndlessComboBox;
@@ -89,7 +90,7 @@ public class EditUser extends EditForm<User>{
 	protected void fillFields(User u) {}
 
 	@Override
-	protected void populateLeftCol(FormLayout leftCol, User u) {
+	protected void populateLeftCol(Layout leftCol, User u) {
 		addAndFillTF("username", "Username", FontAwesome.USER);
 		addAndFillTF("password", "Password", FontAwesome.LOCK);
 		addAndFillTF("first_name", "First Name");
@@ -100,12 +101,14 @@ public class EditUser extends EditForm<User>{
 	}
 
 	@Override
-	protected void populateRightCol(VerticalLayout rightCol, User u) {
-		groupSelect = new EndlessComboBox<Group>("Groups", Tables.GROUP.findAll(), (u == null) ? null : u.getAll(Group.class));
+	protected void populateRightCol(Layout rightCol, User u) {
+		groupSelect = new EndlessComboBox<Group>(Tables.GROUP.findAll(), (u == null) ? null : u.getAll(Group.class));
+		groupSelect.setCaption("Groups");
 		rightCol.addComponent(groupSelect);
 		addCustomComponent(groupSelect);
 		
-		propertySelect = new EndlessComboBox<Property>("Properties", Tables.PROPERTY.findAll(), (u == null) ? null : u.getAll(Property.class));
+		propertySelect = new EndlessComboBox<Property>(Tables.PROPERTY.findAll(), (u == null) ? null : u.getAll(Property.class));
+		propertySelect.setCaption("Properties");
 		rightCol.addComponent(propertySelect);
 		addCustomComponent(propertySelect);
 	}

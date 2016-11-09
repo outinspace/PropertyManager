@@ -2,6 +2,7 @@ package com.wilsongateway.Tabs;
 
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.Layout;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
 import com.wilsongateway.Exceptions.NameUnavailableException;
@@ -69,7 +70,7 @@ public class EditProperty extends EditForm<Property>{
 	protected void fillFields(Property item) {}
 
 	@Override
-	protected void populateLeftCol(FormLayout leftCol, Property item) {
+	protected void populateLeftCol(Layout leftCol, Property item) {
 		addAndFillTF("name", "Name", FontAwesome.BUILDING);//TODO add icons
 		addAndFillTF("street_address", "Street Address", FontAwesome.MAP_PIN);
 		addAndFillTF("city", "City");
@@ -78,7 +79,7 @@ public class EditProperty extends EditForm<Property>{
 	}
 
 	@Override
-	protected void populateRightCol(VerticalLayout rightCol, Property item) {
+	protected void populateRightCol(Layout rightCol, Property item) {
 		// TODO image upload
 	}
 

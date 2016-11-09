@@ -12,13 +12,16 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.wilsongateway.Framework.EncryptedModel;
 import com.wilsongateway.Framework.SessionManager;
 import com.wilsongateway.Framework.Tables.Property;
 import com.wilsongateway.Framework.Tables.User;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Layout;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
@@ -34,7 +37,7 @@ public class EndlessComboBox<T> extends CustomComponent{
 	
 	private boolean isEnabled = true;
 	
-	public EndlessComboBox(String caption, List<T> options, List<T> values){
+	public EndlessComboBox(List<T> options, List<T> values){
 		this.options = options;
 		this.values = values;
 		
@@ -43,15 +46,11 @@ public class EndlessComboBox<T> extends CustomComponent{
 		content = new VerticalLayout();
 		content.setSpacing(true);
 		
-		if(caption != null){
-			content.addComponent(new Label(caption));
-		}
-		
 		boxLayout = new VerticalLayout();
 		boxLayout.setSpacing(true);
 		content.addComponent(boxLayout);
 		
-		//Preload values
+		//Pre-load values
 		if(this.values == null || this.values.size() == 0){
 			addComboBox(null);	
 		}else{
@@ -134,10 +133,11 @@ public class EndlessComboBox<T> extends CustomComponent{
 			cb.removeAllItems();
 			cb.addItems(options);
 		}
+		this.options = options;
 	}
 	
 	public ArrayList<T> getValues(){
-		ArrayList<T> output = new ArrayList<>();
+		ArrayList<T> output = new ArrayList<T>();
 		for(ComboBox cb : boxes){
 			if(cb.getValue() != null){
 				output.add((T) cb.getValue());
@@ -162,19 +162,19 @@ public class EndlessComboBox<T> extends CustomComponent{
 		});
 	}
 	
-	public void setManyToMany(User u, Model staticRef) {
+	public <K extends EncryptedModel> void setManyToMany(K item, Model staticRef) {
 		//Remove relationships
-		for(Model instance : u.getAll(staticRef.getClass())){
+		for(Model instance : item.getAll(staticRef.getClass())){
 			if(!this.getValues().contains(instance)){
-				u.remove(instance);
+				item.remove(instance);
 			}
 		}
 		
 		//Add new Relationships
 		for(T instance : this.getValues()){
 			if(instance != null && instance instanceof Model){
-				if(!u.getAll(staticRef.getClass()).contains(instance)){
-					u.add((Model)instance);
+				if(!item.getAll(staticRef.getClass()).contains(instance)){
+					item.add((Model)instance);
 				}
 			}
 		}

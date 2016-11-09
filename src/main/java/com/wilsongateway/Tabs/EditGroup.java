@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.Layout;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
@@ -103,15 +104,16 @@ public class EditGroup extends EditForm<Group>{
 	protected void fillFields(Group g) {}
 
 	@Override
-	protected void populateLeftCol(FormLayout leftCol, Group g) {
+	protected void populateLeftCol(Layout leftCol, Group g) {
 		addAndFillTF("name", "Group Name", FontAwesome.GROUP);
 		
-		comboSelect = new EndlessComboBox<TabType>("Select Tabs", new ArrayList<TabType>(Arrays.asList(TabType.values())), g == null ? null : g.getTabs());
+		comboSelect = new EndlessComboBox<TabType>(new ArrayList<TabType>(Arrays.asList(TabType.values())), g == null ? null : g.getTabs());
+		comboSelect.setCaption("Select Tabs");
 		leftCol.addComponent(comboSelect);
 		addCustomComponent(comboSelect);
 	}
 
 	@Override
-	protected void populateRightCol(VerticalLayout rightCol, Group item) {}
+	protected void populateRightCol(Layout rightCol, Group item) {}
 
 }
