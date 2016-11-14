@@ -1,6 +1,8 @@
 package com.wilsongateway.Framework;
 
 import com.vaadin.navigator.View;
+import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.wilsongateway.Tabs.AccountTab;
 import com.wilsongateway.Tabs.AdminConsole;
@@ -39,7 +41,11 @@ public abstract class Tab extends VerticalLayout implements View{
 		this.setMargin(true);
 		this.setSpacing(true);
 		
-		manager.ensureBase();
+		SessionManager.ensureBase();
+	}
+	
+	protected void addLineBreak(){
+		addComponent(new Label("<hr />",ContentMode.HTML));
 	}
 	
 	public String getName(){

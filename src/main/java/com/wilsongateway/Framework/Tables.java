@@ -34,7 +34,7 @@ public class Tables {
 	public static class User extends EncryptedModel {
 		
 		public User(){
-			super("password", "first_name", "last_name", "position", "apt_phone", "cell_phone");
+			super("password", "first_name", "last_name", "position", "work_phone", "cell_phone");
 		}
 		
 		public User find(String username){return USER.findFirst("username = (?)", username);}

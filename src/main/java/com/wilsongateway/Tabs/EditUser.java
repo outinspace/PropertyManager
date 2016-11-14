@@ -45,7 +45,7 @@ public class EditUser extends EditForm<User>{
 			newU.setEncrypted("first_name", getTFValue("first_name"));
 			newU.setEncrypted("last_name", getTFValue("last_name"));
 			newU.setEncrypted("position", getTFValue("position"));
-			newU.setEncrypted("apt_phone", getTFValue("apt_phone"));
+			newU.setEncrypted("work_phone", getTFValue("work_phone"));
 			newU.setEncrypted("cell_phone", getTFValue("cell_phone"));
 			newU.save();
 			
@@ -96,7 +96,7 @@ public class EditUser extends EditForm<User>{
 		addAndFillTF("first_name", "First Name");
 		addAndFillTF("last_name", "Last Name");
 		addAndFillTF("position", "Job Position");
-		addAndFillTF("apt_phone", "Apartment Phone", FontAwesome.HOME);
+		addAndFillTF("work_phone", "Work Phone", FontAwesome.HOME);
 		addAndFillTF("cell_phone", "Cell Phone", FontAwesome.MOBILE_PHONE);
 	}
 

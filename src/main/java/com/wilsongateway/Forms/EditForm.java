@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.javalite.activejdbc.Model;
+import org.vaadin.dialogs.ConfirmDialog;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FontAwesome;
@@ -67,7 +68,7 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 		setHeading();
 		
 		addComponent(heading);
-		addComponent(new Label("<hr />",ContentMode.HTML));
+		addLineBreak();
 		
 		split = new HorizontalLayout();
 		split.setSpacing(true);
@@ -119,6 +120,7 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 			
 		});
 		addComponent(editBtn);
+		setComponentAlignment(editBtn, Alignment.MIDDLE_RIGHT);
 	}
 	
 	private void transitionView(Mode m){//TODO Normalize
@@ -274,14 +276,21 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 	}
 	
 	protected void deleteBtnAction(){
-		//TODO are you sure?
-		if(getItem().delete()){
-			Notification.show(itemName + " Deleted", Notification.Type.HUMANIZED_MESSAGE);
-			clearFields();
-			transitionView(Mode.ADD);
-		}else{
-			Notification.show(itemName + " Could Not Be Deleted", Notification.Type.ERROR_MESSAGE);
-		}
+		ConfirmDialog.show(manager, "Please Confirm:", "Are you really sure?",
+		        "I am", "Not quite", new ConfirmDialog.Listener() {
+
+		            public void onClose(ConfirmDialog dialog) {//TODO fix
+		                if (dialog.isConfirmed()) {
+		                	if(getItem().delete()){
+		                		Notification.show(itemName + " Deleted", Notification.Type.HUMANIZED_MESSAGE);
+			        			clearFields();
+			        			transitionView(Mode.ADD);
+		                	}else{
+		                		Notification.show(itemName + " Could Not Be Deleted", Notification.Type.ERROR_MESSAGE);
+		                	}
+		                }
+		            }
+		        });
 	}
 	
 	protected T getItem(){

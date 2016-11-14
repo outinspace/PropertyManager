@@ -34,13 +34,14 @@ public abstract class ViewAllForm extends Tab{
 		Label heading = new Label((isEditable ? "Edit" : "View") +  " All " + pluralItemName);
 		
 		addComponent(heading);
-		addComponent(new Label("<hr />",ContentMode.HTML));
+		addLineBreak();
 		
 		t = new Table(null);
 		t.setWidth("100%");
-		
-		setContainerProperties(t);
+		//TODO Search Box
 		t.addContainerProperty(VIEW, CssLayout.class, "");
+		t.setColumnExpandRatio(VIEW, 0);
+		setContainerProperties(t);
 		
 		populateTable();
 		addComponent(t);
@@ -66,7 +67,7 @@ public abstract class ViewAllForm extends Tab{
 					cells[i] = btnLayout;
 					
 					Button btn = new Button("view", event -> navToEdit(em));
-					btn.setStyleName("quiet");
+					btn.setStyleName("quiet tiny");
 					btnLayout.addComponent(btn);
 				}else if(relationshipColumns.containsKey(attribute)){
 					try{
@@ -91,12 +92,14 @@ public abstract class ViewAllForm extends Tab{
 	
 	protected <T> void addTableColumn(String attribute, Class<T> type, String caption){
 		t.addContainerProperty(attribute, type, "", caption, null, null);
+		t.setColumnExpandRatio(attribute, 1);
 	}
 	
 	protected void addRelationshipColumn(String identifier, Class<? extends EncryptedModel> type, String caption){
 		//Finds all many to many or one to many relationships of model and type.class
 		relationshipColumns.put(identifier, type);
 		t.addContainerProperty(identifier, String.class, "", caption, null, null);
+		t.setColumnExpandRatio(identifier, 1);
 	}
 
 	protected abstract void navToEdit(EncryptedModel usr);
@@ -105,9 +108,9 @@ public abstract class ViewAllForm extends Tab{
 	@Override
 	public void enter(ViewChangeEvent event) {
 		//Refresh
-		manager.ensureBase();
+		SessionManager.ensureBase();
 		populateTable();
-		manager.closeBase();
+		SessionManager.closeBase();
 	}
 
 }
