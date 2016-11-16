@@ -1,5 +1,7 @@
 package com.wilsongateway.Framework;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.servlet.annotation.WebServlet;
 
@@ -45,7 +47,8 @@ public class SessionManager extends UI {
 			config.addDataSourceProperty("prepStmtCacheSize", "250");
 			config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
 			config.setConnectionTestQuery("/* ping */");
-
+			config.setConnectionTimeout(28800);
+			
 			datasource = new HikariDataSource(config);
 		}
 		
@@ -122,6 +125,13 @@ public class SessionManager extends UI {
 	
 	public static void ensureBase(){
 		if(!Base.hasConnection()){
+			try {
+				Connection c = Servlet.getDatasource().getConnection();
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			Base.open(Servlet.getDatasource());
 		}
 	}
