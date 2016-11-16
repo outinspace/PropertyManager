@@ -8,7 +8,7 @@ import com.wilsongateway.Framework.Tab;
 @SuppressWarnings("serial")
 public class ReportGenerator extends Tab{
 
-	protected ReportGenerator(SessionManager manager) {
+	public ReportGenerator(SessionManager manager) {
 		super("Report Generator", manager);
 		
 		initGui();
@@ -23,9 +23,5 @@ public class ReportGenerator extends Tab{
 	}
 
 	@Override
-	public void enter(ViewChangeEvent event) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	public void enter(ViewChangeEvent event) {}
 }
