@@ -39,7 +39,7 @@ public class SessionManager extends UI {
 		public Servlet(){
 			//Create connection pool
 			HikariConfig config = new HikariConfig();
-			config.setJdbcUrl("jdbc:mysql://" + HOSTNAME + ":" + PORT + "/" + DBNAME);
+			config.setJdbcUrl("jdbc:mysql://" + HOSTNAME + ":" + PORT + "/" + DBNAME + "?autoReconnect=true");
 			config.setUsername(USERNAME);
 			config.setPassword(PASSWORD);
 			config.setDriverClassName("com.mysql.jdbc.Driver");
@@ -47,7 +47,7 @@ public class SessionManager extends UI {
 			config.addDataSourceProperty("prepStmtCacheSize", "250");
 			config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
 			config.setConnectionTestQuery("/* ping */");
-			config.setConnectionTimeout(28800);
+			//config.setConnectionTimeout(28800);
 			
 			datasource = new HikariDataSource(config);
 		}
@@ -125,13 +125,6 @@ public class SessionManager extends UI {
 	
 	public static void ensureBase(){
 		if(!Base.hasConnection()){
-			try {
-				Connection c = Servlet.getDatasource().getConnection();
-				
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			Base.open(Servlet.getDatasource());
 		}
 	}
