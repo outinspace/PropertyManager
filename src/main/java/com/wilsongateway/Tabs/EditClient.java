@@ -83,7 +83,7 @@ public class EditClient extends EditForm<Client>{
 	protected void populateLeftCol(Layout leftCol, Client c) {
 		addAndFillTF("first_name", "First Name", FontAwesome.USER).setRequired(true);
 		addAndFillTF("last_name", "Last Name", FontAwesome.USER).setRequired(true);
-		addAndFillTF("unit", "Unit #").setRequired(true);
+		addAndFillTF("unit", "Unit", FontAwesome.HASHTAG).setRequired(true);
 		
 	}
 

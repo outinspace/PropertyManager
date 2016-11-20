@@ -28,7 +28,7 @@ import com.wilsongateway.Framework.Tables.Ticket.Status;
  *
  */
 @SuppressWarnings("serial")
-public class EditTicket extends EditForm<Ticket>{
+public class EditTicket extends EditForm<Ticket>{//TODO add URL property redirecting
 
 	private EndlessComboBox<Client> clientSelect;
 	private ComboBox propertyCB;
@@ -101,10 +101,12 @@ public class EditTicket extends EditForm<Ticket>{
 		dateField = new PopupDateField();
 		dateField.setCaption("Date");
 		dateField.setValue(new Date());
+		dateField.setRequired(true);
 		leftCol.addComponent(dateField);
 		addCustomComponent(dateField);
 		
 		propertyCB = addOneToManySelector(Property.class, Tables.PROPERTY, "Property", leftCol);
+		propertyCB.setRequired(true);
 		propertyCB.addValueChangeListener(new ValueChangeListener(){
 
 			@Override
@@ -138,7 +140,18 @@ public class EditTicket extends EditForm<Ticket>{
 	protected void populateMiddleRow(Layout middleRow){
 		descriptionArea = new TextArea("Description");
 		descriptionArea.setWidth("100%");
+		descriptionArea.setRequired(true);
 		middleRow.addComponent(descriptionArea);
 		addCustomComponent(descriptionArea);
+	}
+	
+	@Override
+	protected boolean checkRequiredFields(){
+		if(propertyCB.getValue() == null){
+			return false;
+		}else if(descriptionArea.getValue().trim().equals("")){
+			return false;
+		}
+		return true;
 	}
 }

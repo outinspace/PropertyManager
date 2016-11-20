@@ -73,17 +73,13 @@ public abstract class ViewAllForm extends Tab{
 			//Get column data from user using propertyIds
 			for(int i = 0; i < length; i++){
 				String attribute = (String)t.getContainerPropertyIds().toArray()[i];
-				
-				//Hide password
-				if(attribute.equals(PASSWORD)){
-					cells[i] = "********";
 					
-					//Create CSSLayout and add Button to navigate to view tab
-				}else if(attribute.equals(VIEW)){
+				//Create CSSLayout and add Button to navigate to view tab
+				if(attribute.equals(VIEW)){
 					CssLayout btnLayout = new CssLayout();
 					cells[i] = btnLayout;
 					
-					Button btn = new Button("view", event -> navToEdit(em));
+					Button btn = new Button("Details", event -> navToEdit(em));
 					btn.setStyleName("quiet tiny");
 					btnLayout.addComponent(btn);
 					
