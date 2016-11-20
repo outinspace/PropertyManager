@@ -105,7 +105,7 @@ public class EditGroup extends EditForm<Group>{
 
 	@Override
 	protected void populateLeftCol(Layout leftCol, Group g) {
-		addAndFillTF("name", "Group Name", FontAwesome.GROUP);
+		addAndFillTF("name", "Group Name", FontAwesome.GROUP).setRequired(true);
 		
 		comboSelect = new EndlessComboBox<TabType>(new ArrayList<TabType>(Arrays.asList(TabType.values())), g == null ? null : g.getTabs());
 		comboSelect.setCaption("Select Tabs");

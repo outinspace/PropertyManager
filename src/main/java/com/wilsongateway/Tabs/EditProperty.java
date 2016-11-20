@@ -71,8 +71,8 @@ public class EditProperty extends EditForm<Property>{
 
 	@Override
 	protected void populateLeftCol(Layout leftCol, Property item) {
-		addAndFillTF("name", "Name", FontAwesome.BUILDING);//TODO add icons
-		addAndFillTF("street_address", "Street Address", FontAwesome.MAP_PIN);
+		addAndFillTF("name", "Name", FontAwesome.BUILDING).setRequired(true);//TODO add icons
+		addAndFillTF("street_address", "Street Address", FontAwesome.MAP_PIN).setRequired(true);
 		addAndFillTF("city", "City");
 		addAndFillTF("state", "State");
 		addAndFillTF("zip", "Zip");

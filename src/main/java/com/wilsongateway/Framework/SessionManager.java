@@ -45,7 +45,6 @@ public class SessionManager extends UI {
 			config.addDataSourceProperty("prepStmtCacheSize", "250");
 			config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
 			config.setConnectionTestQuery("/* ping */");
-			//config.setConnectionTimeout(28800);
 			
 			datasource = new HikariDataSource(config);
 		}
@@ -75,7 +74,7 @@ public class SessionManager extends UI {
 	@Override
 	protected void init(VaadinRequest request) {
 		//Init database connection
-		ensureBase();
+		openBase();
 		
 		nav = new Navigator(this, this);
 		LoginView login = new LoginView(this);
@@ -87,9 +86,6 @@ public class SessionManager extends UI {
 		
 		//Create database entries for testing purposes
 		createTestEntries();
-		
-		//TODO re-enable, removed for debugging
-		//addDetachListener(new SessionCleanup(connections));
 	}
 	
 	private void createTestEntries() {
@@ -121,7 +117,7 @@ public class SessionManager extends UI {
 		u.save();
 	}
 	
-	public static void ensureBase(){
+	public static void openBase(){
 		if(!Base.hasConnection()){
 			Base.open(Servlet.getDatasource());
 		}

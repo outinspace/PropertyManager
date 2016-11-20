@@ -56,9 +56,9 @@ public class EditTicket extends EditForm<Ticket>{
 			}
 			item.save();
 			
-			Notification.show("Client Saved", Notification.Type.HUMANIZED_MESSAGE);
+			Notification.show("Ticket Submitted", Notification.Type.HUMANIZED_MESSAGE);
 		}catch(Exception e){
-			Notification.show("Unable To Save Client", Notification.Type.ERROR_MESSAGE);
+			Notification.show("Unable To Submit Ticket", Notification.Type.ERROR_MESSAGE);
 			e.printStackTrace();
 		}
 	}
@@ -103,13 +103,14 @@ public class EditTicket extends EditForm<Ticket>{
 
 			@Override
 			public void valueChange(ValueChangeEvent event) {
-				SessionManager.ensureBase();
+				SessionManager.openBase();
 				clientSelect.clear();
 				if(propertyCB.getValue() == null){
 					clientSelect.setOptions(new ArrayList<Client>());
 				}else{
 					clientSelect.setOptions(Tables.CLIENT.where("property_id = (?)", ((EncryptedModel)propertyCB.getValue()).getId()));
 				}
+				SessionManager.closeBase();
 			}
 			
 		});
@@ -133,6 +134,5 @@ public class EditTicket extends EditForm<Ticket>{
 		descriptionArea.setWidth("100%");
 		middleRow.addComponent(descriptionArea);
 		addCustomComponent(descriptionArea);
-		//TODO photo upload
 	}
 }

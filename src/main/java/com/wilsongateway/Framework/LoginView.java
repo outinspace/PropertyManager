@@ -37,7 +37,7 @@ public class LoginView extends VerticalLayout implements View{
 	
 	private enum loginMode{FORGOT, LOGIN};
 	private loginMode mode;
-	private int attempts = 0;
+	//private int attempts = 0;
 	
 	public LoginView(SessionManager manager){
 		this.manager = manager;
@@ -149,7 +149,7 @@ public class LoginView extends VerticalLayout implements View{
 	}
 	
 	private void executeLogin(){
-		manager.ensureBase();
+		SessionManager.openBase();
 		
 		switch(mode){
 		case LOGIN:
@@ -169,7 +169,7 @@ public class LoginView extends VerticalLayout implements View{
 			Notification.show("Does nothing yet...");
 			break;
 		}
-		manager.closeBase();
+		SessionManager.closeBase();
 	}
 	
 	@Override

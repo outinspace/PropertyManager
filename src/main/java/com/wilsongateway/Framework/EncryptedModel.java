@@ -68,7 +68,7 @@ public abstract class EncryptedModel extends Model{
 	
 	@Override
 	public boolean equals(Object obj){
-		SessionManager.ensureBase();
+		SessionManager.openBase();
 		if(obj instanceof EncryptedModel){
 			if(this.getTableName().equals(((EncryptedModel) obj).getTableName()) 
 					&& this.getId() == ((EncryptedModel)obj).getId()){

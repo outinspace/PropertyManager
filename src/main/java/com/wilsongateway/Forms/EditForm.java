@@ -59,6 +59,7 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 		super("Add " + itemName, manager);
 		this.item = item;
 		this.itemName = itemName;
+		SessionManager.openBase();
 		
 		setSizeFull();
 		setHeightUndefined();
@@ -104,6 +105,7 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 				c.setEnabled(false);
 			}
 		}
+		SessionManager.closeBase();
 	}
 	
 	//For purpose of overriding in sub class
@@ -160,7 +162,7 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 		setHeading();
 	}
 	
-	private void setHeading(){//TODO change to 
+	private void setHeading(){
 		switch(viewMode){
 		case ADD:
 			heading.setValue("Create A New " + itemName);
@@ -173,7 +175,7 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 		}
 	}
 
-	protected void addAndFillTF(String columnName, String captionName, Resource icon, Layout layout){
+	protected TextField addAndFillTF(String columnName, String captionName, Resource icon, Layout layout){
 		TextField temp = new TextField(captionName);
 		temp.setEnabled(false);
 		temp.setIcon(icon);
@@ -184,14 +186,15 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 		
 		layout.addComponent(temp);
 		columnToTF.put(columnName, temp);
+		return temp;
 	}
 	
-	protected void addAndFillTF(String columnName, String captionName){
-		addAndFillTF(columnName, captionName, FontAwesome.QUESTION, leftCol);
+	protected TextField addAndFillTF(String columnName, String captionName){
+		return addAndFillTF(columnName, captionName, FontAwesome.QUESTION, leftCol);
 	}
 	
-	protected void addAndFillTF(String columnName, String captionName, Resource icon){
-		addAndFillTF(columnName, captionName, icon, leftCol);
+	protected TextField addAndFillTF(String columnName, String captionName, Resource icon){
+		return addAndFillTF(columnName, captionName, icon, leftCol);
 	}
 	
 	protected <J extends EncryptedModel> ComboBox addOneToManySelector(Class<J> parentClass, J staticModel, String caption, Layout layout){
@@ -245,7 +248,7 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 
 				@Override
 				public void buttonClick(ClickEvent event) {
-					SessionManager.ensureBase();
+					SessionManager.openBase();
 					deleteBtnAction();	
 					SessionManager.closeBase();
 				}
@@ -263,34 +266,51 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				SessionManager.ensureBase();
-				saveBtnAction();
-				SessionManager.closeBase();
-				if(viewMode == Mode.EDIT){
-					transitionView(Mode.VIEW);
-				}else if(viewMode == Mode.ADD){
-					transitionView(Mode.ADD);
+				SessionManager.openBase();
+				if(checkRequiredFields()){
+					saveBtnAction();
+					if(viewMode == Mode.EDIT){
+						transitionView(Mode.VIEW);
+					}else if(viewMode == Mode.ADD){
+						transitionView(Mode.ADD);
+					}
+				}else{
+					Notification.show("All Required Fields Must Be Filled", Notification.Type.WARNING_MESSAGE);
 				}
+				SessionManager.closeBase();
 			}
 		});
 	}
 	
 	protected void deleteBtnAction(){
-		ConfirmDialog.show(manager, "Please Confirm:", "Are you really sure?",
-		        "I am", "Not quite", new ConfirmDialog.Listener() {
+		ConfirmDialog.show(manager, "Please Confirm:", "Are you really sure?", 
+				"I am", "Not quite", new ConfirmDialog.Listener() {
 
-		            public void onClose(ConfirmDialog dialog) {//TODO fix
-		                if (dialog.isConfirmed()) {
-		                	if(getItem().delete()){
-		                		Notification.show(itemName + " Deleted", Notification.Type.HUMANIZED_MESSAGE);
-			        			clearFields();
-			        			transitionView(Mode.ADD);
-		                	}else{
-		                		Notification.show(itemName + " Could Not Be Deleted", Notification.Type.ERROR_MESSAGE);
-		                	}
-		                }
-		            }
-		        });
+            public void onClose(ConfirmDialog dialog) {
+            	SessionManager.openBase();
+                if (dialog.isConfirmed()) {
+                	if(getItem().delete()){
+                		Notification.show(itemName + " Deleted", Notification.Type.HUMANIZED_MESSAGE);
+	        			clearFields();
+	        			manager.getDash().navigateBack();
+                	}else{
+                		Notification.show(itemName + " Could Not Be Deleted", Notification.Type.ERROR_MESSAGE);
+                	}
+                }
+                SessionManager.closeBase();
+            }
+            
+        });
+	}
+	
+	protected boolean checkRequiredFields() {
+		for(TextField tf : columnToTF.values()){
+			//Check if TextField value equals null or ""
+			if(tf.isRequired() && (tf.getValue() == null || tf.getValue().trim().equals(""))){
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	protected T getItem(){
@@ -304,7 +324,7 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 	@Override
 	public void enter(ViewChangeEvent event) {
 		if(viewMode == Mode.ADD){
-			SessionManager.ensureBase();
+			SessionManager.openBase();
 			reloadData();
 			SessionManager.closeBase();
 		}

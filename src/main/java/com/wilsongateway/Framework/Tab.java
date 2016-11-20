@@ -41,8 +41,6 @@ public abstract class Tab extends VerticalLayout implements View{
 		//Config Vertical Layout
 		this.setMargin(true);
 		this.setSpacing(true);
-		
-		SessionManager.ensureBase();
 	}
 	
 	protected void addLineBreak(){

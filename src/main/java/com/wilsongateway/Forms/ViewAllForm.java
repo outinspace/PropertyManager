@@ -30,6 +30,7 @@ public abstract class ViewAllForm extends Tab{
 	public ViewAllForm(SessionManager manager, EncryptedModel model, String pluralItemName, boolean isEditable) {
 		super((isEditable ? "Edit" : "View") + " All " + pluralItemName, manager);
 		this.model = model;
+		SessionManager.openBase();
 		
 		Label heading = new Label((isEditable ? "Edit" : "View") +  " All " + pluralItemName);
 		
@@ -45,6 +46,8 @@ public abstract class ViewAllForm extends Tab{
 		
 		populateTable();
 		addComponent(t);
+		
+		SessionManager.closeBase();
 	}
 
 	private void populateTable() {
@@ -108,7 +111,7 @@ public abstract class ViewAllForm extends Tab{
 	@Override
 	public void enter(ViewChangeEvent event) {
 		//Refresh
-		SessionManager.ensureBase();
+		SessionManager.openBase();
 		populateTable();
 		SessionManager.closeBase();
 	}

@@ -36,8 +36,12 @@ public class DashboardView extends VerticalLayout implements View{
 	private VerticalLayout sideContent;
 	private Accordion sideMenu;
 	
+	//Navigation Variables
+	private String lastNav;
+	public final static String DEFAULT = "";
+	
 	public DashboardView(SessionManager manager){
-		manager.ensureBase();
+		SessionManager.openBase();
 		manager.setCurrentDash(this);
 		
 		this.manager = manager;
@@ -55,7 +59,8 @@ public class DashboardView extends VerticalLayout implements View{
 		mainGrid.addComponent(dashContent, 1, 0);
 		
 		tabNav = new Navigator(manager, dashContent);
-		//TODO load initial view or default dashboard
+		tabNav.addView(DEFAULT, new LogoScreen());
+		tabNav.navigateTo(DEFAULT);
 		
 		sideContent = new VerticalLayout();
 		sideContent.setSpacing(true);
@@ -67,6 +72,8 @@ public class DashboardView extends VerticalLayout implements View{
 		sideContent.addComponent(sideMenu);
 		
 		populateSideMenu();
+		
+		SessionManager.closeBase();
 	}
 	
 	private void addUpperSideContent() {
@@ -118,12 +125,13 @@ public class DashboardView extends VerticalLayout implements View{
 					@Override
 					public void buttonClick(ClickEvent event) {
 						tabNav.navigateTo(type.toString());
+						lastNav = type.toString();
 					}
 					
 				});
 				content.addComponent(b);
 			}
-			sideMenu.addTab(content, g.getString("name"));
+			sideMenu.addTab(content, g.getAsString("name"));
 		}
 		
 		sideMenu.addTab(new CssLayout(), "", FontAwesome.CLOSE);
@@ -133,6 +141,12 @@ public class DashboardView extends VerticalLayout implements View{
 		return tabNav;
 	}
 
+	public void navigateBack(){
+		if(lastNav != null){
+			tabNav.navigateTo(lastNav);
+		}
+	}
+	
 	@Override
 	public void enter(ViewChangeEvent event) {
 		if(manager.getCurrentUser() == null){

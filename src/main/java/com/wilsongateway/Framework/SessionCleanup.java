@@ -16,6 +16,7 @@ import com.vaadin.server.ClientConnector.DetachListener;
  *
  */
 @SuppressWarnings("serial")
+@Deprecated
 public class SessionCleanup implements DetachListener{
 
 	private SessionManager manager;

@@ -91,8 +91,8 @@ public class EditUser extends EditForm<User>{
 
 	@Override
 	protected void populateLeftCol(Layout leftCol, User u) {
-		addAndFillTF("username", "Username", FontAwesome.USER);
-		addAndFillTF("password", "Password", FontAwesome.LOCK);
+		addAndFillTF("username", "Username", FontAwesome.USER).setRequired(true);
+		addAndFillTF("password", "Password", FontAwesome.LOCK).setRequired(true);
 		addAndFillTF("first_name", "First Name");
 		addAndFillTF("last_name", "Last Name");
 		addAndFillTF("position", "Job Position");
