@@ -1,9 +1,13 @@
 package com.wilsongateway.Framework;
 
+import java.util.Collection;
+
 import org.jasypt.exceptions.EncryptionOperationNotPossibleException;
 import org.jasypt.util.text.BasicTextEncryptor;
 import org.jasypt.util.text.StrongTextEncryptor;
 import org.javalite.activejdbc.CallbackAdapter;
+import org.javalite.activejdbc.ColumnMetadata;
+import org.javalite.activejdbc.LazyList;
 import org.javalite.activejdbc.Model;
 
 import com.wilsongateway.Exceptions.CannotEncryptNonStringException;
@@ -65,6 +69,16 @@ public abstract class EncryptedModel extends Model{
 		}
 		return false;
 	}
+	
+	public Collection<ColumnMetadata> getColumns(){
+		return this.getMetaModel().getColumnMetadata().values();
+	}
+	
+//	@Override
+//	public LazyList<EncryptedModel> findAll(){
+//		return super.findAll();
+//		
+//	}
 	
 	@Override
 	public boolean equals(Object obj){

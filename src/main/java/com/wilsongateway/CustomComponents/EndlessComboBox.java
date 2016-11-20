@@ -128,12 +128,12 @@ public class EndlessComboBox<T> extends CustomComponent{
 		});
 	}
 	
-	public void setOptions(List<T> options){
+	public void setOptions(List<T> lazyList){
 		for(ComboBox cb : boxes){
 			cb.removeAllItems();
-			cb.addItems(options);
+			cb.addItems(lazyList);
 		}
-		this.options = options;
+		this.options = lazyList;
 	}
 	
 	public ArrayList<T> getValues(){
