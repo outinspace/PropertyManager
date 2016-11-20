@@ -26,6 +26,12 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
+/**
+ * 
+ * @author Nicholas Wilson
+ *         www.outin.space
+ *
+ */
 public class DashboardView extends VerticalLayout implements View{
 
 	private SessionManager manager;

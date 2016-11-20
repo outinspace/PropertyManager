@@ -21,6 +21,12 @@ import com.wilsongateway.Framework.Tables.Property;
 import com.wilsongateway.Framework.Tables.Ticket;
 import com.wilsongateway.Framework.Tables.Ticket.Status;
 
+/**
+ * 
+ * @author Nicholas Wilson
+ *         www.outin.space
+ *
+ */
 @SuppressWarnings("serial")
 public class EditTicket extends EditForm<Ticket>{
 

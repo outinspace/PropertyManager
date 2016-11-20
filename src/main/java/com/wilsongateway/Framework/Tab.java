@@ -17,6 +17,12 @@ import com.wilsongateway.Tabs.ViewAllGroups;
 import com.wilsongateway.Tabs.ViewAllProperties;
 import com.wilsongateway.Tabs.ViewAllUsers;
 
+/**
+ * 
+ * @author Nicholas Wilson
+ *         www.outin.space
+ *
+ */
 @SuppressWarnings("serial")
 public abstract class Tab extends VerticalLayout implements View{
 

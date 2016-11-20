@@ -12,7 +12,8 @@ import com.vaadin.server.ClientConnector.DetachListener;
 
 /**
  * 
- * @author Nick Wilson
+ * @author Nicholas Wilson
+ *         www.outin.space
  *
  */
 @SuppressWarnings("serial")

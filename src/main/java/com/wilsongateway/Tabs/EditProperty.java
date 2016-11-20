@@ -11,6 +11,12 @@ import com.wilsongateway.Framework.SessionManager;
 import com.wilsongateway.Framework.Tables;
 import com.wilsongateway.Framework.Tables.Property;
 
+/**
+ * 
+ * @author Nicholas Wilson
+ *         www.outin.space
+ *
+ */
 @SuppressWarnings("serial")
 public class EditProperty extends EditForm<Property>{
 	

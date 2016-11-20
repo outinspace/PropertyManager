@@ -20,10 +20,22 @@ import com.wilsongateway.Framework.Tables.User;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
+/**
+ * 
+ * @author Nicholas Wilson
+ *         www.outin.space
+ *
+ */
 @SuppressWarnings("serial")
 @Theme("pmTheme")
 public class SessionManager extends UI {
 
+	/**
+	 * 
+	 * @author Nicholas Wilson
+	 *         www.outin.space
+	 *
+	 */
 	@WebServlet(value = "/*", asyncSupported = true)
 	@VaadinServletConfiguration(productionMode = false, ui = SessionManager.class)
 	public static class Servlet extends VaadinServlet {

@@ -20,6 +20,12 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.wilsongateway.Framework.Tables.User;
 
+/**
+ * 
+ * @author Nicholas Wilson
+ *         www.outin.space
+ *
+ */
 @SuppressWarnings("serial")
 public class LoginView extends VerticalLayout implements View{
 

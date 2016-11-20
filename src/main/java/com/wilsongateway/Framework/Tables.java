@@ -12,6 +12,12 @@ import com.wilsongateway.Framework.Tab.TabType;
 import com.wilsongateway.Framework.Tables.Group;
 import com.wilsongateway.Framework.Tables.User;
 
+/**
+ * 
+ * @author Nicholas Wilson
+ *         www.outin.space
+ *
+ */
 public class Tables {
 
 	public static void isUniqueName(String columnName, EncryptedModel item, String comparing) throws NameUnavailableException{

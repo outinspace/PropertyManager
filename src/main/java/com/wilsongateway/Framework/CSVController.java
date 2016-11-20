@@ -10,6 +10,12 @@ import org.javalite.activejdbc.Model;
 
 import com.vaadin.server.VaadinService;
 
+/**
+ * 
+ * @author Nicholas Wilson
+ *         www.outin.space
+ *
+ */
 public class CSVController {
 
 	private final EncryptedModel dataType;

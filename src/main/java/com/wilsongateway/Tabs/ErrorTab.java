@@ -6,6 +6,12 @@ import com.vaadin.ui.Label;
 import com.wilsongateway.Framework.SessionManager;
 import com.wilsongateway.Framework.Tab;
 
+/**
+ * 
+ * @author Nicholas Wilson
+ *         www.outin.space
+ *
+ */
 @SuppressWarnings("serial")
 public class ErrorTab extends Tab{
 

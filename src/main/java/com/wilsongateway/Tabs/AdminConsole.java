@@ -1,6 +1,5 @@
 package com.wilsongateway.Tabs;
 
-import org.vaadin.dialogs.ConfirmDialog;
 import org.vaadin7.console.Console;
 import org.vaadin7.console.Console.Command;
 
@@ -9,8 +8,13 @@ import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Label;
 import com.wilsongateway.Framework.SessionManager;
 import com.wilsongateway.Framework.Tab;
-import com.wilsongateway.Framework.Tables.User;
 
+/**
+ * 
+ * @author Nicholas Wilson
+ *         www.outin.space
+ *
+ */
 @SuppressWarnings("serial")
 public class AdminConsole extends Tab {//TODO
 

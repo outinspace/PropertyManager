@@ -12,6 +12,12 @@ import org.javalite.activejdbc.Model;
 
 import com.wilsongateway.Exceptions.CannotEncryptNonStringException;
 
+/**
+ * 
+ * @author Nicholas Wilson
+ *         www.outin.space
+ *
+ */
 public abstract class EncryptedModel extends Model{
 
 	private static final String GLOBALKEY = System.getProperty("global_key") == null ? "devKey" : System.getProperty("global_key");

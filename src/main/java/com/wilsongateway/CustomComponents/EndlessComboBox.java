@@ -25,6 +25,13 @@ import com.vaadin.ui.Layout;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
+/**
+ * 
+ * @author Nicholas Wilson
+ *         www.outin.space
+ *
+ * @param <T> The object type that this component will be selecting.
+ */
 @SuppressWarnings("serial")
 public class EndlessComboBox<T> extends CustomComponent{
 	

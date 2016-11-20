@@ -9,6 +9,12 @@ import com.wilsongateway.Framework.Tables.Group;
 import com.wilsongateway.Framework.Tables.Property;
 import com.wilsongateway.Framework.Tables.User;
 
+/**
+ * 
+ * @author Nicholas Wilson
+ *         www.outin.space
+ *
+ */
 @SuppressWarnings("serial")
 public class ViewAllUsers extends ViewAllForm{
 

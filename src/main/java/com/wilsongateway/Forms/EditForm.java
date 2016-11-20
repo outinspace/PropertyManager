@@ -36,6 +36,13 @@ import com.wilsongateway.Framework.Tables.Group;
 import com.wilsongateway.Framework.Tables.Property;
 import com.wilsongateway.Framework.Tables.User;
 
+/**
+ * 
+ * @author Nicholas Wilson
+ *         www.outin.space
+ *
+ * @param <T> Type of EncryptedModel that an object of this class will be editing.
+ */
 @SuppressWarnings("serial")
 public abstract class EditForm<T extends EncryptedModel> extends Tab{
 
@@ -107,9 +114,6 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 		}
 		SessionManager.closeBase();
 	}
-	
-	//For purpose of overriding in sub class
-	protected void populateMiddleRow(Layout middleRow) {}
 
 	private void createEditBtn() {
 		editBtn = new Button("Edit");
@@ -125,37 +129,22 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 		setComponentAlignment(editBtn, Alignment.MIDDLE_RIGHT);
 	}
 	
-	private void transitionView(Mode m){//TODO Normalize
+	private void transitionView(Mode m){
 		viewMode = m;
 		switch (m){
 			case VIEW:
 				editBtn.setVisible(true);
 				lowerBtns.setVisible(false);
-				for(TextField tf : columnToTF.values()){
-					tf.setEnabled(false);
-				}
-				for(Component c : customComponents){
-					c.setEnabled(false);
-				}
+				setAllComponentsEnabled(false);
 				break;
 			case EDIT:
 				editBtn.setVisible(false);
 				lowerBtns.setVisible(true);
-				for(TextField tf : columnToTF.values()){
-					tf.setEnabled(true);
-				}
-				for(Component c : customComponents){
-					c.setEnabled(true);
-				}
+				setAllComponentsEnabled(true);
 				break;
 			default:
 				lowerBtns.setVisible(true);
-				for(TextField tf : columnToTF.values()){
-					tf.setEnabled(true);
-				}
-				for(Component c : customComponents){
-					c.setEnabled(true);
-				}
+				setAllComponentsEnabled(true);
 				clearFields();
 				item = null;
 		}
@@ -230,6 +219,15 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 			tf.clear();
 		}
 	}
+	
+	private void setAllComponentsEnabled(boolean value){
+		for(TextField tf : columnToTF.values()){
+			tf.setEnabled(value);
+		}
+		for(Component c : customComponents){
+			c.setEnabled(value);
+		}
+	}
 
 	private void createLowerLayout() {
 		lowerBtns = new HorizontalLayout();
@@ -239,21 +237,10 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 		addComponent(lowerBtns);
 		
 		if(viewMode != Mode.ADD){
-			Button deleteBtn = new Button("Delete " + itemName);
+			Button deleteBtn = new Button("Delete " + itemName, e -> deleteBtnAction());
 			deleteBtn.setStyleName("danger");
 			lowerBtns.addComponent(deleteBtn);
 			lowerBtns.setComponentAlignment(deleteBtn, Alignment.MIDDLE_LEFT);
-			
-			deleteBtn.addClickListener(new ClickListener(){
-
-				@Override
-				public void buttonClick(ClickEvent event) {
-					SessionManager.openBase();
-					deleteBtnAction();	
-					SessionManager.closeBase();
-				}
-				
-			});
 		}
 		
 		
@@ -262,23 +249,20 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 		lowerBtns.addComponent(saveBtn);
 		lowerBtns.setComponentAlignment(saveBtn, Alignment.MIDDLE_RIGHT);
 		
-		saveBtn.addClickListener(new ClickListener(){
-
-			@Override
-			public void buttonClick(ClickEvent event) {
-				SessionManager.openBase();
-				if(checkRequiredFields()){
-					saveBtnAction();
-					if(viewMode == Mode.EDIT){
-						transitionView(Mode.VIEW);
-					}else if(viewMode == Mode.ADD){
-						transitionView(Mode.ADD);
-					}
-				}else{
-					Notification.show("All Required Fields Must Be Filled", Notification.Type.WARNING_MESSAGE);
+		saveBtn.addClickListener(e -> {
+			SessionManager.openBase();
+			
+			if(checkRequiredFields()){
+				saveBtnAction();
+				if(viewMode == Mode.EDIT){
+					transitionView(Mode.VIEW);
+				}else if(viewMode == Mode.ADD){
+					transitionView(Mode.ADD);
 				}
-				SessionManager.closeBase();
+			}else{
+				Notification.show("All Required Fields Must Be Filled", Notification.Type.WARNING_MESSAGE);
 			}
+			SessionManager.closeBase();
 		});
 	}
 	
@@ -329,6 +313,9 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 			SessionManager.closeBase();
 		}
 	}
+	
+	//For purpose of overriding in sub class
+	protected void populateMiddleRow(Layout middleRow) {}
 	
 	protected abstract void saveBtnAction();
 	protected abstract void clearFields();

@@ -17,6 +17,12 @@ import com.wilsongateway.Framework.SessionManager;
 import com.wilsongateway.Framework.Tables;
 import com.wilsongateway.Framework.Tables.Group;
 
+/**
+ * 
+ * @author Nicholas Wilson
+ *         www.outin.space
+ *
+ */
 @SuppressWarnings("serial")
 public class EditGroup extends EditForm<Group>{
 
