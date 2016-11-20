@@ -65,7 +65,9 @@ public abstract class Tab extends VerticalLayout implements View{
 	}
 	
 	public static Tab getInstance(TabType type, SessionManager manager, DashboardView dash){
-		switch(type){
+		try{
+			SessionManager.openBase();
+			switch(type){
 			case ACCOUNTTAB:
 				return new AccountTab(manager);
 			case ADMINCONSOLE:
@@ -98,6 +100,9 @@ public abstract class Tab extends VerticalLayout implements View{
 				return new EditTicket(manager, null, true);
 			default:
 				return new ErrorTab(manager, "Tab not yet created");
+		}
+		}finally{
+			SessionManager.closeBase();
 		}
 	}
 }

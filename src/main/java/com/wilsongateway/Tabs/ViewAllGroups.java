@@ -19,7 +19,7 @@ public class ViewAllGroups extends ViewAllForm{
 	private boolean isEditable;
 	
 	public ViewAllGroups(SessionManager manager, boolean isEditable) {
-		super(manager, Tables.GROUP, "Groups", isEditable);
+		super(manager, Tables.GROUP.findAll(), "Groups", isEditable);
 		this.isEditable = isEditable;
 		
 		addReportBtn(Tables.GROUP, "Generate Report");

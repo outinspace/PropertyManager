@@ -18,7 +18,7 @@ public class ViewAllProperties extends ViewAllForm{
 
 	private boolean isEditable;
 	public ViewAllProperties(SessionManager manager, boolean isEditable) {
-		super(manager, Tables.PROPERTY, "Properties", isEditable);
+		super(manager, Tables.PROPERTY.findAll(), "Properties", isEditable);
 		this.isEditable = isEditable;
 		
 		addReportBtn(Tables.PROPERTY, "Generate Report");

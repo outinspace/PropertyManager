@@ -1,6 +1,7 @@
 package com.wilsongateway.Forms;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.javalite.activejdbc.Model;
@@ -10,7 +11,6 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FileDownloader;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.Resource;
-import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Label;
@@ -31,16 +31,15 @@ import com.wilsongateway.Framework.Tab;
 public abstract class ViewAllForm extends Tab{
 
 	private Table t;
-	private EncryptedModel model;
+	private List<Model> models;
 	private Map<String, Class<? extends EncryptedModel>> relationshipColumns = new HashMap<String, Class<? extends EncryptedModel>>();
 	
-	public static final String VIEW = "view";
-	public static final String PASSWORD = "password";
+	public static final String ACTIONCOMPONENTS = "actionComponents";
 	public static final String RELATIONSHIP = "relationship";
 	
-	public ViewAllForm(SessionManager manager, EncryptedModel model, String pluralItemName, boolean isEditable) {
+	public ViewAllForm(SessionManager manager, List<Model> models, String pluralItemName, boolean isEditable) {
 		super((isEditable ? "Edit" : "View") + " All " + pluralItemName, manager);
-		this.model = model;
+		this.models = models;
 		SessionManager.openBase();
 		
 		Label heading = new Label((isEditable ? "Edit" : "View") +  " All " + pluralItemName);
@@ -51,8 +50,8 @@ public abstract class ViewAllForm extends Tab{
 		t = new Table(null);
 		t.setWidth("100%");
 		//TODO Search Box
-		t.addContainerProperty(VIEW, CssLayout.class, "");
-		t.setColumnExpandRatio(VIEW, 0);
+		t.addContainerProperty(ACTIONCOMPONENTS, CssLayout.class, "", "", null, null);
+		t.setColumnExpandRatio(ACTIONCOMPONENTS, 0);
 		setContainerProperties(t);
 		
 		populateTable();
@@ -64,8 +63,8 @@ public abstract class ViewAllForm extends Tab{
 	private void populateTable() {
 		t.removeAllItems();
 		
-		//Iterate through all users
-		for(Model m : model.findAll()){
+		//Iterate through all models
+		for(Model m : models){
 			EncryptedModel em = (EncryptedModel)m;
 			int length = t.getContainerPropertyIds().size();
 			Object[] cells = new Object[length];
@@ -74,14 +73,12 @@ public abstract class ViewAllForm extends Tab{
 			for(int i = 0; i < length; i++){
 				String attribute = (String)t.getContainerPropertyIds().toArray()[i];
 					
-				//Create CSSLayout and add Button to navigate to view tab
-				if(attribute.equals(VIEW)){
-					CssLayout btnLayout = new CssLayout();
-					cells[i] = btnLayout;
+				//Create CSSLayout and fill with action components
+				if(attribute.equals(ACTIONCOMPONENTS)){
+					CssLayout actionLayout = new CssLayout();
+					cells[i] = actionLayout;
 					
-					Button btn = new Button("Details", event -> navToEdit(em));
-					btn.setStyleName("quiet tiny");
-					btnLayout.addComponent(btn);
+					loadActionComponents(actionLayout, em);
 					
 					//If the attribute is a many to many/one to many relationship,
 					//set the cell to a String output of all relationships.
@@ -108,6 +105,12 @@ public abstract class ViewAllForm extends Tab{
 		}
 	}
 	
+	protected void loadActionComponents(CssLayout layout, EncryptedModel model) {
+		Button btn = new Button("Details", event -> navToEdit(model));
+		btn.setStyleName("quiet tiny");
+		layout.addComponent(btn);
+	}
+
 	protected <T> void addTableColumn(String attribute, Class<T> type, String caption){
 		t.addContainerProperty(attribute, type, "", caption, null, null);
 		t.setColumnExpandRatio(attribute, 1);

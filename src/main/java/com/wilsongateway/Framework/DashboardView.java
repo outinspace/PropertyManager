@@ -19,6 +19,7 @@ import com.vaadin.ui.Button.ClickListener;
 import com.wilsongateway.Framework.Tab.TabType;
 import com.wilsongateway.Framework.Tables.Group;
 import com.wilsongateway.Tabs.ErrorTab;
+import com.wilsongateway.Tabs.LogoScreen;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Image;
