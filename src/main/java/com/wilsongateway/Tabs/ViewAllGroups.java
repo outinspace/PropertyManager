@@ -15,6 +15,8 @@ public class ViewAllGroups extends ViewAllForm{
 	public ViewAllGroups(SessionManager manager, boolean isEditable) {
 		super(manager, Tables.GROUP, "Groups", isEditable);
 		this.isEditable = isEditable;
+		
+		addReportBtn(Tables.GROUP, "Generate Report");
 	}
 
 	@Override

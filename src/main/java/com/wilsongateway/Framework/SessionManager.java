@@ -1,5 +1,7 @@
 package com.wilsongateway.Framework;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.servlet.annotation.WebServlet;
 
@@ -45,6 +47,7 @@ public class SessionManager extends UI {
 			config.addDataSourceProperty("prepStmtCacheSize", "250");
 			config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
 			config.setConnectionTestQuery("/* ping */");
+			config.setLeakDetectionThreshold(10000);
 			
 			datasource = new HikariDataSource(config);
 		}
@@ -73,9 +76,6 @@ public class SessionManager extends UI {
 	
 	@Override
 	protected void init(VaadinRequest request) {
-		//Init database connection
-		openBase();
-		
 		nav = new Navigator(this, this);
 		LoginView login = new LoginView(this);
 		nav.addView(LOGINVIEW, login);
@@ -89,14 +89,13 @@ public class SessionManager extends UI {
 	}
 	
 	private void createTestEntries() {
-		System.out.println("Creating Test Entries");
+		openBase();
 		User u = Tables.USER.findFirst("username = 'admin'");
 		if(u == null){
 			u = new User();
 		}
 		u.setEncrypted("username", "admin");
 		u.setEncrypted("password", "Password1");
-		System.out.println("Saving admin");
 		u.save();
 		
 		//Create group with one tab
@@ -115,11 +114,21 @@ public class SessionManager extends UI {
 		//add group to user
 		u.addGroup(g1);
 		u.save();
+		closeBase();
 	}
 	
 	public static void openBase(){
 		if(!Base.hasConnection()){
-			Base.open(Servlet.getDatasource());
+			try {
+				Connection temp = Servlet.getDatasource().getConnection();
+				while(temp.isClosed()){
+					Servlet.getDatasource().evictConnection(temp);
+					temp = Servlet.getDatasource().getConnection();
+				}
+				Base.attach(temp);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}		
 		}
 	}
 	

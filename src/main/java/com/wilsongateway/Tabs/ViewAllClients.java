@@ -17,6 +17,8 @@ public class ViewAllClients extends ViewAllForm{
 	public ViewAllClients(SessionManager manager, boolean isEditable) {
 		super(manager, Tables.CLIENT, "Clients", isEditable);
 		this.isEditable = isEditable;
+		
+		addReportBtn(Tables.CLIENT, "Generate Report");
 	}
 
 	@Override

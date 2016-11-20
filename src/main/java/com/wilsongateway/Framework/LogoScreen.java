@@ -31,7 +31,7 @@ public class LogoScreen extends VerticalLayout implements View {
 		FileResource logoResource = new FileResource(new File(basepath + "/WEB-INF/classes/images/mercyLetterM.png"));
 		
 		logo = new Image("", logoResource);
-		//logo.setWidth("400px");
+		logo.setWidth("400px");
 		addComponent(logo);
 		setComponentAlignment(logo, Alignment.MIDDLE_CENTER);
 	}

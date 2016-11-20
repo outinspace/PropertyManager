@@ -31,7 +31,7 @@ public abstract class EncryptedModel extends Model{
 				encryptor.setPassword(GLOBALKEY);
 				s = encryptor.decrypt(s);
 				}catch(EncryptionOperationNotPossibleException e){
-					System.out.println("Could not decrypt text: " + s);
+					System.err.println("Could not decrypt text: " + s);
 				}
 			}
 			return s;
@@ -48,15 +48,13 @@ public abstract class EncryptedModel extends Model{
 	}
 	
 	public <T extends Model> T setEncrypted(String attributeName, Object value){
-		System.out.println("Setting attribute: " + attributeName);
 		if(isEncryptedAttribute(attributeName) && value instanceof String){
 			BasicTextEncryptor encryptor = new BasicTextEncryptor();
 			encryptor.setPassword(GLOBALKEY);
+			
 			String encrypted = encryptor.encrypt((String)value);
-			System.out.println("Using encryption: " + encrypted + "\n");
 			return super.set(attributeName, encrypted);
 		}else{
-			System.out.println("Using plaintext: " + value + "\n");
 			return super.set(attributeName, value);
 		}
 	}
@@ -73,12 +71,6 @@ public abstract class EncryptedModel extends Model{
 	public Collection<ColumnMetadata> getColumns(){
 		return this.getMetaModel().getColumnMetadata().values();
 	}
-	
-//	@Override
-//	public LazyList<EncryptedModel> findAll(){
-//		return super.findAll();
-//		
-//	}
 	
 	@Override
 	public boolean equals(Object obj){

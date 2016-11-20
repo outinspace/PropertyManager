@@ -17,6 +17,8 @@ public class ViewAllUsers extends ViewAllForm{
 	public ViewAllUsers(SessionManager manager, boolean isEditable) {
 		super(manager, Tables.USER, "Users", isEditable);
 		this.isEditable = isEditable;
+		
+		addReportBtn(Tables.USER, "Generate Report");
 	}
 
 	@Override

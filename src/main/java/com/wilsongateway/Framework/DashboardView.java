@@ -61,6 +61,7 @@ public class DashboardView extends VerticalLayout implements View{
 		tabNav = new Navigator(manager, dashContent);
 		tabNav.addView(DEFAULT, new LogoScreen());
 		tabNav.navigateTo(DEFAULT);
+		tabNav.setErrorView(new LogoScreen());
 		
 		sideContent = new VerticalLayout();
 		sideContent.setSpacing(true);
@@ -70,7 +71,6 @@ public class DashboardView extends VerticalLayout implements View{
 		
 		sideMenu = new Accordion();
 		sideContent.addComponent(sideMenu);
-		
 		populateSideMenu();
 		
 		SessionManager.closeBase();
@@ -118,22 +118,15 @@ public class DashboardView extends VerticalLayout implements View{
 				
 				tabNav.addView(type.toString(), t);
 				
-				Button b = new Button(t.getName());
-				b.setStyleName("link");
-				b.addClickListener(new ClickListener(){
-
-					@Override
-					public void buttonClick(ClickEvent event) {
-						tabNav.navigateTo(type.toString());
-						lastNav = type.toString();
-					}
-					
+				Button b = new Button(t.getName(), e -> {
+					tabNav.navigateTo(type.toString());
+					lastNav = type.toString();
 				});
+				b.setStyleName("link");
 				content.addComponent(b);
 			}
 			sideMenu.addTab(content, g.getAsString("name"));
 		}
-		
 		sideMenu.addTab(new CssLayout(), "", FontAwesome.CLOSE);
 	}
 	

@@ -10,7 +10,7 @@ import org.javalite.activejdbc.Model;
 
 import com.vaadin.server.VaadinService;
 
-public class ReportController {
+public class CSVController {
 
 	private final EncryptedModel dataType;
 	private final String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
@@ -18,12 +18,13 @@ public class ReportController {
 	
 	private File destination;
 	
-	public ReportController(EncryptedModel dataType){
+	public CSVController(EncryptedModel dataType){
 		this.dataType = dataType;
 	}
 	
 	public void createDestination(){//TODO io locking, add iterating names + autodeletion
 		destination = new File(basepath + subFolder + dataType.getTableName() + ".csv");
+		System.out.println("Creating Report at: " + destination);
 	}
 	
 	public boolean createCSVFile(){
@@ -46,7 +47,7 @@ public class ReportController {
 				for(String attribute : model.attributeNames()){
 					String value = ((EncryptedModel)model).getDecrypted(attribute).toString();
 					if(value != null){
-						newLine += value;
+						newLine += value.replace(",", " ");
 					}
 					newLine += ",";
 				}
