@@ -31,11 +31,12 @@ public class ViewAllProperties extends ViewAllForm{
 
 	@Override
 	protected void setContainerProperties(Table t) {
-		t.addContainerProperty("name", String.class, "", "Name", null, null);
-		t.addContainerProperty("street_address", String.class, "", "Addresss", null, null);
-		t.addContainerProperty("city", String.class, "", "City", null, null);
-		t.addContainerProperty("state", String.class, "", "State", null, null);
-		t.addContainerProperty("zip", String.class, "", "Zip", null, null);
+		addTableColumn("id", String.class, "ID", 0);
+		addTableColumn("name", String.class, "Name", 0);
+		addTableColumn("street_address", String.class, "Address", 1);
+		addTableColumn("city", String.class, "City", 0);
+		addTableColumn("State", String.class, "state", 0);
+		addTableColumn("zip", String.class, "Zip", 0);
 	}
 
 	@Override

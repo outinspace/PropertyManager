@@ -32,9 +32,9 @@ public class ViewAllGroups extends ViewAllForm{
 
 	@Override
 	protected void setContainerProperties(Table t) {
-		t.addContainerProperty("name", String.class, "", "Name", null, null);
-		t.addContainerProperty("tabs", String.class, "", "Tabs", null, null);
-		
+		addTableColumn("id", String.class, "ID", 0);
+		addTableColumn("name", String.class, "Name", 0);
+		addTableColumn("tabs", String.class, "Tabs", 1);
 	}
 
 	@Override

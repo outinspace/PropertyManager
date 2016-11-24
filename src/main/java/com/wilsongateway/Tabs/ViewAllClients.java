@@ -34,11 +34,12 @@ public class ViewAllClients extends ViewAllForm{
 
 	@Override
 	protected void setContainerProperties(Table t) {
-		addTableColumn("first_name", String.class, "First Name");
-		addTableColumn("last_name", String.class, "Last Name");
-		addTableColumn("unit", String.class, "Unit #");
+		addTableColumn("id", String.class, "ID", 0);
+		addTableColumn("first_name", String.class, "First Name", 0);
+		addTableColumn("last_name", String.class, "Last Name", 0);
+		addTableColumn("unit", String.class, "Unit #", 0);
 		
-		addRelationshipColumn("properties", Property.class, "Located At");
+		addRelationshipColumn("properties", Property.class, "Located At", 1);
 	}
 
 	@Override

@@ -93,7 +93,10 @@ public abstract class ViewAllForm extends Tab{
 					
 				//Create CSSLayout and fill with action components
 				if(attribute.equals(ACTIONCOMPONENTS)){
-					cells[i] = loadActionLayout(em);
+					CssLayout actionLayout = new CssLayout();
+					cells[i] = actionLayout;
+					
+					fillActionLayout(actionLayout, em);
 					
 					//If the attribute is a many to many/one to many relationship,
 					//set the cell to a String output of all relationships.
@@ -107,7 +110,7 @@ public abstract class ViewAllForm extends Tab{
 					
 					//Set cell to the model's attribute value
 				}else{
-					cells[i] = em.getAsString(attribute) == null ? "" : em.getDecrypted(attribute).toString();
+					cells[i] = em.getAsString(attribute);
 				}
 				
 				//Truncate long values
@@ -120,27 +123,23 @@ public abstract class ViewAllForm extends Tab{
 		}
 	}
 	
-	protected CssLayout loadActionLayout(EncryptedModel model) {
-		CssLayout actionLayout = new CssLayout();
-		
+	protected void fillActionLayout(Layout actionLayout, EncryptedModel model) {
 		Button btn = new Button("", event -> navToEdit(model));
 		btn.setIcon(FontAwesome.EDIT);
 		btn.setStyleName("quiet tiny");
 		actionLayout.addComponent(btn);
-		
-		return actionLayout;
 	}
 
-	protected <T> void addTableColumn(String attribute, Class<T> type, String caption){
+	protected <T> void addTableColumn(String attribute, Class<T> type, String caption, float expandRatio){
 		t.addContainerProperty(attribute, type, "", caption, null, null);
-		t.setColumnExpandRatio(attribute, 1);
+		t.setColumnExpandRatio(attribute, expandRatio);
 	}
 	
-	protected void addRelationshipColumn(String identifier, Class<? extends EncryptedModel> type, String caption){
+	protected void addRelationshipColumn(String identifier, Class<? extends EncryptedModel> type, String caption, float expandRatio){
 		//Finds all many to many or one to many relationships of model and type.class
 		relationshipColumns.put(identifier, type);
 		t.addContainerProperty(identifier, String.class, "", caption, null, null);
-		t.setColumnExpandRatio(identifier, 1);
+		t.setColumnExpandRatio(identifier, expandRatio);
 	}
 	
 	protected void addReportBtn(EncryptedModel model){
@@ -163,7 +162,7 @@ public abstract class ViewAllForm extends Tab{
 	protected void addRefreshButton(){//NOT WORKING
 		Button refresh = new Button("",e -> {
 			refresh();
-			Notification.show("Refreshed");
+			UI.getCurrent().access(() -> Notification.show("Refreshed", Notification.Type.TRAY_NOTIFICATION));
 		});
 		
 		refresh.setStyleName("tiny");

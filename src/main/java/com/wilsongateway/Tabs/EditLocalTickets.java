@@ -6,6 +6,8 @@ import org.javalite.activejdbc.Model;
 
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Layout;
+import com.vaadin.ui.PopupView;
 import com.vaadin.ui.Table;
 import com.wilsongateway.Forms.ViewAllForm;
 import com.wilsongateway.Framework.EncryptedModel;
@@ -13,6 +15,7 @@ import com.wilsongateway.Framework.SessionManager;
 import com.wilsongateway.Framework.Tables;
 import com.wilsongateway.Framework.Tables.Property;
 import com.wilsongateway.Framework.Tables.Ticket;
+import com.wilsongateway.SubPanels.TicketActionMenu;
 
 public class EditLocalTickets extends ViewAllForm{
 
@@ -27,8 +30,6 @@ public class EditLocalTickets extends ViewAllForm{
 		super(manager, "Local Tickets", true);
 		SessionManager.openBase();
 		
-		
-		
 		this.addRefreshButton();
 		this.addReportBtn(Tables.TICKET);//Individualize
 		createTopBar();
@@ -36,11 +37,11 @@ public class EditLocalTickets extends ViewAllForm{
 		SessionManager.closeBase();
 	}
 	
-	protected void createTopBar(){//messy
+	protected void createTopBar(){
 		getTopBar().addComponent(new Label("Property:"));
 		
 		propCB = new ComboBox();
-		propCB.addItems(manager.getCurrentUser().getAll(Property.class));
+		propCB.addItems(properties);
 		propCB.setStyleName("tiny");
 		getTopBar().addComponent(propCB);
 		
@@ -58,9 +59,11 @@ public class EditLocalTickets extends ViewAllForm{
 
 	@Override
 	protected void setContainerProperties(Table t) {
-		addTableColumn("date", String.class, "Date");
-		addTableColumn("status", String.class, "Status");
-		addTableColumn("description", String.class, "Description");
+		addTableColumn("id", String.class, "ID", 0);
+		addTableColumn("date", String.class, "Date", 0);
+		addTableColumn("status", String.class, "Status", 0);
+		addRelationshipColumn("property", Property.class, "Property", 0);
+		addTableColumn("description", String.class, "Description", 1);
 	}
 	
 	@Override 
@@ -84,5 +87,10 @@ public class EditLocalTickets extends ViewAllForm{
 			return Tables.TICKET.find("id = (?)", -1);
 		}
 	}
-
+	
+	@Override
+	protected void fillActionLayout(Layout actionLayout, EncryptedModel em){
+		PopupView actionMenu = new PopupView("More", new TicketActionMenu(em));
+		actionLayout.addComponent(actionMenu);
+	}
 }

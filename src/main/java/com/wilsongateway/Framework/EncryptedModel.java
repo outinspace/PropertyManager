@@ -52,10 +52,10 @@ public abstract class EncryptedModel extends Model{
 	
 	public String getAsString(String attributeName){
 		Object obj = getDecrypted(attributeName);
-		if(obj instanceof String){
-			return (String)obj;
+		if(obj != null){
+			return obj.toString();
 		}
-		return null;
+		return "";
 	}
 	
 	public <T extends Model> T setEncrypted(String attributeName, Object value){
