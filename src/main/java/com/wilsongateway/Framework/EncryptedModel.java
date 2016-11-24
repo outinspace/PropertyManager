@@ -3,6 +3,7 @@ package com.wilsongateway.Framework;
 import java.util.Collection;
 
 import org.jasypt.exceptions.EncryptionOperationNotPossibleException;
+import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.jasypt.util.text.BasicTextEncryptor;
 import org.jasypt.util.text.StrongTextEncryptor;
 import org.javalite.activejdbc.CallbackAdapter;
@@ -21,6 +22,8 @@ import com.wilsongateway.Exceptions.CannotEncryptNonStringException;
 public abstract class EncryptedModel extends Model{
 
 	private static final String GLOBALKEY = System.getProperty("global_key") == null ? "devKey" : System.getProperty("global_key");
+	public static final String PASSWORDATTRIBUTE = "password";
+	public static final String PASSWORDFILLER = "********";
 	private String[] encryptedAttributes;
 	
 	public EncryptedModel(String ... attributes){
@@ -29,7 +32,9 @@ public abstract class EncryptedModel extends Model{
 	
 	public Object getDecrypted(String attributeName){
 		Object obj = super.get(attributeName);
-		if(isEncryptedAttribute(attributeName) && obj instanceof String){
+		if(attributeName.equals(PASSWORDATTRIBUTE)){
+			return PASSWORDFILLER;
+		}else if(isEncryptedAttribute(attributeName) && obj instanceof String){
 			String s = (String)obj;
 			if(s != null && !s.equals("")){
 				try{
@@ -54,12 +59,17 @@ public abstract class EncryptedModel extends Model{
 	}
 	
 	public <T extends Model> T setEncrypted(String attributeName, Object value){
-		if(isEncryptedAttribute(attributeName) && value instanceof String){
+		if(attributeName.equals(PASSWORDATTRIBUTE)){
+			BasicPasswordEncryptor encryptor = new BasicPasswordEncryptor();
+			return super.set(attributeName, encryptor.encryptPassword((String)value));
+			
+		}else if(isEncryptedAttribute(attributeName) && value instanceof String){
 			BasicTextEncryptor encryptor = new BasicTextEncryptor();
 			encryptor.setPassword(GLOBALKEY);
 			
 			String encrypted = encryptor.encrypt((String)value);
 			return super.set(attributeName, encrypted);
+			
 		}else{
 			return super.set(attributeName, value);
 		}

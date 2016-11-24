@@ -51,9 +51,9 @@ public class CSVController {
 			for(Model model : dataType.findAll()){
 				String newLine = "";
 				for(String attribute : model.attributeNames()){
-					String value = ((EncryptedModel)model).getDecrypted(attribute).toString();
+					Object value = ((EncryptedModel)model).getDecrypted(attribute);
 					if(value != null){
-						newLine += value.replace(",", " ");
+						newLine += value.toString().replace(",", " ");
 					}
 					newLine += ",";
 				}

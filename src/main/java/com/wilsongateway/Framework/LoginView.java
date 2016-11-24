@@ -161,7 +161,7 @@ public class LoginView extends VerticalLayout implements View{
 		case LOGIN:
 			User temp = Tables.USER.find(usernameField.getValue());
 			
-			if(temp != null && temp.getPassword().equals(passwordField.getValue())){
+			if(temp != null && temp.checkPassword(passwordField.getValue())){
 				manager.setCurrentUser(temp);
 				
 				//create and navigate to dashboard

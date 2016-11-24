@@ -16,6 +16,7 @@ import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Table;
+import com.vaadin.ui.UI;
 import com.wilsongateway.Framework.EncryptedModel;
 import com.wilsongateway.Framework.CSVController;
 import com.wilsongateway.Framework.SessionManager;
@@ -31,7 +32,7 @@ import com.wilsongateway.Framework.Tab;
 public abstract class ViewAllForm extends Tab{
 
 	private Table t;
-	private List<Model> models;
+	protected List<? extends Model> models;
 	private Map<String, Class<? extends EncryptedModel>> relationshipColumns = new HashMap<String, Class<? extends EncryptedModel>>();
 	
 	public static final String ACTIONCOMPONENTS = "actionComponents";
@@ -47,6 +48,8 @@ public abstract class ViewAllForm extends Tab{
 		addComponent(heading);
 		addLineBreak();
 		
+		insertTopGui();
+		
 		t = new Table(null);
 		t.setWidth("100%");
 		//TODO Search Box
@@ -60,7 +63,7 @@ public abstract class ViewAllForm extends Tab{
 		SessionManager.closeBase();
 	}
 
-	private void populateTable() {
+	protected void populateTable() {
 		t.removeAllItems();
 		
 		//Iterate through all models
@@ -151,6 +154,8 @@ public abstract class ViewAllForm extends Tab{
 		}
 		SessionManager.closeBase();
 	}
+	
+	protected void insertTopGui() {}
 
 	protected abstract void navToEdit(EncryptedModel usr);
 	protected abstract void setContainerProperties(Table t);
@@ -158,9 +163,17 @@ public abstract class ViewAllForm extends Tab{
 	@Override
 	public void enter(ViewChangeEvent event) {
 		//Refresh
-		SessionManager.openBase();
-		populateTable();
-		SessionManager.closeBase();
+		UI.getCurrent().access(new Runnable(){
+
+			@Override
+			public void run() {
+				SessionManager.openBase();
+				populateTable();
+				SessionManager.closeBase();
+				System.out.println("Refresh");
+			}
+			
+		});
 	}
 
 }

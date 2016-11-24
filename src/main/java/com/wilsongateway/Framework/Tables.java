@@ -2,6 +2,7 @@ package com.wilsongateway.Framework;
 
 import java.util.ArrayList;
 
+import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.javalite.activejdbc.Model;
 import org.javalite.activejdbc.annotations.Table;
 
@@ -58,6 +59,7 @@ public class Tables {
 			}
 		}
 		
+		@Deprecated
 		public static boolean isAcceptablePassword(String password){
 			if(password.length() < 8 || password.length() >= 45){
 				return false;
@@ -103,6 +105,11 @@ public class Tables {
 			}else{
 				throw new InvalidPasswordException();
 			}
+		}
+		
+		public boolean checkPassword(String testPassword){
+			BasicPasswordEncryptor encryptor = new BasicPasswordEncryptor();
+			return encryptor.checkPassword(testPassword, (String) this.get(PASSWORDATTRIBUTE));
 		}
 
 		@Override

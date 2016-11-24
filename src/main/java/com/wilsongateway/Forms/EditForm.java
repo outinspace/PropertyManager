@@ -8,6 +8,7 @@ import java.util.Map;
 import org.javalite.activejdbc.Model;
 import org.vaadin.dialogs.ConfirmDialog;
 
+import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Resource;
@@ -250,22 +251,30 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 		lowerBtns.setComponentAlignment(saveBtn, Alignment.MIDDLE_RIGHT);
 		
 		saveBtn.addClickListener(e -> {
-			SessionManager.openBase();
-			
-			if(checkRequiredFields()){
+			if(validateFields()){
+				SessionManager.openBase();
 				saveBtnAction();
+				SessionManager.closeBase();
 				if(viewMode == Mode.EDIT){
 					transitionView(Mode.VIEW);
 				}else if(viewMode == Mode.ADD){
 					transitionView(Mode.ADD);
 				}
-			}else{
-				Notification.show("All Required Fields Must Be Filled", Notification.Type.WARNING_MESSAGE);
 			}
-			SessionManager.closeBase();
 		});
 	}
 	
+	protected boolean validateFields(){
+		try{
+			for(TextField tf : columnToTF.values()){
+				tf.validate();
+			}
+			return true;
+		}catch(InvalidValueException e){
+			return false;
+		}	
+	}
+
 	protected void deleteBtnAction(){
 		ConfirmDialog.show(manager, "Please Confirm:", "Are you really sure?", 
 				"I am", "Not quite", new ConfirmDialog.Listener() {

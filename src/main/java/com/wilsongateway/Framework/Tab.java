@@ -8,6 +8,7 @@ import com.wilsongateway.Tabs.AccountTab;
 import com.wilsongateway.Tabs.AdminConsole;
 import com.wilsongateway.Tabs.EditClient;
 import com.wilsongateway.Tabs.EditGroup;
+import com.wilsongateway.Tabs.EditLocalTickets;
 import com.wilsongateway.Tabs.EditProperty;
 import com.wilsongateway.Tabs.EditTicket;
 import com.wilsongateway.Tabs.EditUser;
@@ -98,6 +99,8 @@ public abstract class Tab extends VerticalLayout implements View{
 				return new ViewAllClients(manager, true);
 			case ADDTICKET:
 				return new EditTicket(manager, null, true);
+			case EDITLOCALTICKETS:
+				return new EditLocalTickets(manager);
 			default:
 				return new ErrorTab(manager, "Tab not yet created");
 		}

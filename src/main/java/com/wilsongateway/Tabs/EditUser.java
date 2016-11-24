@@ -6,16 +6,20 @@ import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.wilsongateway.CustomComponents.EndlessComboBox;
 import com.wilsongateway.Exceptions.InvalidPasswordException;
 import com.wilsongateway.Exceptions.NameUnavailableException;
 import com.wilsongateway.Forms.EditForm;
+import com.wilsongateway.Framework.EncryptedModel;
 import com.wilsongateway.Framework.SessionManager;
 import com.wilsongateway.Framework.Tables;
 import com.wilsongateway.Framework.Tables.Group;
 import com.wilsongateway.Framework.Tables.Property;
 import com.wilsongateway.Framework.Tables.User;
+import com.wilsongateway.Validators.PasswordValidator;
+import com.wilsongateway.Validators.UniqueUsernameValidator;
 
 /**
  * 
@@ -39,15 +43,15 @@ public class EditUser extends EditForm<User>{
 			User newU;
 			if(viewMode == Mode.ADD){
 				newU = new User();
-				newU.checkAndSetUsername(getTFValue("username"));
 			}else{
 				newU = getItem();
-				if(!getTFValue("username").equals(newU.getUsername())){
-					newU.checkAndSetUsername(getTFValue("username"));
-				}
+			}
+			newU.setEncrypted("username", getTFValue("username"));
+			
+			if(!getTFValue("password").equals(EncryptedModel.PASSWORDFILLER)){
+				newU.setEncrypted("password", getTFValue("password"));
 			}
 			
-			newU.checkAndSetPassword(getTFValue("password"));
 			newU.setEncrypted("first_name", getTFValue("first_name"));
 			newU.setEncrypted("last_name", getTFValue("last_name"));
 			newU.setEncrypted("position", getTFValue("position"));
@@ -60,10 +64,6 @@ public class EditUser extends EditForm<User>{
 			newU.save();
 			
 			Notification.show("User Saved", Notification.Type.HUMANIZED_MESSAGE);
-		}catch(NameUnavailableException e){
-			Notification.show("Username Is Taken", Notification.Type.WARNING_MESSAGE);
-		}catch(InvalidPasswordException e){
-			Notification.show("Password Is Not Acceptable", Notification.Type.WARNING_MESSAGE);
 		}catch(Exception e){
 			Notification.show("Unable To Save User", Notification.Type.ERROR_MESSAGE);
 			e.printStackTrace();
@@ -97,8 +97,14 @@ public class EditUser extends EditForm<User>{
 
 	@Override
 	protected void populateLeftCol(Layout leftCol, User u) {
-		addAndFillTF("username", "Username", FontAwesome.USER).setRequired(true);
-		addAndFillTF("password", "Password", FontAwesome.LOCK).setRequired(true);
+		TextField userTF = addAndFillTF("username", "Username", FontAwesome.USER);
+		userTF.setRequired(true);
+		userTF.addValidator(new UniqueUsernameValidator(userTF.getValue()));
+		
+		TextField passTF = addAndFillTF("password", "Password", FontAwesome.LOCK);
+		passTF.setRequired(true);
+		passTF.addValidator(new PasswordValidator());
+		
 		addAndFillTF("first_name", "First Name");
 		addAndFillTF("last_name", "Last Name");
 		addAndFillTF("position", "Job Position");
@@ -118,5 +124,4 @@ public class EditUser extends EditForm<User>{
 		rightCol.addComponent(propertySelect);
 		addCustomComponent(propertySelect);
 	}
-
 }

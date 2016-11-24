@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import org.javalite.activejdbc.LazyList;
 
+import com.vaadin.event.ItemClickEvent;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -128,6 +129,7 @@ public class DashboardView extends VerticalLayout implements View{
 				Button b = new Button(t.getName(), e -> {
 					tabNav.navigateTo(type.toString());
 					lastNav = type.toString();
+					
 				});
 				b.setStyleName("link");
 				content.addComponent(b);
