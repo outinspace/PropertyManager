@@ -4,16 +4,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.javalite.activejdbc.LazyList;
 import org.javalite.activejdbc.Model;
 import org.javalite.activejdbc.associations.NotAssociatedException;
 
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FileDownloader;
 import com.vaadin.server.FileResource;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Resource;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CssLayout;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Layout;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.UI;
@@ -38,9 +42,10 @@ public abstract class ViewAllForm extends Tab{
 	public static final String ACTIONCOMPONENTS = "actionComponents";
 	public static final String RELATIONSHIP = "relationship";
 	
-	public ViewAllForm(SessionManager manager, List<Model> models, String pluralItemName, boolean isEditable) {
+	private HorizontalLayout topBar;
+	
+	public ViewAllForm(SessionManager manager, String pluralItemName, boolean isEditable) {
 		super((isEditable ? "Edit" : "View") + " All " + pluralItemName, manager);
-		this.models = models;
 		SessionManager.openBase();
 		
 		Label heading = new Label((isEditable ? "Edit" : "View") +  " All " + pluralItemName);
@@ -48,7 +53,21 @@ public abstract class ViewAllForm extends Tab{
 		addComponent(heading);
 		addLineBreak();
 		
-		insertTopGui();
+		topBar = new HorizontalLayout();
+		topBar.setSpacing(true);
+		addComponent(topBar);
+		
+		createTable();
+		 models = getModels();
+		populateTable();
+		
+		SessionManager.closeBase();
+	}
+	
+	private void createTable(){
+//		if(t != null){
+//			removeComponent(t);
+//		}
 		
 		t = new Table(null);
 		t.setWidth("100%");
@@ -56,11 +75,7 @@ public abstract class ViewAllForm extends Tab{
 		t.addContainerProperty(ACTIONCOMPONENTS, CssLayout.class, "", "", null, null);
 		t.setColumnExpandRatio(ACTIONCOMPONENTS, 0);
 		setContainerProperties(t);
-		
-		populateTable();
 		addComponent(t);
-		
-		SessionManager.closeBase();
 	}
 
 	protected void populateTable() {
@@ -78,10 +93,7 @@ public abstract class ViewAllForm extends Tab{
 					
 				//Create CSSLayout and fill with action components
 				if(attribute.equals(ACTIONCOMPONENTS)){
-					CssLayout actionLayout = new CssLayout();
-					cells[i] = actionLayout;
-					
-					loadActionComponents(actionLayout, em);
+					cells[i] = loadActionLayout(em);
 					
 					//If the attribute is a many to many/one to many relationship,
 					//set the cell to a String output of all relationships.
@@ -108,10 +120,15 @@ public abstract class ViewAllForm extends Tab{
 		}
 	}
 	
-	protected void loadActionComponents(CssLayout layout, EncryptedModel model) {
-		Button btn = new Button("Details", event -> navToEdit(model));
+	protected CssLayout loadActionLayout(EncryptedModel model) {
+		CssLayout actionLayout = new CssLayout();
+		
+		Button btn = new Button("", event -> navToEdit(model));
+		btn.setIcon(FontAwesome.EDIT);
 		btn.setStyleName("quiet tiny");
-		layout.addComponent(btn);
+		actionLayout.addComponent(btn);
+		
+		return actionLayout;
 	}
 
 	protected <T> void addTableColumn(String attribute, Class<T> type, String caption){
@@ -126,18 +143,32 @@ public abstract class ViewAllForm extends Tab{
 		t.setColumnExpandRatio(identifier, 1);
 	}
 	
-	protected void addReportBtn(EncryptedModel model, String caption){
+	protected void addReportBtn(EncryptedModel model){
 		Button downloadBtn = new Button("Click To Download");
 		downloadBtn.setVisible(false);
-		addComponent(downloadBtn);
+		downloadBtn.setStyleName("tiny");
+		topBar.addComponent(downloadBtn);
 		
-		Button genBtn = new Button(caption);
+		Button genBtn = new Button("Report");
+		genBtn.setIcon(FontAwesome.DOWNLOAD);
+		genBtn.setStyleName("tiny");
 		genBtn.addClickListener(e -> {
 			downloadReport(model, downloadBtn);
 			downloadBtn.setVisible(true);
 			genBtn.setVisible(false);
 		});
-		addComponent(genBtn);
+		topBar.addComponent(genBtn);
+	}
+	
+	protected void addRefreshButton(){//NOT WORKING
+		Button refresh = new Button("",e -> {
+			refresh();
+			Notification.show("Refreshed");
+		});
+		
+		refresh.setStyleName("tiny");
+		refresh.setIcon(FontAwesome.REFRESH);
+		topBar.addComponent(refresh);
 	}
 
 	private void downloadReport(EncryptedModel model, Button downBtn) {
@@ -155,25 +186,30 @@ public abstract class ViewAllForm extends Tab{
 		SessionManager.closeBase();
 	}
 	
-	protected void insertTopGui() {}
+	protected void refresh(){
+		UI.getCurrent().access(() -> {
+			SessionManager.openBase();
+				models = getModels();
+				populateTable();
+			SessionManager.closeBase();
+		});
+	}
+
+	protected HorizontalLayout getTopBar(){
+		return topBar;
+	}
+	
+	protected void reloadData(){}
 
 	protected abstract void navToEdit(EncryptedModel usr);
 	protected abstract void setContainerProperties(Table t);
-
+	protected abstract List<? extends Model> getModels();
+	
 	@Override
 	public void enter(ViewChangeEvent event) {
 		//Refresh
-		UI.getCurrent().access(new Runnable(){
-
-			@Override
-			public void run() {
-				SessionManager.openBase();
-				populateTable();
-				SessionManager.closeBase();
-				System.out.println("Refresh");
-			}
-			
-		});
+		refresh();
+		reloadData();
 	}
 
 }

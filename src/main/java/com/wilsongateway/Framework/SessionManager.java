@@ -7,12 +7,14 @@ import javax.servlet.annotation.WebServlet;
 
 import org.javalite.activejdbc.Base;
 
+import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.VaadinSession;
+import com.vaadin.shared.communication.PushMode;
 import com.vaadin.ui.UI;
 import com.wilsongateway.Framework.Tab.TabType;
 import com.wilsongateway.Framework.Tables.Group;
@@ -28,6 +30,7 @@ import com.zaxxer.hikari.HikariDataSource;
  */
 @SuppressWarnings("serial")
 @Theme("pmTheme")
+@Push(PushMode.AUTOMATIC)
 public class SessionManager extends UI {
 
 	/**

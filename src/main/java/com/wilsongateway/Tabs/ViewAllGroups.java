@@ -1,5 +1,9 @@
 package com.wilsongateway.Tabs;
 
+import java.util.List;
+
+import org.javalite.activejdbc.Model;
+
 import com.vaadin.ui.Table;
 import com.wilsongateway.Forms.ViewAllForm;
 import com.wilsongateway.Framework.EncryptedModel;
@@ -19,10 +23,11 @@ public class ViewAllGroups extends ViewAllForm{
 	private boolean isEditable;
 	
 	public ViewAllGroups(SessionManager manager, boolean isEditable) {
-		super(manager, Tables.GROUP.findAll(), "Groups", isEditable);
+		super(manager, "Groups", isEditable);
 		this.isEditable = isEditable;
 		
-		addReportBtn(Tables.GROUP, "Generate Report");
+		this.addRefreshButton();
+		this.addReportBtn(Tables.GROUP);
 	}
 
 	@Override
@@ -36,5 +41,10 @@ public class ViewAllGroups extends ViewAllForm{
 	protected void navToEdit(EncryptedModel grp) {
 		manager.getDash().getTabNav().addView("EDITGROUP", new EditGroup(manager, (Group) grp, isEditable));
 		manager.getDash().getTabNav().navigateTo("EDITGROUP");
+	}
+
+	@Override
+	protected List<? extends Model> getModels() {
+		return Tables.GROUP.findAll();
 	}
 }

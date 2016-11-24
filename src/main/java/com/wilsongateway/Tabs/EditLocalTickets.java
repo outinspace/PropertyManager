@@ -1,50 +1,52 @@
 package com.wilsongateway.Tabs;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.javalite.activejdbc.Model;
 
 import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
 import com.wilsongateway.Forms.ViewAllForm;
 import com.wilsongateway.Framework.EncryptedModel;
 import com.wilsongateway.Framework.SessionManager;
+import com.wilsongateway.Framework.Tables;
 import com.wilsongateway.Framework.Tables.Property;
 import com.wilsongateway.Framework.Tables.Ticket;
 
 public class EditLocalTickets extends ViewAllForm{
 
 	private static final long serialVersionUID = 2164419100750800569L;
+	
+	private ComboBox propCB;
+	
 	private List<Property> properties;
+	private Property selectedProperty;
 	
 	public EditLocalTickets(SessionManager manager) {
-		super(manager, new ArrayList<Model>(), "Local Tickets", true);
-		
+		super(manager, "Local Tickets", true);
 		SessionManager.openBase();
-		properties = manager.getCurrentUser().getAll(Property.class);
 		
-		if(properties.size() > 0){
-			this.models = properties.get(0).getAll(Ticket.class);
-			populateTable();
-		}
+		
+		
+		this.addRefreshButton();
+		this.addReportBtn(Tables.TICKET);//Individualize
+		createTopBar();
 		
 		SessionManager.closeBase();
 	}
 	
-	@Override
-	protected void insertTopGui(){//messy
-		if(manager.getCurrentUser().getAll(Property.class).size() < 2){
-			return;
-		}
+	protected void createTopBar(){//messy
+		getTopBar().addComponent(new Label("Property:"));
 		
-		ComboBox propCB = new ComboBox("Property");
+		propCB = new ComboBox();
 		propCB.addItems(manager.getCurrentUser().getAll(Property.class));
-		addComponent(propCB);
+		propCB.setStyleName("tiny");
+		getTopBar().addComponent(propCB);
 		
 		propCB.addValueChangeListener(e -> {
-			models = ((Property) propCB.getValue()).getAll(Ticket.class);
-			populateTable();
+			selectedProperty = (Property) propCB.getValue();
+			refresh();
 		});
 	}
 
@@ -59,6 +61,28 @@ public class EditLocalTickets extends ViewAllForm{
 		addTableColumn("date", String.class, "Date");
 		addTableColumn("status", String.class, "Status");
 		addTableColumn("description", String.class, "Description");
+	}
+	
+	@Override 
+	protected void reloadData(){
+		SessionManager.openBase();
+		propCB.removeAllItems();
+		propCB.addItems(manager.getCurrentUser().getAll(Property.class));
+		SessionManager.closeBase();
+	}
+
+	@Override
+	protected List<? extends Model> getModels() {
+		if(properties == null){
+			properties = manager.getCurrentUser().getAll(Property.class);
+		}
+		
+		if(selectedProperty != null){
+			//Load selected property
+			return selectedProperty.getAll(Ticket.class);
+		}else{
+			return Tables.TICKET.find("id = (?)", -1);
+		}
 	}
 
 }

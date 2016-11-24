@@ -1,5 +1,9 @@
 package com.wilsongateway.Tabs;
 
+import java.util.List;
+
+import org.javalite.activejdbc.Model;
+
 import com.vaadin.ui.Table;
 import com.wilsongateway.Forms.ViewAllForm;
 import com.wilsongateway.Framework.EncryptedModel;
@@ -21,10 +25,11 @@ public class ViewAllClients extends ViewAllForm{
 	private boolean isEditable;
 	
 	public ViewAllClients(SessionManager manager, boolean isEditable) {
-		super(manager, Tables.CLIENT.findAll(), "Clients", isEditable);
+		super(manager, "Clients", isEditable);
 		this.isEditable = isEditable;
 		
-		addReportBtn(Tables.CLIENT, "Generate Report");
+		this.addRefreshButton();
+		this.addReportBtn(Tables.CLIENT);
 	}
 
 	@Override
@@ -40,5 +45,10 @@ public class ViewAllClients extends ViewAllForm{
 	protected void navToEdit(EncryptedModel c) {
 		manager.getDash().getTabNav().addView("EDITCLIENT", new EditClient(manager, (Client) c, isEditable));
 		manager.getDash().getTabNav().navigateTo("EDITCLIENT");
+	}
+
+	@Override
+	protected List<? extends Model> getModels() {
+		return Tables.CLIENT.findAll();
 	}
 }
