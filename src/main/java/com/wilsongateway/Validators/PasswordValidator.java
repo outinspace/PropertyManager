@@ -3,8 +3,9 @@ package com.wilsongateway.Validators;
 import com.vaadin.data.Validator;
 import com.wilsongateway.Framework.EncryptedModel;
 
-@SuppressWarnings("serial")//TODO add serial to all classes
 public class PasswordValidator implements Validator{
+	
+	private static final long serialVersionUID = 8741002061099989032L;
 
 	@Override
 	public void validate(Object value) throws InvalidValueException {

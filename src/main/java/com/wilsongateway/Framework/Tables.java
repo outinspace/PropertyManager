@@ -1,5 +1,6 @@
 package com.wilsongateway.Framework;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import org.jasypt.util.password.BasicPasswordEncryptor;
@@ -19,8 +20,10 @@ import com.wilsongateway.Framework.Tables.User;
  *         www.outin.space
  *
  */
-public class Tables {
+public class Tables implements Serializable{
 
+	private static final long serialVersionUID = 6724376551339318505L;
+	
 	public static void isUniqueName(String columnName, EncryptedModel item, String comparing) throws NameUnavailableException{
 		for(Model m : item.findAll()){
 			EncryptedModel em = (EncryptedModel)m;
@@ -38,7 +41,7 @@ public class Tables {
 	 *
 	 */
 	@Table("users")
-	public static class User extends EncryptedModel {
+	public static class User extends EncryptedModel implements Serializable{
 		
 		public User(){
 			super("password", "first_name", "last_name", "position", "work_phone", "cell_phone");

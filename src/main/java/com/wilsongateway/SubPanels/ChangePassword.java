@@ -11,9 +11,10 @@ import com.wilsongateway.Framework.SessionManager;
 import com.wilsongateway.Framework.Tables.User;
 import com.wilsongateway.Validators.PasswordValidator;
 
-@SuppressWarnings("serial")
 public class ChangePassword extends Window{
-	
+
+	private static final long serialVersionUID = -168889524760672340L;
+
 	private User user;
 	
 	private VerticalLayout content;
@@ -39,6 +40,8 @@ public class ChangePassword extends Window{
 		oldPass = new PasswordField("Old Password");
 		oldPass.setRequired(true);
 		oldPass.addValidator(new Validator(){
+
+			private static final long serialVersionUID = 2427906456930342997L;
 
 			@Override
 			public void validate(Object value) throws InvalidValueException {

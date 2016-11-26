@@ -36,6 +36,8 @@ import com.vaadin.ui.VerticalLayout;
  */
 public class DashboardView extends VerticalLayout implements View{
 
+	private static final long serialVersionUID = 5093369175229691667L;
+
 	private SessionManager manager;
 	
 	//UI Elements
@@ -105,9 +107,13 @@ public class DashboardView extends VerticalLayout implements View{
 		logoContent.setComponentAlignment(logo, Alignment.MIDDLE_CENTER);
 		
 		logoContent.addComponent(new Label("Welcome back " + manager.getCurrentUser().getUsername()));
+	
+//		Button logout = new Button("Logout", e -> manager.logout());
+//		logout.setStyleName("link tiny");
+//		logoContent.addComponent(logout);TODO
 	}
 
-	private void populateSideMenu() {
+	private void populateSideMenu() {//Lazy loading
 		//Get list of all groups
 		LazyList<Tables.Group> groups = manager.getCurrentUser().getAll(Group.class);
 		

@@ -18,9 +18,10 @@ import com.vaadin.ui.VerticalLayout;
  *         www.outin.space
  *
  */
-@SuppressWarnings("serial")
 public class LogoScreen extends VerticalLayout implements View {
-
+	
+	private static final long serialVersionUID = -415834942006736572L;
+	
 	private Image logo;
 	
 	public LogoScreen(){

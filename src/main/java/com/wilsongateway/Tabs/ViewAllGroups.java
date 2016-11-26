@@ -17,9 +17,10 @@ import com.wilsongateway.Framework.Tables.Group;
  *         www.outin.space
  *
  */
-@SuppressWarnings("serial")
 public class ViewAllGroups extends ViewAllForm{
 
+	private static final long serialVersionUID = -305777413744640115L;
+	
 	private boolean isEditable;
 	
 	public ViewAllGroups(SessionManager manager, boolean isEditable) {

@@ -18,9 +18,10 @@ import com.wilsongateway.Framework.Tables.Property;
  *         www.outin.space
  *
  */
-@SuppressWarnings("serial")
 public class EditClient extends EditForm<Client>{
 
+	private static final long serialVersionUID = 7450455034853307524L;
+	
 	private ComboBox propertyCB;
 	private Client c;
 	

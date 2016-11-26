@@ -1,11 +1,5 @@
 package com.wilsongateway.Framework;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.ArrayList;
-
-import org.javalite.activejdbc.Base;
-
 import com.vaadin.server.VaadinSession;
 import com.vaadin.server.ClientConnector.DetachEvent;
 import com.vaadin.server.ClientConnector.DetachListener;
@@ -16,10 +10,11 @@ import com.vaadin.server.ClientConnector.DetachListener;
  *         www.outin.space
  *
  */
-@SuppressWarnings("serial")
 @Deprecated
 public class SessionCleanup implements DetachListener{
 
+	private static final long serialVersionUID = -4348117613345786778L;
+	
 	private SessionManager manager;
 	
 	public SessionCleanup(SessionManager manager){

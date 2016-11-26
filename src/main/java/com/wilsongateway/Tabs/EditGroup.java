@@ -23,9 +23,10 @@ import com.wilsongateway.Framework.Tables.Group;
  *         www.outin.space
  *
  */
-@SuppressWarnings("serial")
 public class EditGroup extends EditForm<Group>{
 
+	private static final long serialVersionUID = 7400513252328247255L;
+	
 	private EndlessComboBox<TabType> comboSelect;
 	
 	public EditGroup(SessionManager manager, Group item, boolean isEditable) {

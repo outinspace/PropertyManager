@@ -27,9 +27,10 @@ import com.wilsongateway.Framework.Tables.Ticket.Status;
  *         www.outin.space
  *
  */
-@SuppressWarnings("serial")
 public class EditTicket extends EditForm<Ticket>{//TODO add URL property redirecting
 
+	private static final long serialVersionUID = -3137430757686065445L;
+	
 	private EndlessComboBox<Client> clientSelect;
 	private ComboBox propertyCB;
 	private TextArea descriptionArea;
@@ -108,6 +109,8 @@ public class EditTicket extends EditForm<Ticket>{//TODO add URL property redirec
 		propertyCB = addOneToManySelector(Property.class, Tables.PROPERTY, "Property", leftCol);
 		propertyCB.setRequired(true);
 		propertyCB.addValueChangeListener(new ValueChangeListener(){
+
+			private static final long serialVersionUID = -7529871905075864829L;
 
 			@Override
 			public void valueChange(ValueChangeEvent event) {

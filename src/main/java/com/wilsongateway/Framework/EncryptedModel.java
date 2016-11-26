@@ -1,5 +1,6 @@
 package com.wilsongateway.Framework;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 import org.jasypt.exceptions.EncryptionOperationNotPossibleException;
@@ -19,7 +20,7 @@ import com.wilsongateway.Exceptions.CannotEncryptNonStringException;
  *         www.outin.space
  *
  */
-public abstract class EncryptedModel extends Model{
+public abstract class EncryptedModel extends Model implements Serializable{
 
 	private static final String GLOBALKEY = System.getProperty("global_key") == null ? "devKey" : System.getProperty("global_key");
 	public static final String PASSWORDATTRIBUTE = "password";

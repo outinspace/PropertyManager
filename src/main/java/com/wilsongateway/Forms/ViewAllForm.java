@@ -32,9 +32,10 @@ import com.wilsongateway.Framework.Tab;
  *         www.outin.space
  *
  */
-@SuppressWarnings("serial")
 public abstract class ViewAllForm extends Tab{
 
+	private static final long serialVersionUID = -4327048693575273337L;
+	
 	private Table t;
 	protected List<? extends Model> models;
 	private Map<String, Class<? extends EncryptedModel>> relationshipColumns = new HashMap<String, Class<? extends EncryptedModel>>();

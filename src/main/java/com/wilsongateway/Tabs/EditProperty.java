@@ -17,9 +17,10 @@ import com.wilsongateway.Framework.Tables.Property;
  *         www.outin.space
  *
  */
-@SuppressWarnings("serial")
 public class EditProperty extends EditForm<Property>{
 	
+	private static final long serialVersionUID = 1808482986800766160L;
+
 	public EditProperty(SessionManager manager, Property prop, boolean isEditable) {
 		super(manager, prop, "Property", isEditable);
 	}

@@ -44,9 +44,10 @@ import com.wilsongateway.Framework.Tables.User;
  *
  * @param <T> Type of EncryptedModel that an object of this class will be editing.
  */
-@SuppressWarnings("serial")
 public abstract class EditForm<T extends EncryptedModel> extends Tab{
 
+	private static final long serialVersionUID = -4723363020095122718L;
+	
 	private HorizontalLayout split;
 	private Layout leftCol;
 	private Layout rightCol;
@@ -119,6 +120,8 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 	private void createEditBtn() {
 		editBtn = new Button("Edit");
 		editBtn.addClickListener(new ClickListener(){
+
+			private static final long serialVersionUID = 4022680688038045081L;
 
 			@Override
 			public void buttonClick(ClickEvent event) {
@@ -279,7 +282,9 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 		ConfirmDialog.show(manager, "Please Confirm:", "Are you really sure?", 
 				"I am", "Not quite", new ConfirmDialog.Listener() {
 
-            public void onClose(ConfirmDialog dialog) {
+					private static final long serialVersionUID = 937031672580420293L;
+
+			public void onClose(ConfirmDialog dialog) {
             	SessionManager.openBase();
                 if (dialog.isConfirmed()) {
                 	if(getItem().delete()){

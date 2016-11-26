@@ -19,9 +19,10 @@ import com.wilsongateway.Framework.Tables.Property;
  *         www.outin.space
  *
  */
-@SuppressWarnings("serial")
 public class ViewAllClients extends ViewAllForm{
 
+	private static final long serialVersionUID = 7816615823531633204L;
+	
 	private boolean isEditable;
 	
 	public ViewAllClients(SessionManager manager, boolean isEditable) {

@@ -32,8 +32,9 @@ import com.vaadin.ui.VerticalLayout;
  *
  * @param <T> The object type that this component will be selecting.
  */
-@SuppressWarnings("serial")
 public class EndlessComboBox<T> extends CustomComponent{
+	
+	private static final long serialVersionUID = 825613765534503733L;
 	
 	private VerticalLayout content;
 	private VerticalLayout boxLayout;
@@ -74,6 +75,8 @@ public class EndlessComboBox<T> extends CustomComponent{
 		
 		plus.addClickListener(new ClickListener(){
 
+			private static final long serialVersionUID = 5605061617241710794L;
+
 			@Override
 			public void buttonClick(ClickEvent event) {
 				if(isEnabled){
@@ -113,6 +116,8 @@ public class EndlessComboBox<T> extends CustomComponent{
 		rowLayout.setComponentAlignment(minus, Alignment.BOTTOM_RIGHT);
 		
 		minus.addClickListener(new ClickListener(){
+
+			private static final long serialVersionUID = 8325200712541209142L;
 
 			@Override
 			public void buttonClick(ClickEvent event) {

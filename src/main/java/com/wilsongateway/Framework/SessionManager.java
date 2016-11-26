@@ -1,5 +1,6 @@
 package com.wilsongateway.Framework;
 
+import java.awt.Desktop;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -7,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 
 import org.javalite.activejdbc.Base;
 
+import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
@@ -28,9 +30,9 @@ import com.zaxxer.hikari.HikariDataSource;
  *         www.outin.space
  *
  */
-@SuppressWarnings("serial")
 @Theme("pmTheme")
 @Push(PushMode.AUTOMATIC)
+@PreserveOnRefresh
 public class SessionManager extends UI {
 
 	/**
@@ -42,6 +44,8 @@ public class SessionManager extends UI {
 	@WebServlet(value = "/*", asyncSupported = true)
 	@VaadinServletConfiguration(productionMode = false, ui = SessionManager.class)
 	public static class Servlet extends VaadinServlet {
+		
+		private static final long serialVersionUID = 1050879670274893621L;
 		
 		private static final String HOSTNAME = System.getProperty("RDS_HOSTNAME") == null ? "localhost" : System.getProperty("RDS_HOSTNAME");
 		private static final String PORT = System.getProperty("RDS_PORT") == null ? "3306" : System.getProperty("RDS_PORT");
@@ -63,6 +67,9 @@ public class SessionManager extends UI {
 			config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
 			config.setConnectionTestQuery("/* ping */");
 			config.setLeakDetectionThreshold(10000);
+			config.setConnectionTimeout(5000);
+		    config.setIdleTimeout(60000);//1 minute idle time
+		    config.setMaxLifetime(600000);//Connection pool turns each 10 minute interval
 			
 			datasource = new HikariDataSource(config);
 		}
@@ -71,6 +78,8 @@ public class SessionManager extends UI {
 			return datasource;
 		}
 	}
+	
+	private static final long serialVersionUID = 547510355936582170L;
 
 	//Testing Config
 	public static final boolean TESTMODE = System.getProperty("RDS_HOSTNAME") == null;
@@ -136,13 +145,15 @@ public class SessionManager extends UI {
 		if(!Base.hasConnection()){
 			try {
 				Connection temp = Servlet.getDatasource().getConnection();
-				while(temp.isClosed()){
+				while(temp.isClosed() || !temp.isValid(3)){//3 second timeout
+					System.out.println("Evicted Connection");
 					Servlet.getDatasource().evictConnection(temp);
 					temp = Servlet.getDatasource().getConnection();
 				}
 				Base.attach(temp);
 			} catch (SQLException e) {
 				e.printStackTrace();
+				System.out.println("Root error in openBase()");
 			}		
 		}
 	}
@@ -153,6 +164,11 @@ public class SessionManager extends UI {
 	
 	public void setCurrentUser(User temp) {
 		VaadinSession.getCurrent().setAttribute(User.class, temp);
+	}
+	
+	public void logout(){//TODO
+		getPage().setLocation("/");
+		getCurrent().close();
 	}
 	
 	public void setCurrentDash(DashboardView dash){

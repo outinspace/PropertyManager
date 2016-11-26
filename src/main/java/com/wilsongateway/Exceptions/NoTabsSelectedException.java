@@ -8,4 +8,5 @@ package com.wilsongateway.Exceptions;
  */
 public class NoTabsSelectedException extends Exception {
 
+	private static final long serialVersionUID = 7754518455069460487L;
 }

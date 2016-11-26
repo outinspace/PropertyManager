@@ -12,8 +12,9 @@ import com.wilsongateway.Framework.Tab;
  *         www.outin.space
  *
  */
-@SuppressWarnings("serial")
 public class ErrorTab extends Tab{
+
+	private static final long serialVersionUID = 4603404633309139819L;
 
 	public ErrorTab(SessionManager manager, String errorMsg) {
 		super("ERROR", manager);

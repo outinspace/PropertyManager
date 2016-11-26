@@ -14,8 +14,9 @@ import com.wilsongateway.SubPanels.ChangePassword;
  *         www.outin.space
  *
  */
-@SuppressWarnings("serial")
 public class AccountTab extends Tab{//TODO
+
+	private static final long serialVersionUID = -632039196777446599L;
 
 	public AccountTab(SessionManager manager) {
 		super("Account Settings", manager);

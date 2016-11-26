@@ -24,9 +24,10 @@ import com.wilsongateway.Tabs.ViewAllUsers;
  *         www.outin.space
  *
  */
-@SuppressWarnings("serial")
 public abstract class Tab extends VerticalLayout implements View{
 
+	private static final long serialVersionUID = 161818186695982586L;
+	
 	protected SessionManager manager;
 	protected String name;
 	protected String description;

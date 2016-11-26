@@ -26,8 +26,9 @@ import com.wilsongateway.Framework.Tables.User;
  *         www.outin.space
  *
  */
-@SuppressWarnings("serial")
 public class LoginView extends VerticalLayout implements View{
+
+	private static final long serialVersionUID = 8933270634838154745L;
 
 	private SessionManager manager;
 	
@@ -102,6 +103,8 @@ public class LoginView extends VerticalLayout implements View{
 		leftBtn.setStyleName("quiet");
 		leftBtn.addClickListener(new ClickListener(){
 
+			private static final long serialVersionUID = 999706760573089564L;
+
 			@Override
 			public void buttonClick(ClickEvent event) {
 				switch(mode){
@@ -128,6 +131,8 @@ public class LoginView extends VerticalLayout implements View{
 		
 		rightBtn = new Button("Login");
 		rightBtn.addClickListener(new ClickListener(){
+
+			private static final long serialVersionUID = 3259348253118435026L;
 
 			@Override
 			public void buttonClick(ClickEvent event) {

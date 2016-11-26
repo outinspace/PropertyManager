@@ -27,9 +27,10 @@ import com.wilsongateway.Validators.UniqueUsernameValidator;
  *         www.outin.space
  *
  */
-@SuppressWarnings("serial")
 public class EditUser extends EditForm<User>{
 
+	private static final long serialVersionUID = -6642323507991754297L;
+	
 	private EndlessComboBox<Group> groupSelect;
 	private EndlessComboBox<Property> propertySelect;
 	
