@@ -8,18 +8,22 @@ import org.javalite.activejdbc.LazyList;
 import org.javalite.activejdbc.Model;
 import org.javalite.activejdbc.associations.NotAssociatedException;
 
+import com.vaadin.event.FieldEvents.TextChangeEvent;
+import com.vaadin.event.FieldEvents.TextChangeListener;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FileDownloader;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Resource;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Table;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.wilsongateway.Framework.EncryptedModel;
 import com.wilsongateway.Framework.CSVController;
@@ -59,7 +63,7 @@ public abstract class ViewAllForm extends Tab{
 		addComponent(topBar);
 		
 		createTable();
-		 models = getModels();
+		models = getModels();
 		populateTable();
 		
 		SessionManager.closeBase();
@@ -115,9 +119,9 @@ public abstract class ViewAllForm extends Tab{
 				}
 				
 				//Truncate long values
-				if(cells[i] instanceof String && cells[i].toString().length() > 50){
-					cells[i] = cells[i].toString().substring(0, 50) + "...";
-				}
+//				if(cells[i] instanceof String && cells[i].toString().length() > 50){
+//					cells[i] = cells[i].toString().substring(0, 50) + "...";
+//				}
 			}
 			
 			t.addItem(cells, em.getId());
@@ -143,6 +147,49 @@ public abstract class ViewAllForm extends Tab{
 		t.setColumnExpandRatio(identifier, expandRatio);
 	}
 	
+	protected void addSearchBox(){//TODO
+		topBar.addComponent(new Label("Search Where"));
+		
+		ComboBox fieldToSearch = new ComboBox();
+		fieldToSearch.addItems(t.getContainerPropertyIds());
+		fieldToSearch.setStyleName("tiny");
+		topBar.addComponent(fieldToSearch);
+		
+		topBar.addComponent(new Label("Equals"));
+		
+		TextField searchField = new TextField();
+		searchField.setStyleName("tiny");
+		topBar.addComponent(searchField);
+		
+		searchField.addTextChangeListener(new TextChangeListener(){
+
+			private static final long serialVersionUID = 715380955879471784L;
+
+			@Override
+			public void textChange(TextChangeEvent event) {
+				String query = searchField.getValue();
+				String attribute = (String) fieldToSearch.getValue();
+				
+				UI.getCurrent().access(new Runnable(){
+
+					@Override
+					public void run() {
+						for(Model m : models){
+							EncryptedModel em = (EncryptedModel) m;
+							if(!em.getDecrypted(attribute).toString().startsWith(query)){
+								models.remove(m);
+							}
+						}
+					}
+					
+				});
+				
+				refresh(false);
+			}
+			
+		});
+	}
+	
 	protected void addReportBtn(EncryptedModel model){
 		Button downloadBtn = new Button("Click To Download");
 		downloadBtn.setVisible(false);
@@ -160,7 +207,7 @@ public abstract class ViewAllForm extends Tab{
 		topBar.addComponent(genBtn);
 	}
 	
-	protected void addRefreshButton(){//NOT WORKING
+	protected void addRefreshButton(){
 		Button refresh = new Button("",e -> {
 			refresh();
 			UI.getCurrent().access(() -> Notification.show("Refreshed", Notification.Type.TRAY_NOTIFICATION));
@@ -187,9 +234,15 @@ public abstract class ViewAllForm extends Tab{
 	}
 	
 	protected void refresh(){
+		refresh(true);
+	}
+	
+	protected void refresh(boolean reloadModels){
 		UI.getCurrent().access(() -> {
 			SessionManager.openBase();
-				models = getModels();
+				if(reloadModels){
+					models = getModels();
+				}
 				populateTable();
 			SessionManager.closeBase();
 		});

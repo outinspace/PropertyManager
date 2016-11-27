@@ -94,10 +94,11 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 		split.addComponent(rightCol);
 		populateRightCol(rightCol, item);
 		
+		populateMiddleRow(this);
+		
 		if(item != null){
 			fillFields(item);
 		}
-		populateMiddleRow(this);
 		addComponent(new Label("<hr />", ContentMode.HTML));
 		
 		if(isEditable){
@@ -190,6 +191,7 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 		return addAndFillTF(columnName, captionName, icon, leftCol);
 	}
 	
+	//TODO make custom component
 	protected <J extends EncryptedModel> ComboBox addOneToManySelector(Class<J> parentClass, J staticModel, String caption, Layout layout){
 		List<J> options  = staticModel.findAll();
 		

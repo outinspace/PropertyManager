@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 import org.javalite.activejdbc.LazyList;
 
+import com.vaadin.addon.contextmenu.ContextMenu;
+import com.vaadin.addon.contextmenu.MenuItem;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
@@ -12,11 +14,13 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.VaadinService;
+import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Accordion;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.Component;
 import com.wilsongateway.Framework.Tab.TabType;
 import com.wilsongateway.Framework.Tables.Group;
 import com.wilsongateway.Tabs.ErrorTab;
@@ -25,8 +29,10 @@ import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Layout;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
 
 /**
  * 
@@ -82,6 +88,7 @@ public class DashboardView extends VerticalLayout implements View{
 		sideMenu = new Accordion();
 		sideContent.addComponent(sideMenu);
 		populateSideMenu();
+		sideMenu.setSelectedTab(sideMenu);
 		
 		SessionManager.closeBase();
 	}
@@ -120,31 +127,45 @@ public class DashboardView extends VerticalLayout implements View{
 		for(Group g : groups){
 			//Create container for subMenu
 			VerticalLayout content = new VerticalLayout();
+			content.setSizeUndefined();
 			
 			for(TabType type : g.getTabs()){
-				Tab t;
 				try{
-					t = Tab.getInstance(type, manager, this);
+					Tab t = Tab.getInstance(type, manager, this);
+					tabNav.addView(type.toString(), t);
+					
+					Button pageLink = new Button(t.getName());
+					pageLink.addClickListener(e -> {
+						addContextMenu(pageLink, type);
+						
+						tabNav.navigateTo(type.toString());
+						lastNav = type.toString();
+						
+					});
+					pageLink.setStyleName("link");
+					content.addComponent(pageLink);
 				}catch(Exception e){
-					t = new ErrorTab(manager, e.getMessage());
 					e.printStackTrace();
 				}
-				
-				tabNav.addView(type.toString(), t);
-				
-				Button b = new Button(t.getName(), e -> {
-					tabNav.navigateTo(type.toString());
-					lastNav = type.toString();
-					
-				});
-				b.setStyleName("link");
-				content.addComponent(b);
 			}
 			sideMenu.addTab(content, g.getAsString("name"));
 		}
-		sideMenu.addTab(new CssLayout(), "", FontAwesome.CLOSE);
+		sideMenu.setSelectedTab(sideMenu.addTab(new CssLayout(), "", FontAwesome.CLOSE));
 	}
 	
+	private void addContextMenu(AbstractComponent c, TabType type) {
+		ContextMenu rightClick = new ContextMenu(c, true);
+		rightClick.addItem("Open in Window", e -> {
+			Window win = new Window("|");
+			win.setContent(Tab.getInstance(type, manager, this));
+			win.center();
+			win.setSizeUndefined();
+			win.setHeight("50%");
+			win.setWidth("50%");
+			manager.addWindow(win);
+		});
+	}
+
 	public Navigator getTabNav(){
 		return tabNav;
 	}

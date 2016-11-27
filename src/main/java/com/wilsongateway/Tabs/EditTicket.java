@@ -95,7 +95,12 @@ public class EditTicket extends EditForm<Ticket>{//TODO add URL property redirec
 	}
 
 	@Override
-	protected void fillFields(Ticket t) {}
+	protected void fillFields(Ticket t) {
+//		clientSelect.setOptions(Tables.CLIENT.where("property_id = (?)", ((EncryptedModel)propertyCB.getValue()).getId()));
+//		clientSelect.setValues(t.getAll(Client.class));
+		completedField.setValue(Ticket.Status.valueOf(t.getAsString("status")) == Status.COMPLETED);
+		descriptionArea.setValue(t.getAsString("description"));
+	}
 
 	@Override
 	protected void populateLeftCol(Layout leftCol, Ticket t) {
@@ -133,7 +138,8 @@ public class EditTicket extends EditForm<Ticket>{//TODO add URL property redirec
 
 	@Override
 	protected void populateRightCol(Layout rightCol, Ticket t) {
-		clientSelect = new EndlessComboBox<Client>(new ArrayList<Client>(), (t == null) ? null : t.getAll(Client.class));
+		
+		clientSelect = new EndlessComboBox<Client>(Tables.CLIENT.findAll(), (t == null) ? null : t.getAll(Client.class));
 		clientSelect.setCaption("Clients Involved");
 		rightCol.addComponent(clientSelect);
 		addCustomComponent(clientSelect);

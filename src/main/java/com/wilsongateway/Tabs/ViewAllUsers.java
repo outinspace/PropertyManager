@@ -40,7 +40,7 @@ public class ViewAllUsers extends ViewAllForm{
 		addTableColumn("first_name", String.class, "First Name", 0);
 		addTableColumn("last_name", String.class, "Last Name", 0);
 		
-		addRelationshipColumn("groups", Group.class, "Groups", 0);
+		addRelationshipColumn("groups", Group.class, "Groups", 1);
 		addRelationshipColumn("properties", Property.class, "Properties", 1);
 	}
 

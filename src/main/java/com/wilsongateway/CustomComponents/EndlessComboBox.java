@@ -1,6 +1,7 @@
 package com.wilsongateway.CustomComponents;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -197,5 +198,12 @@ public class EndlessComboBox<T> extends CustomComponent{
 			cb.setEnabled(value);
 		}
 		isEnabled = value;
+	}
+	
+	public void setValues(Collection<T> values){
+		clear();
+		for(T value : values){
+			addComboBox(value);
+		}
 	}
 }

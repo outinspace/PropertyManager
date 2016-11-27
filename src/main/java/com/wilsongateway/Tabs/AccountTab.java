@@ -7,6 +7,7 @@ import com.vaadin.ui.PopupView;
 import com.wilsongateway.Framework.SessionManager;
 import com.wilsongateway.Framework.Tab;
 import com.wilsongateway.SubPanels.ChangePassword;
+import com.wilsongateway.SubPanels.ChangeTheme;
 
 /**
  * 
@@ -28,10 +29,13 @@ public class AccountTab extends Tab{//TODO
 		addComponent(new Label("Account Settings for " + manager.getCurrentUser().getDecrypted("first_name")));
 		addLineBreak();
 		
-		ChangePassword passWindow = new ChangePassword(manager.getCurrentUser());
-		
-		Button changePassBtn = new Button("Change Password", e -> manager.addWindow(passWindow));
+		Button changePassBtn = new Button("Change Password", 
+				e -> manager.addWindow(new ChangePassword(manager.getCurrentUser())));
 		addComponent(changePassBtn);
+		
+		Button changeThemeBtn = new Button("Change Theme",
+				e -> manager.addWindow(new ChangeTheme(manager)));
+		addComponent(changeThemeBtn);
 	}
 
 	@Override

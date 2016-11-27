@@ -15,7 +15,9 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.wilsongateway.Framework.Tables.User;
@@ -185,6 +187,10 @@ public class LoginView extends VerticalLayout implements View{
 	
 	@Override
 	public void enter(ViewChangeEvent event) {
+		for(Window w :UI.getCurrent().getWindows()){
+			w.close();
+		}
+		
 		//TODO for testing purposes
 		if(SessionManager.TESTMODE){
 			usernameField.setValue("admin");

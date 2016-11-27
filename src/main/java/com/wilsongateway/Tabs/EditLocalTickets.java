@@ -90,7 +90,7 @@ public class EditLocalTickets extends ViewAllForm{
 	
 	@Override
 	protected void fillActionLayout(Layout actionLayout, EncryptedModel em){
-		PopupView actionMenu = new PopupView("More", new TicketActionMenu(em));
+		PopupView actionMenu = new PopupView("More", new TicketActionMenu(manager, (Ticket)em));
 		actionLayout.addComponent(actionMenu);
 	}
 }
