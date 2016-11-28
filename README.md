@@ -19,5 +19,8 @@ This system uses a MySQL database to store persistant data and most queries are 
 
 All dependencies are managed by Maven and the project runs as a Servlet. For testing purposes, a preconfigured Apache Tomcat server is included in the LocalServer folder.
 
+##Status
+Currently the project is in a working state although I would like to continue to add more views. I'll be the first to admit that the code is not cleanest. Once all views are made, I plan on refactoring the Forms package and commenting all classes. I would like to eventually turn the Framework package into an API to use in future projects or for forking here.
+
 ###Credits
 This program was made by Nicholas Wilson in 2016. Please refer to the License.md file for usage concerns.
