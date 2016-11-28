@@ -96,9 +96,9 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 		
 		populateMiddleRow(this);
 		
-		if(item != null){
-			fillFields(item);
-		}
+//		if(item != null){
+//			fillFields(item);
+//		}
 		addComponent(new Label("<hr />", ContentMode.HTML));
 		
 		if(isEditable){
@@ -337,7 +337,7 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 	protected abstract void clearFields();
 	protected abstract void reloadData();
 	protected abstract void setViewMode(T item);
-	protected abstract void fillFields(T item);
+//	protected abstract void fillFields(T item);
 	protected abstract void populateLeftCol(Layout leftCol, T item);
 	protected abstract void populateRightCol(Layout rightCol, T item);
 }

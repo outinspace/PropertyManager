@@ -6,6 +6,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.wilsongateway.Tabs.AccountTab;
 import com.wilsongateway.Tabs.AdminConsole;
+import com.wilsongateway.Tabs.EditAllTickets;
 import com.wilsongateway.Tabs.EditClient;
 import com.wilsongateway.Tabs.EditGroup;
 import com.wilsongateway.Tabs.EditLocalTickets;
@@ -38,7 +39,7 @@ public abstract class Tab extends VerticalLayout implements View{
 									ADDGROUP, VIEWALLGROUPS, EDITALLGROUPS,
 									ADDPROPERTY, VIEWALLPROPERTIES, EDITALLPROPERTIES,
 									ADDCLIENT, VIEWALLCLIENTS, EDITALLCLIENTS,
-									ADDTICKET, EDITLOCALTICKETS, VIEWALLTICKETS, EDITALLTICKETS};
+									ADDTICKET, EDITLOCALTICKETS, EDITALLTICKETS};
 	
 	protected Tab(String name, SessionManager manager){
 		this.name = name;
@@ -102,6 +103,8 @@ public abstract class Tab extends VerticalLayout implements View{
 				return new EditTicket(manager, null, true);
 			case EDITLOCALTICKETS:
 				return new EditLocalTickets(manager);
+			case EDITALLTICKETS:
+				return new EditAllTickets(manager);
 			default:
 				return new ErrorTab(manager, "Tab not yet created");
 		}

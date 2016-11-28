@@ -108,9 +108,6 @@ public class EditGroup extends EditForm<Group>{
 	}
 
 	@Override
-	protected void fillFields(Group g) {}
-
-	@Override
 	protected void populateLeftCol(Layout leftCol, Group g) {
 		addAndFillTF("name", "Group Name", FontAwesome.GROUP).setRequired(true);
 		

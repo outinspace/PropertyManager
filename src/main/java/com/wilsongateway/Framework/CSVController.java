@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import org.javalite.activejdbc.ColumnMetadata;
+import org.javalite.activejdbc.LazyList;
 import org.javalite.activejdbc.Model;
 
 import com.vaadin.server.VaadinService;
@@ -19,16 +20,18 @@ import com.vaadin.server.VaadinService;
 public class CSVController {
 
 	private final EncryptedModel dataType;
+	private final LazyList<? extends Model> models;
 	private final String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
 	private final String subFolder = "/WEB-INF/classes/reports/";
 	
 	private File destination;
 	
-	public CSVController(EncryptedModel dataType){
+	public CSVController(EncryptedModel dataType, LazyList<? extends Model> models){
 		this.dataType = dataType;
+		this.models = models;
 	}
 	
-	public void createDestination(){//TODO io locking, add iterating names + autodeletion
+	public void createDestination(){
 		destination = new File(basepath + subFolder + dataType.getTableName() + ".csv");
 		System.out.println("Creating Report at: " + destination);
 	}
@@ -48,7 +51,7 @@ public class CSVController {
 			writer.newLine();
 			
 			//Write data line by line
-			for(Model model : dataType.findAll()){
+			for(Model model : models){
 				String newLine = "";
 				for(String attribute : model.attributeNames()){
 					Object value = ((EncryptedModel)model).getDecrypted(attribute);

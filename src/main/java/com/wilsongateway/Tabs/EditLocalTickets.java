@@ -2,6 +2,7 @@ package com.wilsongateway.Tabs;
 
 import java.util.List;
 
+import org.javalite.activejdbc.LazyList;
 import org.javalite.activejdbc.Model;
 
 import com.vaadin.ui.ComboBox;
@@ -34,6 +35,11 @@ public class EditLocalTickets extends ViewAllForm{
 		this.addReportBtn(Tables.TICKET);//Individualize
 		createTopBar();
 		
+		if(manager.getCurrentUser().getAll(Ticket.class).size() > 0){
+			propCB.setValue(manager.getCurrentUser().getAll(Ticket.class).get(0));
+			refresh();
+		}
+		
 		SessionManager.closeBase();
 	}
 	
@@ -52,10 +58,7 @@ public class EditLocalTickets extends ViewAllForm{
 	}
 
 	@Override
-	protected void navToEdit(EncryptedModel usr) {
-		// TODO Auto-generated method stub
-		
-	}
+	protected void navToEdit(EncryptedModel usr) {}
 
 	@Override
 	protected void setContainerProperties(Table t) {
@@ -75,7 +78,7 @@ public class EditLocalTickets extends ViewAllForm{
 	}
 
 	@Override
-	protected List<? extends Model> getModels() {
+	protected LazyList<? extends Model> getModels() {
 		if(properties == null){
 			properties = manager.getCurrentUser().getAll(Property.class);
 		}

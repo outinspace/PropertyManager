@@ -47,69 +47,15 @@ public class Tables implements Serializable{
 			super("password", "first_name", "last_name", "position", "work_phone", "cell_phone");
 		}
 		
-		public User find(String username){return USER.findFirst("username = (?)", username);}
+		public static User find(String username){return USER.findFirst("username = (?)", username);}
 		
-		public String getUsername(){
-			return this.getAsString("username");
-		}
-		public String getPassword(){
-			return this.getAsString("password");
-		}
 		
 		public void addGroup(Group newGroup){
 			if(!this.getAll(Group.class).contains(newGroup)){
 				this.add(newGroup);
 			}
 		}
-		
-		@Deprecated
-		public static boolean isAcceptablePassword(String password){
-			if(password.length() < 8 || password.length() >= 45){
-				return false;
-			}
-			
-			boolean uppercase = false;
-			boolean lowercase = false;
-			boolean numeric = false;
-			
-			for(char c : password.toCharArray()){
-				if(Character.isUpperCase(c)){
-					uppercase = true;
-				}
-				if(Character.isLowerCase(c)){
-					lowercase = true;
-				}
-				if(Character.isDigit(c)){
-					numeric = true;
-				}
-			}
-			
-			return uppercase && lowercase && numeric;
-		}
-		
-		public void checkAndSetUsername(String username) throws NameUnavailableException{
-			if(username.contains(" ") || username.equals("")){
-				throw new NameUnavailableException();
-			}else{
-				User u = Tables.USER.findFirst("username = (?)", username);
-				if(u == null){
-					this.setEncrypted("username", username);
-				}else{
-					throw new NameUnavailableException();
-				}
-			}
-		}
-		
-		public void checkAndSetPassword(String password) throws InvalidPasswordException{
-			if(User.isAcceptablePassword(password)){
-				System.out.println("calling set password");
-				this.setEncrypted("password", password);
-				this.save();
-			}else{
-				throw new InvalidPasswordException();
-			}
-		}
-		
+
 		public boolean checkPassword(String testPassword){
 			BasicPasswordEncryptor encryptor = new BasicPasswordEncryptor();
 			return encryptor.checkPassword(testPassword, (String) this.get(PASSWORDATTRIBUTE));
@@ -117,7 +63,7 @@ public class Tables implements Serializable{
 
 		@Override
 		public String toString() {
-			return this.getAsString("first_name") + " " + this.getAsString("last_name");
+			return this.getAsString("username");
 		}
 	}
 	public static final User USER = new User();

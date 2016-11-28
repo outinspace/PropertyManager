@@ -2,6 +2,7 @@ package com.wilsongateway.Tabs;
 
 import java.util.List;
 
+import org.javalite.activejdbc.LazyList;
 import org.javalite.activejdbc.Model;
 
 import com.vaadin.ui.Table;
@@ -47,7 +48,7 @@ public class ViewAllProperties extends ViewAllForm{
 	}
 
 	@Override
-	protected List<? extends Model> getModels() {
+	protected LazyList<? extends Model> getModels() {
 		return Tables.PROPERTY.findAll();
 	}
 }

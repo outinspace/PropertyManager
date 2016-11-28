@@ -1,35 +1,26 @@
 package com.wilsongateway.Framework;
 
 import java.io.File;
-import java.util.ArrayList;
-
 import org.javalite.activejdbc.LazyList;
 
-import com.vaadin.addon.contextmenu.ContextMenu;
-import com.vaadin.addon.contextmenu.MenuItem;
-import com.vaadin.event.ItemClickEvent;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.VaadinService;
-import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Accordion;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.Component;
 import com.wilsongateway.Framework.Tab.TabType;
 import com.wilsongateway.Framework.Tables.Group;
-import com.wilsongateway.Tabs.ErrorTab;
 import com.wilsongateway.Tabs.LogoScreen;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.GridLayout;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.Layout;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
@@ -47,13 +38,16 @@ public class DashboardView extends VerticalLayout implements View{
 	private SessionManager manager;
 	
 	//UI Elements
-	private Navigator tabNav;
+	private HorizontalLayout topBar;
 	private VerticalLayout dashContent;
 	private VerticalLayout sideContent;
+	
 	private Accordion sideMenu;
 	
+	private Navigator tabNav;
+	
 	//Navigation Variables
-	private String lastNav;
+	private TabType lastTab;
 	public final static String DEFAULT = "";
 	
 	public DashboardView(SessionManager manager){
@@ -61,12 +55,19 @@ public class DashboardView extends VerticalLayout implements View{
 		manager.setCurrentDash(this);
 		
 		this.manager = manager;
-		this.setSizeFull();
-		this.setHeightUndefined();
+		setSizeFull();
+		setHeightUndefined();
+		
+		topBar = new HorizontalLayout();
+		topBar.setSpacing(true);
+		topBar.setSizeUndefined();
+		addComponent(topBar);
+		setComponentAlignment(topBar, Alignment.TOP_RIGHT);
+		fillTopBar();
 		
 		GridLayout mainGrid = new GridLayout(2, 1);
 		mainGrid.setSizeFull();
-		this.addComponent(mainGrid);
+		addComponent(mainGrid);
 		
 		mainGrid.setColumnExpandRatio(0, 1);
 		mainGrid.setColumnExpandRatio(1, 4);
@@ -88,7 +89,6 @@ public class DashboardView extends VerticalLayout implements View{
 		sideMenu = new Accordion();
 		sideContent.addComponent(sideMenu);
 		populateSideMenu();
-		sideMenu.setSelectedTab(sideMenu);
 		
 		SessionManager.closeBase();
 	}
@@ -96,14 +96,9 @@ public class DashboardView extends VerticalLayout implements View{
 	private void addUpperSideContent() {
 		VerticalLayout logoContent = new VerticalLayout();
 		logoContent.setWidth("90%");
-		//logoContent.setMargin(true);
 		
 		sideContent.addComponent(logoContent);
 		sideContent.setComponentAlignment(logoContent, Alignment.MIDDLE_RIGHT);
-		
-		Label spacer = new Label("");
-		spacer.setHeight("1em");
-		logoContent.addComponent(spacer);
 		
 		String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
 		FileResource logoResource = new FileResource(new File(basepath + "/WEB-INF/classes/images/mercySmall.png"));
@@ -113,11 +108,7 @@ public class DashboardView extends VerticalLayout implements View{
 		logoContent.addComponent(logo);
 		logoContent.setComponentAlignment(logo, Alignment.MIDDLE_CENTER);
 		
-		logoContent.addComponent(new Label("Welcome back " + manager.getCurrentUser().getUsername()));
-	
-//		Button logout = new Button("Logout", e -> manager.logout());
-//		logout.setStyleName("link tiny");
-//		logoContent.addComponent(logout);TODO
+		logoContent.addComponent(new Label("Welcome back " + manager.getCurrentUser().toString()));
 	}
 
 	private void populateSideMenu() {//Lazy loading
@@ -136,11 +127,8 @@ public class DashboardView extends VerticalLayout implements View{
 					
 					Button pageLink = new Button(t.getName());
 					pageLink.addClickListener(e -> {
-						addContextMenu(pageLink, type);
-						
 						tabNav.navigateTo(type.toString());
-						lastNav = type.toString();
-						
+						lastTab = type;
 					});
 					pageLink.setStyleName("link");
 					content.addComponent(pageLink);
@@ -153,17 +141,30 @@ public class DashboardView extends VerticalLayout implements View{
 		sideMenu.setSelectedTab(sideMenu.addTab(new CssLayout(), "", FontAwesome.CLOSE));
 	}
 	
-	private void addContextMenu(AbstractComponent c, TabType type) {
-		ContextMenu rightClick = new ContextMenu(c, true);
-		rightClick.addItem("Open in Window", e -> {
-			Window win = new Window("|");
-			win.setContent(Tab.getInstance(type, manager, this));
-			win.center();
-			win.setSizeUndefined();
-			win.setHeight("50%");
-			win.setWidth("50%");
-			manager.addWindow(win);
+	private void fillTopBar(){
+		Button popoutBtn = new Button();
+		popoutBtn.setIcon(FontAwesome.BINOCULARS);
+		popoutBtn.setStyleName("tiny");
+		popoutBtn.addClickListener(e -> {
+			if(lastTab != null){
+				Window subWindow = new Window(": :");
+				subWindow.setStyleName("tiny");
+				subWindow.setContent(Tab.getInstance(lastTab, manager, this));
+				subWindow.setHeight("40%");
+				subWindow.setWidth("40%");
+				subWindow.center();
+				
+				UI.getCurrent().addWindow(subWindow);
+			}else{
+				Notification.show("Select A Tab First", Notification.Type.TRAY_NOTIFICATION);
+			}
 		});
+		topBar.addComponent(popoutBtn);
+		
+		Button logoutBtn = new Button("Logout");
+		logoutBtn.setIcon(FontAwesome.SIGN_OUT);
+		logoutBtn.setStyleName("tiny");
+		topBar.addComponent(logoutBtn);
 	}
 
 	public Navigator getTabNav(){
@@ -171,8 +172,8 @@ public class DashboardView extends VerticalLayout implements View{
 	}
 
 	public void navigateBack(){
-		if(lastNav != null){
-			tabNav.navigateTo(lastNav);
+		if(lastTab != null){
+			tabNav.navigateTo(lastTab.toString());
 		}
 	}
 	

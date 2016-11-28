@@ -13,6 +13,7 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.communication.PushMode;
@@ -184,5 +185,10 @@ public class SessionManager extends UI {
 	
 	public Navigator getNav(){
 		return nav;
+	}
+	
+	public static String getResourcePath(){
+		String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
+		return basepath + "/WEB-INF/classes";
 	}
 }

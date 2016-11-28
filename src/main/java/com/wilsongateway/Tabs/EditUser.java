@@ -94,9 +94,6 @@ public class EditUser extends EditForm<User>{
 	}
 
 	@Override
-	protected void fillFields(User u) {}
-
-	@Override
 	protected void populateLeftCol(Layout leftCol, User u) {
 		TextField userTF = addAndFillTF("username", "Username", FontAwesome.USER);
 		userTF.setRequired(true);

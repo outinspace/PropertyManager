@@ -76,11 +76,6 @@ public class EditClient extends EditForm<Client>{
 	}
 
 	@Override
-	protected void fillFields(Client c) {
-		
-	}
-
-	@Override
 	protected void populateLeftCol(Layout leftCol, Client c) {
 		addAndFillTF("first_name", "First Name", FontAwesome.USER).setRequired(true);
 		addAndFillTF("last_name", "Last Name", FontAwesome.USER).setRequired(true);

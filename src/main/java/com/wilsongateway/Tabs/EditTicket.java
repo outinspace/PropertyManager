@@ -95,14 +95,6 @@ public class EditTicket extends EditForm<Ticket>{//TODO add URL property redirec
 	}
 
 	@Override
-	protected void fillFields(Ticket t) {
-//		clientSelect.setOptions(Tables.CLIENT.where("property_id = (?)", ((EncryptedModel)propertyCB.getValue()).getId()));
-//		clientSelect.setValues(t.getAll(Client.class));
-		completedField.setValue(Ticket.Status.valueOf(t.getAsString("status")) == Status.COMPLETED);
-		descriptionArea.setValue(t.getAsString("description"));
-	}
-
-	@Override
 	protected void populateLeftCol(Layout leftCol, Ticket t) {
 		dateField = new PopupDateField();
 		dateField.setCaption("Date");
@@ -134,6 +126,11 @@ public class EditTicket extends EditForm<Ticket>{//TODO add URL property redirec
 		completedField = new CheckBox("Repair Completed");
 		leftCol.addComponent(completedField);
 		addCustomComponent(completedField);
+		
+		if(t != null){
+			completedField.setValue(Ticket.Status.valueOf(t.getAsString("status")) == Status.COMPLETED);
+			descriptionArea.setValue(t.getAsString("description"));
+		}
 	}
 
 	@Override

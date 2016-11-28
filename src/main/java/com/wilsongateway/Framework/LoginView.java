@@ -148,8 +148,7 @@ public class LoginView extends VerticalLayout implements View{
 	}
 
 	private void loadWelcomeGUI(){
-		String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
-		FileResource logoResource = new FileResource(new File(basepath + "/WEB-INF/classes/images/mercyLogo.png"));
+		FileResource logoResource = new FileResource(new File(SessionManager.getResourcePath() + "/images/mercyLogo.png"));
 		
 		logo = new Image("", logoResource);
 		logo.setWidth("400px");
@@ -166,7 +165,7 @@ public class LoginView extends VerticalLayout implements View{
 		
 		switch(mode){
 		case LOGIN:
-			User temp = Tables.USER.find(usernameField.getValue());
+			User temp = User.find(usernameField.getValue());
 			
 			if(temp != null && temp.checkPassword(passwordField.getValue())){
 				manager.setCurrentUser(temp);

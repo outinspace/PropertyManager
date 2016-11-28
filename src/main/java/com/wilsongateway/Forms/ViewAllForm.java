@@ -41,7 +41,7 @@ public abstract class ViewAllForm extends Tab{
 	private static final long serialVersionUID = -4327048693575273337L;
 	
 	private Table t;
-	protected List<? extends Model> models;
+	protected LazyList<? extends Model> models;
 	private Map<String, Class<? extends EncryptedModel>> relationshipColumns = new HashMap<String, Class<? extends EncryptedModel>>();
 	
 	public static final String ACTIONCOMPONENTS = "actionComponents";
@@ -190,6 +190,17 @@ public abstract class ViewAllForm extends Tab{
 		});
 	}
 	
+	protected void addRefreshButton(){
+		Button refresh = new Button("",e -> {
+			refresh();
+			UI.getCurrent().access(() -> Notification.show("Refreshed", Notification.Type.TRAY_NOTIFICATION));
+		});
+		
+		refresh.setStyleName("tiny");
+		refresh.setIcon(FontAwesome.REFRESH);
+		topBar.addComponent(refresh);
+	}
+	
 	protected void addReportBtn(EncryptedModel model){
 		Button downloadBtn = new Button("Click To Download");
 		downloadBtn.setVisible(false);
@@ -206,22 +217,11 @@ public abstract class ViewAllForm extends Tab{
 		});
 		topBar.addComponent(genBtn);
 	}
-	
-	protected void addRefreshButton(){
-		Button refresh = new Button("",e -> {
-			refresh();
-			UI.getCurrent().access(() -> Notification.show("Refreshed", Notification.Type.TRAY_NOTIFICATION));
-		});
-		
-		refresh.setStyleName("tiny");
-		refresh.setIcon(FontAwesome.REFRESH);
-		topBar.addComponent(refresh);
-	}
 
 	private void downloadReport(EncryptedModel model, Button downBtn) {
 		SessionManager.openBase();
 		
-		CSVController reportGen = new CSVController(model);
+		CSVController reportGen = new CSVController(model, models);
 		if(reportGen.createCSVFile()){
 			Resource res = new FileResource(reportGen.getFile());
 			FileDownloader downloader = new FileDownloader(res);
@@ -256,7 +256,7 @@ public abstract class ViewAllForm extends Tab{
 
 	protected abstract void navToEdit(EncryptedModel usr);
 	protected abstract void setContainerProperties(Table t);
-	protected abstract List<? extends Model> getModels();
+	protected abstract LazyList<? extends Model> getModels();
 	
 	@Override
 	public void enter(ViewChangeEvent event) {
