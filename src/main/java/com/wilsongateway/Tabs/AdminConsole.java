@@ -31,7 +31,7 @@ public class AdminConsole extends Tab {//TODO
 		addComponent(new Label("<hr />",ContentMode.HTML));
 		
 		initConsole();
-		initStatsSection();
+		//initStatsSection();
 	}
 
 	private void initStatsSection() {

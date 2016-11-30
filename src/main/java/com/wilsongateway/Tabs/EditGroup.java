@@ -34,20 +34,18 @@ public class EditGroup extends EditForm<Group>{
 	}
 
 	@Override
-	protected void saveBtnAction() {
+	protected void saveBtnAction(Group grp) {
 		try{
 			//Checks tabs
 			checkValidTabs();
-			Group grp;
+			
 			if(viewMode == Mode.ADD){
 				//Checks name is unique and saves
 				grp = createAndSetGroup();
-			}else{
-				grp = getItem();
-				if(!getTFValue("name").equals(grp.getString("name"))){
-					checkAndSetName();
-				}
+			}else if(!getTFValue("name").equals(grp.getAsString("name"))){
+				checkAndSetName();
 			}
+			
 			grp.set("tabs", comboSelect.getValues().toString());
 			grp.save();
 			

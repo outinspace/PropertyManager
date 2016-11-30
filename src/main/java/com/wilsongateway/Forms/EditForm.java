@@ -96,9 +96,6 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 		
 		populateMiddleRow(this);
 		
-//		if(item != null){
-//			fillFields(item);
-//		}
 		addComponent(new Label("<hr />", ContentMode.HTML));
 		
 		if(isEditable){
@@ -258,7 +255,7 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 		saveBtn.addClickListener(e -> {
 			if(validateFields()){
 				SessionManager.openBase();
-				saveBtnAction();
+				saveBtnAction(item);
 				SessionManager.closeBase();
 				if(viewMode == Mode.EDIT){
 					transitionView(Mode.VIEW);
@@ -333,7 +330,7 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 	//For purpose of overriding in sub class
 	protected void populateMiddleRow(Layout middleRow) {}
 	
-	protected abstract void saveBtnAction();
+	protected abstract void saveBtnAction(T item);
 	protected abstract void clearFields();
 	protected abstract void reloadData();
 	protected abstract void setViewMode(T item);

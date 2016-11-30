@@ -14,11 +14,15 @@ public class ChangeTheme extends Window{
 
 	public ChangeTheme(SessionManager manager){
 		VerticalLayout content = new VerticalLayout();
+		content.setSpacing(true);
+		content.setMargin(true);
 		setContent(content);
+		center();
 		
 		OptionGroup themeSelect = new OptionGroup("Select Theme");
 		themeSelect.addItem("Light");
-		themeSelect.addItem("Windows");
+		themeSelect.addItem("Runo");
+		themeSelect.addItem("Reindeer");
 		themeSelect.select("Light");
 		content.addComponent(themeSelect);
 		
@@ -32,8 +36,11 @@ public class ChangeTheme extends Window{
 				case "Light":
 					UI.getCurrent().setTheme("pmTheme");
 					break;
-				case "Windows":
-					UI.getCurrent().access(() -> UI.getCurrent().setTheme("windowsXP-theme"));
+				case "Runo":
+					UI.getCurrent().setTheme("runo");
+					break;
+				case "Reindeer":
+					UI.getCurrent().setTheme("reindeer");
 					break;
 				}
 			}

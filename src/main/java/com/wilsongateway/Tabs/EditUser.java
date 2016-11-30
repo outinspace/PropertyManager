@@ -39,30 +39,28 @@ public class EditUser extends EditForm<User>{
 	}
 
 	@Override
-	protected void saveBtnAction() {
+	protected void saveBtnAction(User u) {
 		try{
-			User newU;
 			if(viewMode == Mode.ADD){
-				newU = new User();
-			}else{
-				newU = getItem();
+				u = new User();
 			}
-			newU.setEncrypted("username", getTFValue("username"));
+			
+			u.setEncrypted("username", getTFValue("username"));
 			
 			if(!getTFValue("password").equals(EncryptedModel.PASSWORDFILLER)){
-				newU.setEncrypted("password", getTFValue("password"));
+				u.setEncrypted("password", getTFValue("password"));
 			}
 			
-			newU.setEncrypted("first_name", getTFValue("first_name"));
-			newU.setEncrypted("last_name", getTFValue("last_name"));
-			newU.setEncrypted("position", getTFValue("position"));
-			newU.setEncrypted("work_phone", getTFValue("work_phone"));
-			newU.setEncrypted("cell_phone", getTFValue("cell_phone"));
-			newU.save();
+			u.setEncrypted("first_name", getTFValue("first_name"));
+			u.setEncrypted("last_name", getTFValue("last_name"));
+			u.setEncrypted("position", getTFValue("position"));
+			u.setEncrypted("work_phone", getTFValue("work_phone"));
+			u.setEncrypted("cell_phone", getTFValue("cell_phone"));
+			u.save();
 			
-			groupSelect.setManyToMany(newU, Tables.GROUP);
-			propertySelect.setManyToMany(newU, Tables.PROPERTY);
-			newU.save();
+			groupSelect.setManyToMany(u, Tables.GROUP);
+			propertySelect.setManyToMany(u, Tables.PROPERTY);
+			u.save();
 			
 			Notification.show("User Saved", Notification.Type.HUMANIZED_MESSAGE);
 		}catch(Exception e){
@@ -86,7 +84,7 @@ public class EditUser extends EditForm<User>{
 
 	@Override
 	protected void setViewMode(User u) {
-		if(getItem() == null){
+		if(u == null){
 			viewMode = Mode.ADD;
 		}else{
 			viewMode = Mode.VIEW;

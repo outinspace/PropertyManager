@@ -26,19 +26,15 @@ public class EditProperty extends EditForm<Property>{
 	}
 
 	@Override
-	protected void saveBtnAction() {
+	protected void saveBtnAction(Property prop) {
 		try{
-			Property prop;
 			if(viewMode == Mode.ADD){
 				prop = new Property();
 				Tables.isUniqueName("name", prop, getTFValue("name"));
 				prop.set("name", getTFValue("name"));
-			}else{
-				prop = getItem();
-				if(!getTFValue("name").equals(prop.getString("name"))){
-					Tables.isUniqueName("name", prop, getTFValue("name"));
-					prop.set("name", getTFValue("name"));
-				}
+			}else if(!getTFValue("name").equals(prop.getString("name"))){
+				Tables.isUniqueName("name", prop, getTFValue("name"));
+				prop.set("name", getTFValue("name"));
 			}
 			
 			prop.set("street_address", getTFValue("street_address"));

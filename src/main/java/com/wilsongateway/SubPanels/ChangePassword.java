@@ -4,6 +4,7 @@ import com.vaadin.data.Validator;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
@@ -59,13 +60,21 @@ public class ChangePassword extends Window{
 		});
 		content.addComponent(oldPass);
 		
-//		content.addComponent(new Label("- Minimum length 8"));
-//		content.addComponent(new Label("- Alphanumeric"));
-//		content.addComponent(new Label("- At least 1 uppercase"));
-		
 		newPass = new PasswordField("New Password");
 		newPass.setRequired(true);
 		newPass.addValidator(new PasswordValidator());
+		newPass.addValidator(new Validator(){
+
+			private static final long serialVersionUID = 4188385725188971113L;
+
+			@Override
+			public void validate(Object value) throws InvalidValueException {
+				if(user.getAsString("username").equals("demo")){
+					throw new InvalidValueException("Cannot Change Password On Demo Account");
+				}
+			}
+			
+		});
 		content.addComponent(newPass);
 		
 		error = new Label();
@@ -80,6 +89,7 @@ public class ChangePassword extends Window{
 		if(validateFields()){
 			user.setEncrypted("password", newPass.getValue());
 			this.close();
+			Notification.show("Password Changed", Notification.Type.TRAY_NOTIFICATION);
 		}
 	}
 

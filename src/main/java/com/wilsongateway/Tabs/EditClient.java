@@ -23,17 +23,15 @@ public class EditClient extends EditForm<Client>{
 	private static final long serialVersionUID = 7450455034853307524L;
 	
 	private ComboBox propertyCB;
-	private Client c;
 	
 	public EditClient(SessionManager manager, Client c, boolean isEditable) {
 		super(manager, c, "Client", isEditable);
-		this.c = c;
 	}
 
 	@Override
-	protected void saveBtnAction() {
+	protected void saveBtnAction(Client c) {
 		try{
-			if(c == null){
+			if(viewMode == Mode.ADD){
 				c = new Client();
 			}
 			c.setEncrypted("first_name", getTFValue("first_name"));

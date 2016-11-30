@@ -37,31 +37,33 @@ public class EditTicket extends EditForm<Ticket>{//TODO add URL property redirec
 	private PopupDateField dateField;
 	private CheckBox completedField;
 	
-	private Ticket item;
-	
-	public EditTicket(SessionManager manager, Ticket item, boolean isEditable) {
-		super(manager, item, "Ticket", isEditable);
-		this.item = item;
+	public EditTicket(SessionManager manager, Ticket t, boolean isEditable) {
+		super(manager, t, "Ticket", isEditable);
+		
+		if(viewMode == Mode.ADD){
+			completedField.setValue(Ticket.Status.valueOf(t.getAsString("status")) == Status.COMPLETED);
+			descriptionArea.setValue(t.getAsString("description"));
+		}
 	}
 
 	@Override
-	protected void saveBtnAction() {
+	protected void saveBtnAction(Ticket t) {
 		try{
-			if(item == null){
-				item = new Ticket();
+			if(t == null){
+				t = new Ticket();
 			}
-			item.setDate("date", dateField.getValue());
-			item.setEncrypted("description", descriptionArea.getValue());
-			item.setEncrypted("status", completedField.getValue() ? Status.COMPLETED.toString() : Status.PENDING.toString());
-			item.save();
+			t.setDate("date", dateField.getValue());
+			t.setEncrypted("description", descriptionArea.getValue());
+			t.setEncrypted("status", completedField.getValue() ? Status.COMPLETED.toString() : Status.PENDING.toString());
+			t.save();
 			
-			clientSelect.setManyToMany(item, Tables.CLIENT);
+			clientSelect.setManyToMany(t, Tables.CLIENT);
 			
 			if(propertyCB.getValue() != null){
 				Property p = (Property) propertyCB.getValue();
-				p.add(item);
+				p.add(t);
 			}
-			item.save();
+			t.save();
 			
 			Notification.show("Ticket Submitted", Notification.Type.HUMANIZED_MESSAGE);
 		}catch(Exception e){
@@ -126,11 +128,6 @@ public class EditTicket extends EditForm<Ticket>{//TODO add URL property redirec
 		completedField = new CheckBox("Repair Completed");
 		leftCol.addComponent(completedField);
 		addCustomComponent(completedField);
-		
-		if(t != null){
-			completedField.setValue(Ticket.Status.valueOf(t.getAsString("status")) == Status.COMPLETED);
-			descriptionArea.setValue(t.getAsString("description"));
-		}
 	}
 
 	@Override
