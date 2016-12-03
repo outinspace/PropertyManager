@@ -124,10 +124,11 @@ public class SessionManager extends UI {
 		
 		//Create group with one tab
 		Group g1 = Tables.GROUP.findFirst("name = 'Admin'");
-		if(g1 == null){
-			Tables.GROUP.createIt("name", "Admin");
-			g1 = Tables.GROUP.findFirst("name = 'Admin'");
+		if(g1 != null){
+			g1.delete();
 		}
+		g1 = Tables.GROUP.createIt("name", "Admin");
+		
 		ArrayList<TabType> tabs = new ArrayList<TabType>();
 		for(TabType t : TabType.values()){
 			tabs.add(t);

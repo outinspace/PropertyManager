@@ -34,6 +34,7 @@ public class EditUser extends EditForm<User>{
 	
 	private EndlessComboBox<Group> groupSelect;
 	private EndlessComboBox<Property> propertySelect;
+	private PasswordField passTF;
 	
 	public EditUser(SessionManager manager, User item, boolean isEditable) {
 		super(manager, item, "User", isEditable);
@@ -48,8 +49,8 @@ public class EditUser extends EditForm<User>{
 			
 			u.setEncrypted("username", getTFValue("username"));
 			
-			if(!getTFValue("password").equals(EncryptedModel.PASSWORDFILLER)){
-				u.setEncrypted("password", getTFValue("password"));
+			if(!passTF.getValue().equals(EncryptedModel.PASSWORDFILLER)){
+				u.setEncrypted("password", passTF.getValue());
 			}
 			
 			u.setEncrypted("first_name", getTFValue("first_name"));
@@ -98,7 +99,7 @@ public class EditUser extends EditForm<User>{
 		userTF.setRequired(true);
 		userTF.addValidator(new UniqueUsernameValidator(userTF.getValue()));
 		
-		PasswordField passTF = new PasswordField("Password");
+		passTF = new PasswordField("Password");
 		leftCol.addComponent(passTF);
 		passTF.setIcon(FontAwesome.LOCK);
 		passTF.setValue(u == null ? "" : u.getAsString("password"));

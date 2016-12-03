@@ -57,7 +57,7 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 	private Button editBtn;
 	
 	private Label heading;
-	private Map<String, Field> columnToTF = new HashMap<String, Field>();
+	private Map<String, Field<?>> columnToTF = new HashMap<String, Field<?>>();
 	private List<Component> customComponents = new ArrayList<Component>();
 	
 	public enum Mode {ADD, VIEW, EDIT};
@@ -210,7 +210,7 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 	}
 	
 	protected void clearAllTF(){
-		for(Field f : columnToTF.values()){
+		for(Field<?> f : columnToTF.values()){
 			f.clear();
 		}
 	}
@@ -225,12 +225,10 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 		while(rightIter.hasNext()){
 			rightIter.next().setEnabled(value);
 		}
-//		for(TextField tf : columnToTF.values()){
-//			tf.setEnabled(value);
-//		}
-//		for(Component c : customComponents){
-//			c.setEnabled(value);
-//		}
+		
+		for(Component c : customComponents){
+			c.setEnabled(value);
+		}
 	}
 
 	private void createLowerLayout() {
@@ -272,6 +270,7 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 			validateLayout(leftCol);
 			validateLayout(rightCol);
 			validateLayout(this);
+			
 			return true;
 		}catch(InvalidValueException e){
 			return false;

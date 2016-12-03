@@ -40,7 +40,7 @@ public class EditTicket extends EditForm<Ticket>{//TODO add URL property redirec
 	public EditTicket(SessionManager manager, Ticket t, boolean isEditable) {
 		super(manager, t, "Ticket", isEditable);
 		
-		if(viewMode == Mode.ADD){
+		if(viewMode != Mode.ADD){
 			completedField.setValue(Ticket.Status.valueOf(t.getAsString("status")) == Status.COMPLETED);
 			descriptionArea.setValue(t.getAsString("description"));
 		}
@@ -89,10 +89,10 @@ public class EditTicket extends EditForm<Ticket>{//TODO add URL property redirec
 
 	@Override
 	protected void setViewMode(Ticket t) {
-		if(t != null){
-			viewMode = Mode.VIEW;
-		}else{
+		if(t == null){
 			viewMode = Mode.ADD;
+		}else{
+			viewMode = Mode.VIEW;
 		}
 	}
 
@@ -147,14 +147,4 @@ public class EditTicket extends EditForm<Ticket>{//TODO add URL property redirec
 		middleRow.addComponent(descriptionArea);
 		addCustomComponent(descriptionArea);
 	}
-	
-//	@Override
-//	protected boolean checkRequiredFields(){
-//		if(propertyCB.getValue() == null){
-//			return false;
-//		}else if(descriptionArea.getValue().trim().equals("")){
-//			return false;
-//		}
-//		return true;
-//	}
 }
