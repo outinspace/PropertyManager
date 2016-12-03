@@ -33,7 +33,7 @@ import com.vaadin.ui.VerticalLayout;
  *
  * @param <T> The object type that this component will be selecting.
  */
-public class EndlessComboBox<T> extends CustomComponent{
+public class EndlessComboBox<T> extends CustomComponent{//Change to customField
 	
 	private static final long serialVersionUID = 825613765534503733L;
 	

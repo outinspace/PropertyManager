@@ -2,6 +2,7 @@ package com.wilsongateway.Forms;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +20,7 @@ import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.Field;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
@@ -49,13 +51,13 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 	private static final long serialVersionUID = -4723363020095122718L;
 	
 	private HorizontalLayout split;
-	private Layout leftCol;
-	private Layout rightCol;
+	private FormLayout leftCol;
+	private FormLayout rightCol;
 	private HorizontalLayout lowerBtns;
 	private Button editBtn;
 	
 	private Label heading;
-	private Map<String, TextField> columnToTF = new HashMap<String, TextField>();
+	private Map<String, Field> columnToTF = new HashMap<String, Field>();
 	private List<Component> customComponents = new ArrayList<Component>();
 	
 	public enum Mode {ADD, VIEW, EDIT};
@@ -116,17 +118,7 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 	}
 
 	private void createEditBtn() {
-		editBtn = new Button("Edit");
-		editBtn.addClickListener(new ClickListener(){
-
-			private static final long serialVersionUID = 4022680688038045081L;
-
-			@Override
-			public void buttonClick(ClickEvent event) {
-				transitionView(Mode.EDIT);
-			}
-			
-		});
+		editBtn = new Button("Edit", e -> transitionView(Mode.EDIT));
 		addComponent(editBtn);
 		setComponentAlignment(editBtn, Alignment.MIDDLE_RIGHT);
 	}
@@ -214,22 +206,31 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 	}
 	
 	protected String getTFValue(String column){
-		return columnToTF.get(column).getValue();
+		return columnToTF.get(column).getValue().toString();
 	}
 	
 	protected void clearAllTF(){
-		for(TextField tf : columnToTF.values()){
-			tf.clear();
+		for(Field f : columnToTF.values()){
+			f.clear();
 		}
 	}
 	
 	private void setAllComponentsEnabled(boolean value){
-		for(TextField tf : columnToTF.values()){
-			tf.setEnabled(value);
+		Iterator<Component> leftIter = leftCol.iterator();
+		while(leftIter.hasNext()){
+			leftIter.next().setEnabled(value);
 		}
-		for(Component c : customComponents){
-			c.setEnabled(value);
+		
+		Iterator<Component> rightIter = rightCol.iterator();
+		while(rightIter.hasNext()){
+			rightIter.next().setEnabled(value);
 		}
+//		for(TextField tf : columnToTF.values()){
+//			tf.setEnabled(value);
+//		}
+//		for(Component c : customComponents){
+//			c.setEnabled(value);
+//		}
 	}
 
 	private void createLowerLayout() {
@@ -255,7 +256,7 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 		saveBtn.addClickListener(e -> {
 			if(validateFields()){
 				SessionManager.openBase();
-				saveBtnAction(item);
+				saveModel(item);
 				SessionManager.closeBase();
 				if(viewMode == Mode.EDIT){
 					transitionView(Mode.VIEW);
@@ -266,56 +267,43 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 		});
 	}
 	
-	protected boolean validateFields(){
+	private boolean validateFields(){//TODO Validate collection<Field>
 		try{
-			for(TextField tf : columnToTF.values()){
-				tf.validate();
-			}
+			validateLayout(leftCol);
+			validateLayout(rightCol);
+			validateLayout(this);
 			return true;
 		}catch(InvalidValueException e){
 			return false;
-		}	
-	}
-
-	protected void deleteBtnAction(){
-		ConfirmDialog.show(manager, "Please Confirm:", "Are you really sure?", 
-				"I am", "Not quite", new ConfirmDialog.Listener() {
-
-					private static final long serialVersionUID = 937031672580420293L;
-
-			public void onClose(ConfirmDialog dialog) {
-            	SessionManager.openBase();
-                if (dialog.isConfirmed()) {
-                	if(getItem().delete()){
-                		Notification.show(itemName + " Deleted", Notification.Type.HUMANIZED_MESSAGE);
-	        			clearFields();
-	        			manager.getDash().navigateBack();
-                	}else{
-                		Notification.show(itemName + " Could Not Be Deleted", Notification.Type.ERROR_MESSAGE);
-                	}
-                }
-                SessionManager.closeBase();
-            }
-            
-        });
+		}
 	}
 	
-	protected boolean checkRequiredFields() {
-		for(TextField tf : columnToTF.values()){
-			//Check if TextField value equals null or ""
-			if(tf.isRequired() && (tf.getValue() == null || tf.getValue().trim().equals(""))){
-				return false;
+	private void validateLayout(Layout layout) throws InvalidValueException{
+		Iterator<Component> iterator = layout.iterator();
+		while(iterator.hasNext()){
+			Component c = iterator.next();
+			if(c instanceof Field){
+				Field<?> f = (Field<?>)c;
+				f.validate();
 			}
 		}
-		return true;
 	}
-	
-	protected T getItem(){
-		return item;
-	}
-	
-	protected void addCustomComponent(Component c){
-		customComponents.add(c);
+
+	private void deleteBtnAction(){
+		ConfirmDialog.show(manager, "Please Confirm:", "Are you sure?", 
+				"Yes", "No", (dialog) -> {
+					SessionManager.openBase();
+	                if (dialog.isConfirmed()) {
+	                	if(item.delete()){
+	                		Notification.show(itemName + " Deleted", Notification.Type.HUMANIZED_MESSAGE);
+		        			clearFields();
+		        			manager.getDash().navigateBack();
+	                	}else{
+	                		Notification.show(itemName + " Could Not Be Deleted", Notification.Type.ERROR_MESSAGE);
+	                	}
+	                }
+	                SessionManager.closeBase();
+				});
 	}
 	
 	@Override
@@ -327,14 +315,17 @@ public abstract class EditForm<T extends EncryptedModel> extends Tab{
 		}
 	}
 	
-	//For purpose of overriding in sub class
-	protected void populateMiddleRow(Layout middleRow) {}
+	protected void addCustomComponent(Component c){
+		customComponents.add(c);
+	}
 	
-	protected abstract void saveBtnAction(T item);
+	//For purpose of overriding as necessary
+	protected void populateMiddleRow(Layout middleRow) {}
+	protected void populateLeftCol(Layout leftCol, T item){}
+	protected void populateRightCol(Layout rightCol, T item){}
+	
+	protected abstract void saveModel(T item);
 	protected abstract void clearFields();
 	protected abstract void reloadData();
 	protected abstract void setViewMode(T item);
-//	protected abstract void fillFields(T item);
-	protected abstract void populateLeftCol(Layout leftCol, T item);
-	protected abstract void populateRightCol(Layout rightCol, T item);
 }

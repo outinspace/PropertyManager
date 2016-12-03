@@ -6,6 +6,7 @@ import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.wilsongateway.CustomComponents.EndlessComboBox;
@@ -39,7 +40,7 @@ public class EditUser extends EditForm<User>{
 	}
 
 	@Override
-	protected void saveBtnAction(User u) {
+	protected void saveModel(User u) {
 		try{
 			if(viewMode == Mode.ADD){
 				u = new User();
@@ -97,7 +98,10 @@ public class EditUser extends EditForm<User>{
 		userTF.setRequired(true);
 		userTF.addValidator(new UniqueUsernameValidator(userTF.getValue()));
 		
-		TextField passTF = addAndFillTF("password", "Password", FontAwesome.LOCK);
+		PasswordField passTF = new PasswordField("Password");
+		leftCol.addComponent(passTF);
+		passTF.setIcon(FontAwesome.LOCK);
+		passTF.setValue(u == null ? "" : u.getAsString("password"));
 		passTF.setRequired(true);
 		passTF.addValidator(new PasswordValidator());
 		

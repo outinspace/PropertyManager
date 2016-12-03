@@ -47,7 +47,7 @@ public class EditTicket extends EditForm<Ticket>{//TODO add URL property redirec
 	}
 
 	@Override
-	protected void saveBtnAction(Ticket t) {
+	protected void saveModel(Ticket t) {
 		try{
 			if(t == null){
 				t = new Ticket();
@@ -148,13 +148,13 @@ public class EditTicket extends EditForm<Ticket>{//TODO add URL property redirec
 		addCustomComponent(descriptionArea);
 	}
 	
-	@Override
-	protected boolean checkRequiredFields(){
-		if(propertyCB.getValue() == null){
-			return false;
-		}else if(descriptionArea.getValue().trim().equals("")){
-			return false;
-		}
-		return true;
-	}
+//	@Override
+//	protected boolean checkRequiredFields(){
+//		if(propertyCB.getValue() == null){
+//			return false;
+//		}else if(descriptionArea.getValue().trim().equals("")){
+//			return false;
+//		}
+//		return true;
+//	}
 }

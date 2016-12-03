@@ -26,7 +26,7 @@ public class EditProperty extends EditForm<Property>{
 	}
 
 	@Override
-	protected void saveBtnAction(Property prop) {
+	protected void saveModel(Property prop) {
 		try{
 			if(viewMode == Mode.ADD){
 				prop = new Property();

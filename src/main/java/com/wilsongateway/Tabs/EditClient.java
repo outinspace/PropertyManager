@@ -29,7 +29,7 @@ public class EditClient extends EditForm<Client>{
 	}
 
 	@Override
-	protected void saveBtnAction(Client c) {
+	protected void saveModel(Client c) {
 		try{
 			if(viewMode == Mode.ADD){
 				c = new Client();
@@ -66,7 +66,7 @@ public class EditClient extends EditForm<Client>{
 
 	@Override
 	protected void setViewMode(Client c) {
-		if(getItem() == null){
+		if(c == null){
 			viewMode = Mode.ADD;
 		}else{
 			viewMode = Mode.VIEW;

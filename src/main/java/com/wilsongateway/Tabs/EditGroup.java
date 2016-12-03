@@ -34,7 +34,7 @@ public class EditGroup extends EditForm<Group>{
 	}
 
 	@Override
-	protected void saveBtnAction(Group grp) {
+	protected void saveModel(Group grp) {
 		try{
 			//Checks tabs
 			checkValidTabs();
