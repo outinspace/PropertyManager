@@ -112,7 +112,9 @@ public class DashboardView extends VerticalLayout implements View{
 		logoContent.addComponent(new Label("Welcome back " + manager.getCurrentUser().toString()));
 	}
 
-	private void populateSideMenu() {//Lazy loading
+	public void populateSideMenu() {//Lazy loading
+		sideMenu.removeAllComponents();
+		
 		//Get list of all groups
 		LazyList<Tables.Group> groups = manager.getCurrentUser().getAll(Group.class);
 		
@@ -161,6 +163,17 @@ public class DashboardView extends VerticalLayout implements View{
 			}
 		});
 		topBar.addComponent(popoutBtn);
+		
+		Button refreshBtn = new Button("", e -> {
+			UI.getCurrent().access(() -> {
+				SessionManager.openBase();
+				populateSideMenu();
+				SessionManager.closeBase();
+			});
+		});
+		refreshBtn.setStyleName("tiny");
+		refreshBtn.setIcon(FontAwesome.REFRESH);
+		topBar.addComponent(refreshBtn);
 		
 		Button logoutBtn = new Button("Logout", e -> {
 			UI.getCurrent().getSession().close();

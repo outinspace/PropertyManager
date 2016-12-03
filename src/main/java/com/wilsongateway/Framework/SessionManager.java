@@ -167,7 +167,7 @@ public class SessionManager extends UI {
 		VaadinSession.getCurrent().setAttribute(User.class, temp);
 	}
 	
-	public void logout(){//TODO
+	public void logout(){
 		getPage().setLocation("/");
 		getCurrent().close();
 	}

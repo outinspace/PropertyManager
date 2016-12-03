@@ -21,13 +21,14 @@ public class AccountTab extends Tab{//TODO
 
 	public AccountTab(SessionManager manager) {
 		super("Account Settings", manager);
-		initUI();
 		
-	}
-
-	private void initUI() {
-		addComponent(new Label("Account Settings for " + manager.getCurrentUser().getDecrypted("first_name")));
+		addComponent(new Label("Account Settings for " + manager.getCurrentUser().getAsString("first_name")));
 		addLineBreak();
+		
+		addComponent(new Label(manager.getCurrentUser().getAsString("id")));
+		addComponent(new Label(manager.getCurrentUser().getAsString("first_name")));
+		addComponent(new Label(manager.getCurrentUser().getAsString("last_name")));
+		addComponent(new Label(manager.getCurrentUser().getAsString("position")));
 		
 		Button changePassBtn = new Button("Change Password", 
 				e -> manager.addWindow(new ChangePassword(manager.getCurrentUser())));
